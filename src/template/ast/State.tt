@@ -263,40 +263,6 @@ $if(Concurrent)
   }
 $endif
 
-  /**
-   * Maps circular attribute to last evaluated cycle index.
-   * @apilevel internal
-   */
-  private java.util.Map<Object, Integer> visited = new java.util.IdentityHashMap<Object, Integer>();
-
-  /**
-   * Check if attribute was already visited during the current cycle.
-   * @apilevel internal
-   * @return {@code true} if the attribute was already visited.
-   */
-  protected boolean checkAndSetVisited(Object attribute, int cycle) {
-    boolean result = visited.containsKey(attribute) && visited.get(attribute) == cycle;
-    visited.put(attribute, cycle);
-    return result;
-  }
-
-  /**
-   * Reset visited cycle tracking for this thread.
-   * @apilevel internal
-   */
-  protected void clearVisited() {
-    visited.clear();
-  }
-
-  // TODO(joqvist): may not be necessary.
-  /**
-   * Reset visit tracker for a single attribute.
-   * @apilevel internal
-   */
-  protected void resetVisited(Object attribute) {
-    visited.remove(attribute);
-  }
-
   /** @apilevel internal */
   protected void leaveCircle() {
 $if(ComponentCheck)
