@@ -29,7 +29,7 @@ pipeline {
 
     stage('Build') {
       steps {
-        sh './gradle clean jar'
+        sh './gradlew clean jar'
       }
     }
   }
