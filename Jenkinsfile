@@ -3,6 +3,11 @@
 // This Jenkinsfile builds ExtendJ with Gradle.
 pipeline {
   agent any
+  environment {
+    JAVA_HOME = "${tool 'jdk-8'}"
+    ANT_HOME = "${tool 'ant-1.10.5'}"
+    PATH = "${env.JAVA_HOME}/bin:${env.ANT_HOME}/bin:${env.PATH}"
+  }
 
   options {
     buildDiscarder(logRotator(numToKeepStr: '10'))
@@ -30,6 +35,15 @@ pipeline {
     stage('Build') {
       steps {
         sh './gradlew clean jar'
+      }
+    }
+
+    stage('Test') {
+      steps {
+        dir('test') {
+          sh 'ant test -Djastadd.jar="../jastadd2.jar" -Dthreads=1 -Dtimeout=20000'
+          junit 'reports/**/*.xml'
+        }
       }
     }
   }
