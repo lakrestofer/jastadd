@@ -592,7 +592,7 @@ aspect JragCodeGen {
   syn boolean AttrEq.canInlineBlock(AttrDecl decl) = false;
 
   eq SynEq.canInlineBlock(AttrDecl decl) =
-      hasComputeBlock() && !decl.isMemoized();
+      hasComputeBlock() && !decl.isMemoized() && !config().traceCompute();
 
   /**
    * Generates the method to compute an attribute with a specific equation
