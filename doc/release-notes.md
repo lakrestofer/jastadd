@@ -1,5 +1,16 @@
 # JastAdd2 Release Notes
 
+## 2.3.6 - 2023-09-04
+
+This release improves attribute tracing with new tracing events and bug fixes.
+
+* [Issue 329:](https://bitbucket.org/jastadd/jastadd2/issues/329)
+  New trace events `INC_FLUSH_START` and `INC_FLUSH_END` for tracing the start and
+  completion of attribute flushing.
+* [Pull Request 20:](https://bitbucket.org/jastadd/jastadd2/pull-requests/20)
+  Attribute code is not inlined in the compute function when `tracing=compute` is
+  enabled, fixing `COMPUTE_END` events having the wrong attribute value.
+
 ## 2.3.5 - 2021-03-30
 
 Improvements to Java 8 support, bug fixes and various internal code cleanups.
