@@ -369,7 +369,15 @@ if (state().inCircle()) {
   $include(AttrDecl.traceCacheStore)
     $else
   $include(AttrDecl.incHookAttrCompBeforeStore)
+  $if(CacheCycle)
+  if(state().lastCycle()){
+    #(signature)_computed = $StateClass.NON_CYCLE;
+  }else{
+    #(signature)_computed = state().cycle();
+  }
+  $else
   #(signature)_computed = state().cycle();
+  $endif
   $include(AttrDecl.traceCacheStore)
     $endif
 } else {
