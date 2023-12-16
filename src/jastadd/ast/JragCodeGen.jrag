@@ -292,8 +292,10 @@ aspect JragCodeGen {
   public void TypeDecl.emitMembers(PrintStream out) {
     for (ClassBodyObject obj : classBodyDecls) {
       org.jastadd.jrag.AST.SimpleNode node = obj.node;
-      out.print(obj.modifiers());
-      out.println(docComment(obj));
+      out.print(obj.modifiers()); // 'public', @UserAnnotation etc.
+      TemplateContext tt = templateContext(obj);
+      tt.bind("RawComment", docComment(obj));
+      tt.expand("InterTypeDeclaration.member", out);
       out.print(config().indent);
       StringBuffer buf = new StringBuffer();
       node.jjtAccept(new ClassBodyDeclUnparser(), buf);

@@ -70,7 +70,10 @@ public class ASTNodeAnnotation {
   public enum Kind { SYN, INH, COLL }
 
   @java.lang.annotation.Retention(java.lang.annotation.RetentionPolicy.RUNTIME)
-  @java.lang.annotation.Target(java.lang.annotation.ElementType.METHOD)
+  @java.lang.annotation.Target({java.lang.annotation.ElementType.METHOD,
+                                java.lang.annotation.ElementType.CONSTRUCTOR,
+                                java.lang.annotation.ElementType.TYPE,
+				java.lang.annotation.ElementType.FIELD})
   @java.lang.annotation.Documented
   public @interface Source {
     String aspect() default "";
@@ -114,4 +117,9 @@ $endif]]
 TokenComponent.generatedAnnotations = [[
 $if(generateAnnotations)
 @ASTNodeAnnotation.Token(name="$Id")
+$endif]]
+
+MemberDecl.generatedAnnotations = [[
+$if(generateAnnotations)
+@ASTNodeAnnotation.Source(aspect="$AspectName", declaredAt="$SourceLocation")
 $endif]]

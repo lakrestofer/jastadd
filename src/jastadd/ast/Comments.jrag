@@ -143,6 +143,17 @@ outer: while (true) {
    * @return generated javadoc comment
    */
   public String TypeDecl.docComment(ClassBodyObject obj) {
+    TemplateContext tt = templateContext(obj);
+    return tt.expand("ASTDecl.docComment");
+  }
+
+  /**
+   * Constructs TemplateContext set up for a </tt>ClassBodyObject</tt>
+   *
+   * @param obj source context to build TemplateContext from
+   * @return <tt>TemplateContext</tt> with bindings that reflect <tt>obj</tt>
+   */
+  public TemplateContext TypeDecl.templateContext(ClassBodyObject obj) {
     JavaDocParser parser = new JavaDocParser();
     TemplateContext tt = templateContext();
     tt.bind("SourceComment", parser.parse(obj.comments));
@@ -151,7 +162,8 @@ outer: while (true) {
     String declaredat = ASTNode.declaredat(obj.getFileName(), obj.getStartLine());
     tt.bind("HasDeclaredAt", declaredat.length() > 0);
     tt.bind("DeclaredAt", declaredat);
-    return tt.expand("ASTDecl.docComment");
+    tt.bind("SourceLocation", ASTNode.sourceLocation(obj.getFileName(), obj.getStartLine()));
+    return tt;
   }
 
   public String TypeDecl.docComment() {

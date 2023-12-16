@@ -55,6 +55,7 @@ aspect TemplateUtil {
     loadTemplates(tt, "ast/CopyNode");
     loadTemplates(tt, "ast/ImplicitDeclarations");
     loadTemplates(tt, "ast/InheritedAttributes");
+    loadTemplates(tt, "ast/InterTypeDeclaration");
     loadTemplates(tt, "ast/JJTree");
     loadTemplates(tt, "ast/List");
     loadTemplates(tt, "ast/NodeConstructor");
