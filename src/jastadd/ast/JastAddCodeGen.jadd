@@ -232,6 +232,7 @@ aspect JastAddCodeGen {
       ByteArrayOutputStream bos = new ByteArrayOutputStream();
       PrintStream stream = new PrintStream(bos, true, "UTF-8");
       stream.println(docComment());
+      templateContext().expand("TypeDecl.generatedAnnotations", stream);
       stream.println(typeDeclarationString());
 
       emitMembers(stream);
@@ -284,6 +285,7 @@ aspect JastAddCodeGen {
 
       fstream.print(grammar().genImportsList(code));
       fstream.println(docComment());
+      templateContext().expand("TypeDecl.generatedAnnotations", fstream);
       fstream.println(code);
       fstream.close();
     } catch (IOException f) {
@@ -316,6 +318,7 @@ aspect JastAddCodeGen {
 
       fstream.print(grammar().genImportsList(code));
       fstream.println(docComment());
+      templateContext().expand("TypeDecl.generatedAnnotations", fstream);
       fstream.println(code);
       fstream.println("}");
       fstream.close();

@@ -123,3 +123,12 @@ MemberDecl.generatedAnnotations = [[
 $if(generateAnnotations)
 @ASTNodeAnnotation.Source(aspect="$AspectName", declaredAt="$SourceLocation")
 $endif]]
+
+TypeDecl.generatedAnnotations = [[
+$if(generateAnnotations)
+$if(HasDeclaredAt)
+$if(HasAspectName)
+@ASTNodeAnnotation.Source(aspect="$AspectName", declaredAt="$SourceLocation")
+$endif
+$endif
+$endif]]

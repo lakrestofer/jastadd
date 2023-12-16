@@ -166,15 +166,21 @@ outer: while (true) {
     return tt;
   }
 
-  public String TypeDecl.docComment() {
+  public TemplateContext TypeDecl.templateContext() {
+    TemplateContext tt = super.templateContext();
     JavaDocParser parser = new JavaDocParser();
-    TemplateContext tt = templateContext();
     tt.bind("SourceComment", parser.parse(getComment()));
     tt.bind("HasAspectName", getAspectName().length() > 0);
     tt.bind("AspectName", getAspectName());
     String declaredat = ASTNode.declaredat(getFileName(), getStartLine());
     tt.bind("HasDeclaredAt", declaredat.length() > 0);
     tt.bind("DeclaredAt", declaredat);
+    tt.bind("SourceLocation", ASTNode.sourceLocation(getFileName(), getStartLine()));
+    return tt;
+  }
+
+  public String TypeDecl.docComment() {
+    TemplateContext tt = templateContext();
     return tt.expand("TypeDecl.docComment");
   }
 
