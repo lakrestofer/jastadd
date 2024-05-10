@@ -49,7 +49,7 @@ $if(Concurrent)
 $endif
       return node;
     } catch (CloneNotSupportedException e) {
-      throw new Error("Error: clone not supported for " + getClass().getName());
+      throw internalError("Error: clone not supported for " + getClass().getName());
     }
   }
 ]]

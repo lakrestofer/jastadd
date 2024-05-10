@@ -37,7 +37,7 @@ InhEq.defaultInhDefineMethod [[
     }
 $if(DebugMode)
     if (parent == null) {
-      throw new RuntimeException(
+      throw userError(
           "Trying to evaluate inherited attribute #name in detached subtree (parent == null)");
     }
 $endif
@@ -156,7 +156,7 @@ return super.Define_#(name)(_callerNode, _childNode#inhParametersTail);
 $else
   $if(DebugMode)
 if (getParent() == null) {
-  throw new RuntimeException(
+  throw userError(
       "Trying to evaluate inherited attribute #name in detached subtree (parent == null)");
 }
   $endif

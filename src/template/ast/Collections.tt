@@ -44,7 +44,7 @@ $include(CollDecl.collDebugCheck)
 CollDecl.collDebugCheck [[
 $if(DebugMode)
 if (node == null) {
-  throw new RuntimeException(
+  throw userError(
       "Trying to evaluate collection attribute #getTarget.#getName() in subtree not attached to main tree.");
 }
 $endif
@@ -187,7 +187,7 @@ while (_sourceParent != null) {
   }
 }
 if (_targetRoot != _sourceRoot) {
-  throw new RuntimeException("Contribution source and target do not share a common collection "
+  throw userError("Contribution source and target do not share a common collection "
       + "root node for collection attribute #getTargetName.#getTargetAttributeName().");
 }
 $endif
