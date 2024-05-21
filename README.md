@@ -116,4 +116,24 @@ equations in .jrag files. This is because these expressions are not analyzed by
 JastAdd. They are just unparsed at appropriate places in the generated Java
 code.
 
+## Contributing
+
+To contribute:
+
+* Create an issue to document the change, if there isn't one already.
+* Create a branch and fix the issue.
+* Make sure there are suitable tests covering the fix. (Tests are in the repo jastadd-test which is a submodule in this repo. If you need to add tests, do so in that repo, and update the submodule link.)
+* Make sure all tests run in jastadd-test.
+* Make sure your latest commit mentions the fixed issue. Or add a note to the file ChangeLog.
+* Create a pull request for the fix.
+* Ask one of the current maintainers (Jesper, Niklas, Emma, More TBA) to take a look and approve the pull request.
+* Then you can merge the pull request (if you have the rights to do so). Or ask one of the maintainers.
+* Make sure the tests still run.
+
+## Creating a release:
+
+This is done by one of: Jesper, More TBA. There is info on this in the private repo "JastAdd Release Scripts".
+
+
+
 [1]: http://jastadd.org
