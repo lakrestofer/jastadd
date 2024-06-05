@@ -47,7 +47,7 @@ $if(#isCollection)
       $include(CollDecl.collDebugCheck)
       #rootType root = (#rootType) _node;
       if (root.collecting_contributors_#collectionId) {
-        throw new RuntimeException("Circularity during survey phase");
+        throw userError("Circularity during survey phase");
       }
       root.survey_#collectionId();
 $endif

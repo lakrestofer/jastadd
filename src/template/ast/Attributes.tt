@@ -141,7 +141,8 @@ AttrDecl.visitedException [[
 $if(TraceVisitCheck)
 System.out.println("Circular definition of attribute #hostClassName.#signatureJavaStyle.");
 $else
-throw new RuntimeException("Circular definition of attribute #hostClassName.#signatureJavaStyle.");
+resetState();
+throw userError("Circular definition of attribute #hostClassName.#signatureJavaStyle.");
 $endif
 ]]
 
@@ -424,7 +425,7 @@ protected $StateClass.CircleState #(signature)_circle = null;
 
 AttrDecl.enterLazyAttribute [[
 $if(ComponentCheck)
-state().assertSameCircle(#(signature)_circle, "#hostClassName.#signatureJavaStyle");
+state().assertSameCircle(this, #(signature)_circle, "#hostClassName.#signatureJavaStyle");
 #(signature)_circle = state().currentCircle();
 state().enterLazyAttribute();
 $else

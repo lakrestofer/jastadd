@@ -156,6 +156,62 @@ $else
   $endif
 $endif
 
+  /**
+   * Throws an exception to signal an internal error and tries to clear internal state
+   * so that other attributes might be evaluated safely.
+   *
+   * @returns never
+   * @apilevel internal
+   */
+  RuntimeException $ASTNode.internalError(Throwable t)
+  {
+    resetState();
+    if (t instanceof Error) {
+      throw (Error) t;
+    }
+    throw new Error(t);
+  }
+
+  /**
+   * Throws an exception to signal an internal error and tries to clear internal state
+   * so that other attributes might be evaluated safely.
+   *
+   * @returns never
+   * @apilevel internal
+   */
+  RuntimeException $ASTNode.internalError(String explanation)
+  {
+    throw internalError(new Error(explanation));
+  }
+
+  /**
+   * Throws an exception to signal a user error and clears internal evaluation state
+   * so that other attributes can be evaluated safely.
+   *
+   * @returns never
+   * @apilevel internal
+   */
+  RuntimeException $ASTNode.userError(Throwable t)
+  {
+    resetState();
+    if (t instanceof RuntimeException) {
+      throw (RuntimeException) t;
+    }
+    throw new RuntimeException(t);
+  }
+
+  /**
+   * Throws an exception to signal a user error and clears internal evaluation state
+   * so that other attributes can be evaluated safely.
+   *
+   * @returns never
+   * @apilevel internal
+   */
+  RuntimeException $ASTNode.userError(String explanation)
+  {
+    throw userError(new RuntimeException(explanation));
+  }
+
 $if(LegacyRewrite)
   /** @apilevel internal */
   public boolean $ASTNode.in$$Circle = false;
@@ -230,9 +286,9 @@ $if(DebugMode)
   }
 
   /** @apilevel internal */
-  private static void $ASTNode.debugNodeAttachment($ASTNode node) {
+  private void $ASTNode.debugNodeAttachment($ASTNode node) {
     if (node == null) {
-      throw new RuntimeException("Trying to assign null to a tree child node");
+      throw userError("Trying to assign null to a tree child node");
     }
 
     while (node != null && !node.debugNodeAttachmentIsRoot()) {
@@ -249,7 +305,7 @@ $endif
     }
 
     if (node != null) {
-      throw new RuntimeException("Trying to insert the same tree at multiple tree locations");
+      throw userError("Trying to insert the same tree at multiple tree locations");
     }
   }
 $endif

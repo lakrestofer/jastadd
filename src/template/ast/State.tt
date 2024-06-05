@@ -294,9 +294,9 @@ $if(ComponentCheck)
    * than the given circle state.
    * @apilevel internal
    */
-  protected void assertSameCircle(CircleState prev, String attribute) {
+  protected void assertSameCircle($ASTNode node, CircleState prev, String attribute) {
     if (prev != null && !prev.completed && prev != currentCircle()) {
-      throw new RuntimeException(String.format("Circular definition of attribute %s.", attribute));
+      throw node.userError(String.format("Circular definition of attribute %s.", attribute));
     }
   }
 $endif
