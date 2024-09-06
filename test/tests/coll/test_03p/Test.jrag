@@ -1,0 +1,12 @@
+import java.util.*;
+
+aspect Test {
+  inh A B.a();
+  eq A.getB().a() = this;
+
+  coll Set<String> A.set() [ new HashSet<String>() ] with add;
+
+  B contributes getID()
+      to A.set()
+      for a();
+}

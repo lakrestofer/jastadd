@@ -1,0 +1,1 @@
+Call to super.a() in the equation of an attribute "a()" should not result in a circularity exception

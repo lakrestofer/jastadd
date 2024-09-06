@@ -1,0 +1,6 @@
+aspect Test {
+  syn nta B A.b(String id) = new B(id);
+
+  inh String B.outer();
+  eq A.b().outer() = getID();
+}

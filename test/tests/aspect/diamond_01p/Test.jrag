@@ -1,0 +1,10 @@
+// Tests that the Java 7 diamond construct can be used in an aspect file.
+// .result=COMPILE_PASS
+import java.util.HashMap;
+aspect Test {
+  public HashMap<String, Integer> A.map = new HashMap<>();
+
+  public void A.f() {
+    map = new HashMap<>();
+  }
+}

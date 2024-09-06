@@ -1,0 +1,2 @@
+Tests accessing an ordinary child after a node with AST declared NTA has been
+copied

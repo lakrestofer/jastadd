@@ -1,0 +1,4 @@
+aspect Test {
+  syn lazy C Node.getC() = new C();
+  syn nta C Node.c() = new C();
+}

@@ -1,0 +1,1 @@
+Error at tests\diagnostics\syntax_err02\Test.ast: Lexical error at line 1, column 7.  Encountered: <EOF> after : ""

@@ -1,0 +1,5 @@
+Program ::= A B; 
+A ::= X;
+B ::= X;
+X ::= Expr;
+Expr;

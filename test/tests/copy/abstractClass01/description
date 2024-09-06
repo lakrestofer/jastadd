@@ -1,0 +1,2 @@
+Tests that abstract classes have the methods fullCopy(), 
+treeCopyNoTransform() and treeCopy() with correct return types.

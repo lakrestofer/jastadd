@@ -1,0 +1,7 @@
+aspect Test {
+  syn lazy B SubA.getLeft() = new B();
+
+  inh boolean B.value();
+  eq A.getLeft().value() = true;
+  eq A.getChild().value() = false;
+}

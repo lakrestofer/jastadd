@@ -1,0 +1,9 @@
+aspect Test {
+	public A NodeA.theA = new A();
+	syn A NodeA.getA() = theA;
+
+	public B NodeB.theB = new B();
+	/* declared /NtaB:B/ in grammar: */ syn B NodeB.getNtaB() {
+		return theB;
+	}
+}

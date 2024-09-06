@@ -1,0 +1,4 @@
+aspect Test {
+	@Silly
+	class MyClass { }
+}

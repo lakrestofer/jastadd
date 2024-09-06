@@ -1,0 +1,9 @@
+// Tests that attribute code can modify attribute parameters.
+// TODO: attribute paramters should be made final.
+// .result=COMPILE_PASS
+aspect Test {
+  syn int A.x(int z) {
+    z = 10;
+    return 0;
+  }
+}

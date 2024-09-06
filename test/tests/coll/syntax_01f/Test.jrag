@@ -1,0 +1,10 @@
+// Test that a syntax error in collection declaration is not allowed.
+// .result=JASTADD_FAIL
+import java.util.*;
+
+aspect Test {
+  coll Collection<B> A.set() [new HashSet<B>()] with add groot A;
+
+  inh A B.a();
+  eq A.getB().a() = this;
+}

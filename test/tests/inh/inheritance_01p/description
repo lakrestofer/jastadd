@@ -1,0 +1,2 @@
+Tests that equations for inherited attributes of children are
+inherited by AST subtypes

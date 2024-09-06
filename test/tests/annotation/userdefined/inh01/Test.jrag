@@ -1,0 +1,23 @@
+import static runtime.Test.*;
+
+import java.lang.reflect.*;
+
+aspect Test {
+	inh int Node.inhAttr();
+
+	@Silly
+	eq Root.getNode().inhAttr() {
+		Method method = new Object(){}.getClass().getEnclosingMethod();
+		testTrue("missing annotation", method.isAnnotationPresent(Silly.class));
+		testFalse("unexpected annotation", method.isAnnotationPresent(NotSilly.class));
+		return -1;
+	}
+
+	@NotSilly
+	eq Node.getChild().inhAttr() {
+		Method method = new Object(){}.getClass().getEnclosingMethod();
+		testFalse("unexpected annotation", method.isAnnotationPresent(Silly.class));
+		testTrue("missing annotation", method.isAnnotationPresent(NotSilly.class));
+		return 1;
+	}
+}

@@ -1,0 +1,15 @@
+import java.util.Set;
+import java.util.HashSet;
+
+aspect Test {
+	
+	inh Node A.node();
+	eq Node.getChild().node() = this;
+
+	syn boolean A.isC() = false;
+	eq C.isC() = true;
+	
+	coll Set<A> Node.children() [new HashSet<A>()] with add;
+	A contributes this when isC()
+		to Node.children() for node();
+}

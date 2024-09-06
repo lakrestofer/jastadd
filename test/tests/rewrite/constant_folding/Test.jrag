@@ -1,0 +1,20 @@
+aspect Test {
+  syn boolean Expr.isConstant() = false;
+  eq Const.isConstant() = true;
+
+  syn int Expr.constValue() { throw new Error("not a constant"); }
+  eq Const.constValue() = getVALUE();
+
+  // This rewrite is written in a way to intentially trigger successive rewrites.
+  // It could have been done in a way which computes the constant value of the
+  // topmost Add directly, but that would be less interesting.
+  rewrite Add {
+    when (getLeft().isConstant() && getRight().isConstant())
+    to Const {
+      int left = getLeft().constValue();
+      int right = getRight().constValue();
+      System.out.format("rewriting %d + %d to %d%n", left, right, left + right);
+      return new Const(left + right);
+    }
+  }
+}

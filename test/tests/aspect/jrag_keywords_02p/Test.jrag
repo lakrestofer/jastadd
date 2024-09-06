@@ -1,0 +1,17 @@
+// It is possible to use JastAdd reserved words in certain contexts as legal Java identifiers.
+// See https://bitbucket.org/jastadd/jastadd2/issue/195/jastadd-keywords-in-java-code
+// .result=COMPILE_PASS
+aspect Test {
+  syn int Node.compute() {
+    // Keywords in attribute code block.
+    int to = 100;
+    int aspect = 3 * to;
+    int refine = 16;
+    return refine + aspect + to;
+  }
+
+  private int Node.uncache = 0;
+
+  // Keyword in attribute equation.
+  syn int Node.foo() = uncache;
+}

@@ -1,0 +1,12 @@
+aspect Test {
+  // Parameterized NTA with the value null for n == 0.
+  syn nta B A.b(int n) = (n == 0) ? null : new B();
+
+  syn int A.numProxyRefs() {
+    int i = 0;
+    for (Object child : b_int_proxy.astChildren()) {
+      i += 1;
+    }
+    return i;
+  }
+}

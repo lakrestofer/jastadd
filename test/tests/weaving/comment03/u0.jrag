@@ -1,0 +1,10 @@
+// This file has a name starting with u in order to test unicode escape handling on Windows.
+// On a Windows machine, the declared-at string for this file will include a \ followed by u,
+// leading to an illegal a Unicode escape sequence in Java and causing a compile error.
+// See https://bitbucket.org/jastadd/jastadd2/issues/297/unicode-escapes-in-generated-comments
+aspect utest {
+	/**
+ 	 * \u00B1
+ 	 */
+	public void A.a() {}
+}

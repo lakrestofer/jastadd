@@ -1,0 +1,4 @@
+A synthesized attribute with no equation generates an abstract method even if
+there is another attribute with the same name
+
+[Trac link](http://svn.cs.lth.se/trac/jastadd-trac/ticket/78)

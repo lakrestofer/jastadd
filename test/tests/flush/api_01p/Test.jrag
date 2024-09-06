@@ -1,0 +1,4 @@
+aspect Test {
+  // Creates fresh objects to check memoization behaviour.
+  syn Object A.fresh() = new Object();
+}

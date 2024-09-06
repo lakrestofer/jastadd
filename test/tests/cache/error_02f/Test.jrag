@@ -1,0 +1,9 @@
+// Conflicting cache declarations cause a JastAdd error.
+// .grammar={ A; }
+// .result=JASTADD_ERR_OUTPUT
+aspect Cache {
+  syn int A.attr() = 0;
+
+  cache A.attr();
+  uncache A.attr(); // Conflicting cache declaration.
+}

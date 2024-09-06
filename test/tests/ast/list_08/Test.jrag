@@ -1,0 +1,10 @@
+aspect Test {
+  syn lazy List<A> Node.getNtaAList() = getAListNoTransform().treeCopyNoTransform();
+
+  rewrite A {
+    when (!getTransformed())
+    to A {
+      return new A(true);
+    }
+  }
+}

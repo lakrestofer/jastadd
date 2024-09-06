@@ -1,0 +1,13 @@
+aspect Test {
+  inh A ASTNode.a();
+
+  eq A.getChild().a() = this;
+
+  coll java.util.List<ASTNode> A.bNodes() [new java.util.LinkedList<ASTNode>()];
+
+  ASTNode contributes this when isB() to A.bNodes() for a();
+
+  syn boolean ASTNode.isB() = false;
+
+  eq B.isB() = true;
+}

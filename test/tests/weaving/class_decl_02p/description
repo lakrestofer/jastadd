@@ -1,0 +1,4 @@
+Tests that the order of ITD and class declaration in an aspect files does not
+affect weaving of methods in aspect-declared classes.
+
+[Link to bitbucket issue.](https://bitbucket.org/jastadd/jastadd2/issue/176/order-of-arguments)

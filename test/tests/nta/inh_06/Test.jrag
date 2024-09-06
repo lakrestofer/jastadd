@@ -1,0 +1,12 @@
+aspect Test {
+  syn lazy B A.getB0() = new B(0);
+  syn lazy B A.getB1() = new B(getB0().value());
+  syn lazy List<B> A.getB2List() = new List<B>(new B(getB0().value()));
+  syn lazy Opt<B> A.getB3Opt() = new Opt<B>(new B(getB0().value()));
+
+  inh int B.value();
+  eq R.getA(int index).value() = index;
+  eq A.getB1().value() = -1;
+  eq A.getB2().value() = -2;
+  eq A.getB3().value() = -3;
+}

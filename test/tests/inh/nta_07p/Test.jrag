@@ -1,0 +1,14 @@
+// Test that an inherited attribute can be used on a synthesized NTA declared on an interface.
+// .result=JASTADD_PASS
+aspect Test {
+  interface I {
+  }
+
+  syn nta B I.b() = new B();
+
+  A implements I;
+
+  inh A B.a();
+
+  eq I.b().a() = this;
+}

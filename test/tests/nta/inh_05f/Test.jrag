@@ -1,0 +1,9 @@
+aspect Test {
+  // NTA on List subtype. Causes problem in inherited evaluation. See below.
+  syn nta A AList.implicit() = new A();
+
+  inh int A.x();
+  eq B.getA(int index).x() = getA(index).y(); // NullPointerException when called from AList.implicit().
+
+  syn int A.y() = 3;
+}

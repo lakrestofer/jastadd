@@ -1,0 +1,4 @@
+aspect B {
+	// second equivalent declaration
+	inh boolean A.x();
+}

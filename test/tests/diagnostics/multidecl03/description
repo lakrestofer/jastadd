@@ -1,0 +1,3 @@
+Tests the diagnostic message for multiple synthesized equations.
+
+[Related trac ticket](http://svn.cs.lth.se/trac/jastadd-trac/ticket/118)

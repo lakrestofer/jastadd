@@ -1,0 +1,6 @@
+Root ::= Node;
+abstract Node;
+Multi : Node ::= Node*;
+Decl : Node ::= <ID>;
+Use : Node ::= <ID>;
+UseSubclass : Use;

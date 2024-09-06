@@ -1,0 +1,2 @@
+Tests that an synthesized attribute on an abstract node type does not
+require an equation

@@ -1,0 +1,8 @@
+aspect Test {
+	public boolean A.customConstructor = false;
+	
+	public A.A(String s) {
+		this();
+		customConstructor = true;
+	}
+}

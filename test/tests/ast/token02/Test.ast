@@ -1,0 +1,3 @@
+Node ::= <BooleanToken:boolean> <ByteToken:byte> <CharToken:char>
+    <ShortToken:short> <IntToken:int> <LongToken:long>
+    <FloatToken:float> <DoubleToken:double>;

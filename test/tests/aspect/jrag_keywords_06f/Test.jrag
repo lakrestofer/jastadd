@@ -1,0 +1,7 @@
+// Can not use JastAdd keyword in attribute parameter list
+// See https://bitbucket.org/jastadd/jastadd2/issue/195/jastadd-keywords-in-java-code
+// .result=JASTADD_FAIL
+aspect Test {
+  // Keyword in attribute parameter list is not allowed.
+  syn int Node.foo(int eq) = 0;
+}

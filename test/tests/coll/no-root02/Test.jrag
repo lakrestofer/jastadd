@@ -1,0 +1,12 @@
+import java.util.*;
+
+aspect Test {
+  /**
+   * Super simple collection attribute that only collects one node.
+   */
+  coll Collection<Node> Node.self() [new HashSet<Node>()] with add root Node;
+
+  Node contributes
+    this when true
+  to Node.self() for this;
+}

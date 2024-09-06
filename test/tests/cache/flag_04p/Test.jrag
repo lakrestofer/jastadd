@@ -1,0 +1,10 @@
+aspect Test {
+  syn int Node.attr() {
+    return 0;
+  }
+}
+
+aspect CacheConfig {
+  cache Node.attr();
+  cache Node.attr(); // Multiple equivalent cache declarations are OK.
+}

@@ -1,0 +1,12 @@
+// Test that node types used as synthesized NTAs are not treated as root types.
+//
+// https://bitbucket.org/jastadd/jastadd2/issues/224/node-type-only-used-as-nta-treated-as-root
+//
+// .result=JASTADD_PASS
+aspect Test {
+  syn nta B A.b() = new B(new C());
+
+  inh int C.x();
+
+  eq A.getChild().x() = 1;
+}

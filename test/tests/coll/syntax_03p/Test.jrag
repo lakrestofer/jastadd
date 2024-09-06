@@ -1,0 +1,10 @@
+// The 'with x' part of a collection declaration is optional and defaults to 'add'.
+// .result=COMPILE_PASS
+import java.util.*;
+
+aspect Test {
+  coll Collection<B> A.set() [new HashSet<B>()] root A;
+
+  inh A B.a();
+  eq A.getB().a() = this;
+}

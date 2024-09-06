@@ -1,0 +1,16 @@
+// Same as generics_02p, but the interface is declared outside the aspect.
+// .result: COMPILE_PASS
+// .grammar: {A;}
+aspect Test {
+  // empty
+}
+
+interface Test<T> {
+  public void f(T o);
+
+  class Inner<U> implements Test<U> {
+    @Override
+    public void f(U o) {
+    }
+  }
+}

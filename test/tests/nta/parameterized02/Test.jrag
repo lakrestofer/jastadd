@@ -1,0 +1,5 @@
+aspect Test {
+    syn nta B A.b() = new B(0, "");
+    syn nta B A.b(int n) = new B(n, "");
+    syn nta B A.b(int n, String s) = new B(n, s);
+}

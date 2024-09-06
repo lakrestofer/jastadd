@@ -1,0 +1,15 @@
+import java.util.Collection;
+import java.util.HashSet;
+
+aspect Test {
+	inh A B.a();
+	eq A.getB().a() = this;
+
+	interface I { }
+	interface J { }
+	J implements I;
+	A implements J;
+
+	coll Collection<String> I.set() [new HashSet<String>()] with add;
+	B contributes getID() to I.set() for a();
+}

@@ -1,0 +1,3 @@
+Tests regression in JastAdd internal type lookup.
+
+See JastAdd issue #229 https://bitbucket.org/jastadd/jastadd2/issues/229/nullpointerexception-for-undeclared-ast

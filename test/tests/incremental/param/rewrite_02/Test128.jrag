@@ -1,0 +1,19 @@
+aspect Test128 {
+
+  inh String B.name();
+  eq A.getB().name() = getName();
+
+  syn boolean B.isC() = false;
+  eq C.isC() = true;
+
+  rewrite B {
+    when (name().equals("b") && !isC()) to C {
+      return new C();
+    }
+  }
+
+  inh B D.firstChild();
+  eq A.getD().firstChild() = getB();
+
+  syn lazy B D.sibling() = firstChild();
+}

@@ -1,0 +1,4 @@
+aspect Test {
+	inh int A.value();
+	eq Node.getA(int pos).value() = pos - 1;
+}

@@ -1,0 +1,64 @@
+import java.util.*;
+
+/**
+ * http://jastadd.org/web/examples.php?example=StateMachine
+ */
+aspect Test {
+  syn State Transition.source() = lookup(getSourceLabel()); // R1
+  syn State Transition.target() = lookup(getTargetLabel()); // R2
+
+  inh State Declaration.lookup(String label); // R3
+
+  eq StateMachine.getDeclaration(int i).lookup(String label) { // R4
+    for (Declaration d : getDeclarationList()) {
+      State match = d.localLookup(label);
+      if (match != null) return match;
+    }
+    return null;
+  }
+
+  syn State Declaration.localLookup(String label) = null; // R5
+
+  eq State.localLookup(String label) = // R6
+    (label.equals(getLabel())) ? this : null;
+
+  coll Set<Transition> State.transitions() [new HashSet<Transition>()] with add;
+
+  Transition contributes this
+    when source() != null
+    to State.transitions()
+    for source();
+
+  syn Set<State> State.successors() {
+    Set<State> result = new HashSet<State>();
+    for (Transition t : transitions()) {
+      if (t.target() != null) {
+        result.add(t.target());
+      }
+    }
+    return result;
+  }
+
+  coll Set<State> State.predecessors() [new HashSet<State>()] with add;
+
+  State contributes this
+    to State.predecessors()
+    for each successors();
+
+  coll Set<State> State.altReachable() circular [new HashSet<State>()] with addAll;
+
+  State contributes union(asSet(this), altReachable())
+    to State.altReachable()
+    for each predecessors();
+
+  // helper functions asSet and union
+  Set<State> ASTNode.asSet(State o) {
+    return Collections.singleton(o);
+  }
+
+  Set<State> ASTNode.union(Set<State> s1, Set<State> s2) {
+    Set<State> result = new HashSet<State>(s1);
+    result.addAll(s2);
+    return result;
+  }
+}

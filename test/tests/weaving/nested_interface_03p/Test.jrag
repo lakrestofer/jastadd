@@ -1,0 +1,7 @@
+aspect Test {
+	public class MyClass {
+		interface NestedInterface {
+			void m();
+		}
+	}
+}

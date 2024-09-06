@@ -1,0 +1,5 @@
+// Test aspect syntax error.
+// .result=JASTADD_ERR_OUTPUT
+aspect Test {
+  syn 4 A.v() = 3;
+}

@@ -1,0 +1,4 @@
+aspect Test {
+  syn boolean A.x() circular [false] = y();
+  syn boolean A.y() circular [false] = x() || true;
+}

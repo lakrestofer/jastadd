@@ -1,0 +1,4 @@
+abstract A ::= /d:D/;
+B: A;
+C: A;
+D;

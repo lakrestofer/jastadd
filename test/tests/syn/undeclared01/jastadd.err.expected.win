@@ -1,0 +1,1 @@
+Error at tests\syn\undeclared01\Test.jrag:2: synthesized attribute attribute assigned in class Node is not declared

@@ -1,0 +1,5 @@
+// Test the error message generated for an equation to an undeclared collection attribute.
+// .result=JASTADD_ERR_OUTPUT
+aspect Test {
+  A contributes getNumB() to A.childCounts() for this;
+}

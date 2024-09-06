@@ -1,0 +1,15 @@
+import java.util.HashSet;
+
+aspect Test {
+  inh A B.a(int index);
+
+  eq Root.getChild().a(int index) = getA(index);
+
+  coll HashSet<B> A.set() root Root;
+
+  B contributes this to A.set() for a(2); // OK.
+
+  coll HashSet<B> A.set2() root A;
+
+  B contributes this to A.set2() for a(2); // Error a(2) is outside the collection root of A.set2().
+}

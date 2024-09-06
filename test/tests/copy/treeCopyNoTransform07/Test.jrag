@@ -1,0 +1,3 @@
+aspect Test {
+	syn lazy X Node.getX() = new X();
+}

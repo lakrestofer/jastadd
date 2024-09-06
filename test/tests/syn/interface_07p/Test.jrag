@@ -1,0 +1,15 @@
+// A synthesized attribute can be inherited through multiple levels of interfaces.
+// .grammar: { A; }
+// .result: COMPILE_PASS
+aspect Test {
+	interface I { }
+	interface J { }
+	I implements J;
+  A implements I;
+
+	syn int J.attr();
+
+	eq A.attr() = 1234;
+
+  public int A.x = attr();
+}

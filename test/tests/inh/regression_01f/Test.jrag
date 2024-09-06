@@ -1,0 +1,4 @@
+aspect Test {
+	inh int B.x();
+	eq A.getB().x() = childIndex;
+}

@@ -1,0 +1,3 @@
+A ::= B* C*;
+B ::= <NAME>;
+C ::= <NAME> <TO:Integer>;

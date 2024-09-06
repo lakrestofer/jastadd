@@ -1,0 +1,4 @@
+Problems during JRAG parsing:
+Error at tests/rewrite/list_01f/Test.jrag:2:13: unexpected token "in":
+  rewrite C in A.getB() {
+            ^^

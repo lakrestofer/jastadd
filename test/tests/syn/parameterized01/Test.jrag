@@ -1,0 +1,3 @@
+aspect Test {
+    syn int Node.paramAttr(int i) = i + 13;
+}

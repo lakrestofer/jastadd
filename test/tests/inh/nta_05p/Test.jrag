@@ -1,0 +1,9 @@
+// Tests that a missing inherited equation warning is reported for an inherited equation on a
+// synthesized NTA child.
+//
+// .result=JASTADD_ERR_OUTPUT
+aspect Test {
+  syn nta B A.b() = new B();
+
+  inh A B.a(); // No equation for this inherited attribute.
+}

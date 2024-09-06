@@ -1,0 +1,8 @@
+aspect Test {
+  rewrite C in A.getB() {
+    to List {
+      List newList = new List(new D(), new D());
+      return newList;
+    }
+  }
+}

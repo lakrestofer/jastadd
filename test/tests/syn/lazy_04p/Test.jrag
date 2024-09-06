@@ -1,0 +1,16 @@
+aspect Test {
+	public int Node.counter1 = 0;
+	public int Node.counter2 = 0;
+
+  private int Node.incCounter1() {
+    return counter1++;
+  }
+	
+  private int Node.incCounter2() {
+    return counter2++;
+  }
+	
+	syn lazy int Node.lazyAttr() = incCounter1();
+
+	syn int Node.nonLazyAttr() = incCounter2();
+}

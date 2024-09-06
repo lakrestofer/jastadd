@@ -1,0 +1,1 @@
+Tests that a subtype of a non-root node type is not considered a root node type.

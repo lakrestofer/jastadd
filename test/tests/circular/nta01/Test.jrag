@@ -1,0 +1,20 @@
+aspect Test {
+  syn nta A Root.a() circular [new A()] {
+    A a = a();
+    if (a.isA()) return new B();
+    if (a.isB()) return new C();
+    return a;
+  }
+
+  syn boolean A.isA() = true;
+  eq B.isA() = false;
+  eq C.isA() = false;
+
+  syn boolean A.isB() = false;
+  eq B.isB() = true;
+  eq C.isB() = false;
+
+  syn boolean A.isC() = false;
+  eq B.isC() = false;
+  eq C.isC() = true;
+}

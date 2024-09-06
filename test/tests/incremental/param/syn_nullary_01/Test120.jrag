@@ -1,0 +1,38 @@
+aspect Test120 {
+
+  // Cache combinations of a() -> b() -> <Name>.
+
+  // With no caching on a() and b().
+  syn boolean A.a0() = b0();
+  syn boolean A.b0() = getName().equals("a");
+
+  // With caching on a().
+  syn lazy boolean A.a1() = b1();
+  syn boolean A.b1() = getName().equals("a");
+
+  // With caching on b().
+  syn boolean A.a2() = b2();
+  syn lazy boolean A.b2() = getName().equals("a");
+
+  // With caching on both a() and b().
+  syn lazy boolean A.a3() = b3();
+  syn lazy boolean A.b3() = getName().equals("a");
+
+
+  // Cache combinations of a() -> b() -> c() -> <Name>.
+
+  // With caching on a() and c().
+  syn lazy boolean A.a4() = b4();
+  syn boolean A.b4() = c4();
+  syn lazy boolean A.c4() = getName().equals("a");
+
+  // With caching on b() and c().
+  syn boolean A.a5() = b5();
+  syn lazy boolean A.b5() = c5();
+  syn lazy boolean A.c5() = getName().equals("a");
+
+  // With caching on a() and b().
+  syn lazy boolean A.a6() = b6();
+  syn lazy boolean A.b6() = c6();
+  syn boolean A.c6() = getName().equals("a");
+}

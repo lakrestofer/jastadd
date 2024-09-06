@@ -1,0 +1,9 @@
+aspect Test {
+  syn int Node.attr() {
+    return 0;
+  }
+}
+
+aspect CacheConfig {
+  uncache Node.attr();
+}

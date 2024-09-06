@@ -1,0 +1,3 @@
+Exposes bug in fullCopy. NTA children are initialized with incorrect indices.
+
+Bitbucket issue: https://bitbucket.org/jastadd/jastadd2/issue/131/nta-children-initialized-at-incorrect

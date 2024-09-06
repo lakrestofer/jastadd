@@ -1,0 +1,16 @@
+aspect Test {
+  syn lazy D A.getD1() {
+    return new D("D1");
+  }
+
+  syn lazy List A.getD2List() {
+    List l = new List();
+    l.add(new D("D2_1"));
+    l.add(new D("D2_2"));
+    return l;
+  }
+
+  syn lazy Opt<D> A.getD3Opt() {
+    return new Opt(new D("D3"));
+  }
+}

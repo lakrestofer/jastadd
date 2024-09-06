@@ -1,0 +1,9 @@
+aspect Test {
+  syn lazy int X.py(int a, int b) {
+    return (int) Math.sqrt(a * a + b * b);
+  }
+
+  public boolean X.computedMapInitialized() {
+    return py_int_int_computed != null;
+  }
+}

@@ -1,0 +1,1 @@
+Tests that an AST node type can inherit explicitly from ASTNode

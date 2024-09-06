@@ -1,0 +1,8 @@
+aspect Test {
+  public class Size {
+    int value;
+    public Size(int v) {
+      this.value = v;
+    }
+  }
+}

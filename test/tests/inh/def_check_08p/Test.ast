@@ -1,0 +1,4 @@
+Program ::= B;
+abstract A ::= Id;
+B : A;
+Id;

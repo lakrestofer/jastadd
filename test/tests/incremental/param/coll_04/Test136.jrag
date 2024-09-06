@@ -1,0 +1,12 @@
+import java.util.*;
+
+aspect Test {
+  inh B C.b();
+  eq B.getC().b() = this;
+
+  coll Collection<C> B.cs() [new HashSet<C>()];
+
+  C contributes this
+      to B.cs()
+      for b();
+}

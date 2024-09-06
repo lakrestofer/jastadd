@@ -1,0 +1,5 @@
+import java.util.ArrayList;
+aspect Test {
+    coll ArrayList<B> A.bs();
+    B contributes this to A.bs();
+}

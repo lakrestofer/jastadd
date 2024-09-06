@@ -1,0 +1,47 @@
+JastAdd2 Tour
+=============
+
+This tour will guide you through the basic features of JastAdd2.
+
+Abstract Syntax Tree
+--------------------
+
+$include(grammar/basic)
+
+$include(grammar/basic2)
+
+$include(grammar/basic3)
+
+###### Optional Components
+
+$include(grammar/opt1)
+
+###### List Components
+
+TODO
+
+Synthesized Attributes
+----------------------
+
+$include(attributes/synthesized)
+
+Inherited Attributes
+--------------------
+
+TODO
+
+Collection Attributes
+---------------------
+
+TODO
+
+Nonterminal Attributes
+----------------------
+
+TODO
+
+Rewrite Rules
+-------------
+
+TODO
+

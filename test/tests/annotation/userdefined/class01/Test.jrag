@@ -1,0 +1,9 @@
+aspect Test {
+	class MyClass {
+		@Silly
+		public void sillyMethod() {
+		}
+		public void seriousMethod() {
+		}
+	}
+}

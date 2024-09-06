@@ -1,0 +1,10 @@
+// Test parsing of generic inter-type method.
+// See https://bitbucket.org/jastadd/jastadd2/issue/208/support-for-generics-in-short-method
+// .result: COMPILE_PASS
+// .grammar: {A;}
+import java.util.Collection;
+
+aspect Test {
+  public <T extends Integer> void A.b(T o, Collection<T> res) {
+  }
+}

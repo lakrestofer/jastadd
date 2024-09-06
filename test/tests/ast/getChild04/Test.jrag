@@ -1,0 +1,6 @@
+aspect Test {
+  /**
+   * Access child index.
+   */
+  syn int ASTNode.childIndex() = childIndex;
+}

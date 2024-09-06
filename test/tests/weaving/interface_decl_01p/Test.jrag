@@ -1,0 +1,9 @@
+public interface InterfaceA {
+	public InterfaceA foo();
+}
+
+aspect Test {
+	public interface InterfaceB {
+		public void bar(InterfaceB obj);
+	}
+}

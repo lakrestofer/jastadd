@@ -1,0 +1,24 @@
+aspect Test {
+	// asfg
+	//
+	/**
+ 	  * qwer
+ 	  */
+ 	//
+ 	//  asdf
+	public void A.a() {}
+
+	/**
+ 	  * qwer
+ 	  */
+ 	//
+ 	//  asdf
+	public void A.b() {}
+
+ 	//
+ 	//  asdf
+	/**
+ 	  * qwer
+ 	  */
+	public void A.c() {}
+}

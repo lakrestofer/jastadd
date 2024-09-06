@@ -1,0 +1,24 @@
+// Test that the aspect parser allows Java 7 try-with-resources syntax.
+// .grammar: { A; }
+// .result: JASTADD_PASS
+import java.util.*;
+import java.io.*;
+
+aspect Java7_TWR {
+  // No semicolon after last resource declaration.
+  public void A.print1(String filename, String msg) throws IOException {
+    try (FileOutputStream fout = new FileOutputStream(filename);
+        PrintStream out = new PrintStream(fout)) {
+      out.println(msg);
+    }
+  }
+
+  // Semicolon after last resource declaration.
+  public void A.print2(String filename, String msg) throws IOException {
+    try (FileOutputStream fout = new FileOutputStream(filename);
+        PrintStream out = new PrintStream(fout);
+    ) {
+      out.println(msg);
+    }
+  }
+}

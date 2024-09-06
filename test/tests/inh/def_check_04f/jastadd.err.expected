@@ -1,0 +1,1 @@
+Warning at tests/inh/def_check_04f/Test.jrag:2: missing inherited equation for attribute attr in class Expr when being child of X (path: Program->C->X->Expr)

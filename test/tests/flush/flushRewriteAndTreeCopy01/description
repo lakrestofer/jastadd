@@ -1,0 +1,4 @@
+A complicated test case combining flush, rewrite and treeCopy. 
+
+treeCopy invokes clone that in turn flushes caches. Clone should not 
+flush rewrite cache since this may change the original node.

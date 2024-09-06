@@ -1,0 +1,10 @@
+aspect Test {
+	syn int ASTNode.maxDepth() = 0;// allow graph generation
+
+// DOC START
+syn int Stmt.maxDepth() = 1 + getExpr().maxDepth();
+syn int Expr.maxDepth();
+eq Add.maxDepth() = 1 + Math.max(getLeft().maxDepth(), getRight().maxDepth());
+eq Num.maxDepth() = 1;
+// DOC END
+}

@@ -1,0 +1,4 @@
+aspect Test {
+  inh Object A.attr();
+  eq Program.getA().attr() = new Object();
+}

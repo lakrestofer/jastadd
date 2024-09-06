@@ -1,0 +1,33 @@
+ ------------------
+| after construction
+ ------------------
+A(CREATED) listeners: []
+A/List[0](CREATED) listeners: []
+A/List[0]/B[0](CREATED) listeners: []
+A/List[0]/B[1](CREATED) listeners: []
+ -------------
+| after b1.decl
+ -------------
+A(COMPUTED) listeners: [A/List[0](COMPUTED)]
+A/List[0](COMPUTED) listeners: [A(COMPUTED), A/List[0]/B[0](COMPUTED)]
+A/List[0]/B[0](COMPUTED) listeners: [A/List[0](COMPUTED)]
+A/List[0]/B[1](CREATED) listeners: [A/List[0](COMPUTED)]
+ -------------
+| after b2.decl
+ -------------
+A(COMPUTED) listeners: [A/List[0](COMPUTED)]
+A/List[0](COMPUTED) listeners: [A(COMPUTED), A/List[0]/B[0](COMPUTED), A/List[0]/B[1](COMPUTED)]
+A/List[0]/B[0](COMPUTED) listeners: [A/List[0](COMPUTED)]
+A/List[0]/B[1](COMPUTED) listeners: [A/List[0](COMPUTED)]
+ ----------------------------------
+| after a.getChild(0).removeChild(0)
+ ----------------------------------
+A(EMPTY) listeners: []
+A/List[0](EMPTY) listeners: []
+A/List[0]/B[0](EMPTY) listeners: []
+ ---------------------------------------
+| after b2.decl (now at child position 0)
+ ---------------------------------------
+A(COMPUTED) listeners: [A/List[0](COMPUTED)]
+A/List[0](COMPUTED) listeners: [A(COMPUTED), A/List[0]/B[0](COMPUTED)]
+A/List[0]/B[0](COMPUTED) listeners: [A/List[0](COMPUTED)]

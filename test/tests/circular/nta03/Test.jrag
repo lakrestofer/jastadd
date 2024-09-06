@@ -1,0 +1,18 @@
+aspect Test {
+  syn nta A A.min(int p) circular [ new A(getValue()) ] {
+    if (getValue() < p) {
+      return new A(getValue());
+    } else {
+      return new A(p);
+    }
+  }
+
+  /** Custom equals method to compare A objects. */
+  @Override public boolean A.equals(Object o) {
+    if (o instanceof A) {
+      A other = (A) o;
+      return other.getValue().equals(getValue());
+    }
+    return false;
+  }
+}

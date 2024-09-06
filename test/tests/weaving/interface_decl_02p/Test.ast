@@ -1,0 +1,4 @@
+abstract Declarator;
+
+FieldDecl : Declarator;
+VarDecl : Declarator;

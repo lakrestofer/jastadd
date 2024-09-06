@@ -1,0 +1,1 @@
+Warning at tests/inh/nta_05p/Test.jrag:8: missing inherited equation for attribute a in class B when being child of A (path: A->B)

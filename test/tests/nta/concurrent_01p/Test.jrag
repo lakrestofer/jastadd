@@ -1,0 +1,9 @@
+// Regression test for code generation issue with concurrent evaluation.
+// See https://bitbucket.org/jastadd/jastadd2/issues/298/faulty-code-generation-with-concurrent
+// .options: concurrent
+// .result: COMPILE_PASS
+aspect Test {
+  syn lazy D A.getd();
+  eq B.getd() = new D();
+  eq C.getd() = new D(); 
+}

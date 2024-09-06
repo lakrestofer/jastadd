@@ -1,0 +1,16 @@
+import java.util.LinkedList;
+
+aspect Test {
+  coll LinkedList<B> R.bList();
+
+  // Using custom survey code does not stop contributions from the same node type.
+  A contributes {
+    implicitB().collectContributions();
+  } to R.bList();
+
+  A contributes getThing() to R.bList();
+
+  B contributes this to R.bList();
+
+  syn nta B A.implicitB() = new B();
+}

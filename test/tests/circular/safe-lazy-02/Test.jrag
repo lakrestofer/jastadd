@@ -1,0 +1,12 @@
+aspect Test {
+  syn int A.c() circular [0] = Math.min(5, b() + c());
+
+  public int A.bComputeCount = 0; // Used to measure recomputations of A.b().
+
+  // This attribute does not need --safeLazy, and using the flag causes
+  // unnecessary cache discards.
+  syn lazy int A.b() {
+    bComputeCount += 1;
+    return 1;
+  }
+}

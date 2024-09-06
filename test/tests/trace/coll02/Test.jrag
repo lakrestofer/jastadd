@@ -1,0 +1,23 @@
+import java.util.Set;
+import java.util.HashSet;
+
+aspect Test {
+	
+	inh Node A.node();
+	eq Node.getChild().node() = this;
+
+	syn boolean A.isC() = false;
+	eq C.isC() = true;
+	
+	coll Set<String> Node.greetings() [new HashSet<String>()] with add;
+	A contributes "hello" when isC() to Node.greetings() for node();
+        // Include condition on more than one line and with quotes to check that condition strings work in the tracing
+	A contributes "ciao" 
+	  when !isC() &&    	 
+	    "true".equals("true") &&
+	    "\t".equals("\t")
+	  to Node.greetings() for node();
+	C contributes "hej" to Node.greetings() for node();
+	B contributes "hi" to Node.greetings() for node();
+
+}

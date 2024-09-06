@@ -1,0 +1,9 @@
+aspect Test {
+	public <T extends Answer> boolean Answer.isSame(T node) {
+		return answerToString().equals(node.answerToString());
+	}
+
+	syn String Answer.answerToString() = "Unknown";
+	syn String No.answerToString() = "No";
+	syn String Yes.answerToString() = "Yes";
+}

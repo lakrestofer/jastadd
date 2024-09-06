@@ -1,0 +1,5 @@
+aspect A {
+	inh boolean A.x();
+	
+	eq Node.getA().x() = false;
+}

@@ -1,0 +1,4 @@
+When a multiple-declaration error is reported for an inherited attribute
+the previous declaration location should also be reported.
+
+[Related trac ticket](http://svn.cs.lth.se/trac/jastadd-trac/ticket/115)

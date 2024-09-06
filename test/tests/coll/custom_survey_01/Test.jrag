@@ -1,0 +1,15 @@
+import java.util.LinkedList;
+
+aspect Test {
+  coll LinkedList<B> A.bList();
+
+  // Custom survey code is inserted into generated collection survey method.
+  A contributes {
+    implicitB().collectContributions();
+    super.collectContributions();
+  } to A.bList();
+
+  B contributes this to A.bList();
+
+  syn nta B A.implicitB() = new B();
+}

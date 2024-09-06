@@ -1,0 +1,9 @@
+aspect InterfaceOrder {
+    syn int MyInterface.myValue1() = 10; // Error
+
+    public interface MyInterface {
+    }
+
+    syn int MyInterface.myValue2() = 10; // OK
+}
+

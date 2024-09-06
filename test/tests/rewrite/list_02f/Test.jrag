@@ -1,0 +1,13 @@
+// List rewrites are not supported in cnta rewrite mode. This test checks
+// that an error is reported if a list rewrite is used in cnta rewrite mode.
+// .grammar: { A ::= B*; abstract B; C : B; D : B; E : B; }
+// .options: rewrite=cnta
+// .result:  JASTADD_ERR_OUTPUT
+aspect Test {
+  rewrite C in A.getB() {
+    to List {
+      List newList = new List(new D(), new D());
+      return newList;
+    }
+  }
+}

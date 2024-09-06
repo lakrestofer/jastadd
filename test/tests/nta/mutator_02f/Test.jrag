@@ -1,0 +1,11 @@
+// Test that a setter method is not generated for an list NTA.
+// .result=COMPILE_FAIL
+// .tags=nta,codegen
+aspect Test {
+	syn List<B> A.getBList() = new List<B>();
+
+	public void A.error() {
+		// ERROR: no set method generated for the NTA B
+		setBList(new List<B>());
+	}
+}

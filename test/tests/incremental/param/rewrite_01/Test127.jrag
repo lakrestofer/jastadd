@@ -1,0 +1,14 @@
+aspect Test127 {
+
+  inh String B.name();
+  eq A.getB().name() = getName();
+
+  syn boolean B.isC() = false;
+  eq C.isC() = true;
+
+  rewrite B {
+    when (name().equals("b") && !isC()) to C {
+      return new C(name());
+    }
+  }
+}

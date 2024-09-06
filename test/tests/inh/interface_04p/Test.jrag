@@ -1,0 +1,12 @@
+aspect Test1 {
+	interface FatherI { }
+	Father implements FatherI;
+
+	inh boolean Son.attr();
+
+	eq FatherI.getChild().attr() = true;
+}
+
+aspect Test2 {
+	refine Test1 eq Father.getChild().attr() = false;
+}

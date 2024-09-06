@@ -1,0 +1,7 @@
+aspect Test {
+	public enum Fruit {
+		CHERRY,
+		BANANA,
+		APPLE
+	}
+}

@@ -1,0 +1,6 @@
+aspect Test {
+  syn Object A.x() = new Object();
+  eq B.x() = new Object();
+
+  cache B.x();
+}

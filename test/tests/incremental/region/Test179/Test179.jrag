@@ -1,0 +1,14 @@
+import java.util.*;
+
+aspect Test178 {
+
+  inh lazy int B.c();
+  eq A.getChild().c() = 5;
+
+  syn lazy boolean A.d() = b("a") instanceof C;
+  syn nta B A.b(String s) = s.equals(getName()) ? new B() : new C();
+
+  syn lazy int B.a() = b();
+  syn lazy int B.b() = c();
+
+}

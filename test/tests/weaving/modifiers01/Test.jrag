@@ -1,0 +1,4 @@
+aspect Test {
+	public class MyClass {}
+	public final int MyClass.x;
+}

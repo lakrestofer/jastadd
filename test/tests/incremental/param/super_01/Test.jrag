@@ -1,0 +1,5 @@
+aspect Test {
+  syn lazy String A.name() = "Dr" + getID();
+
+  eq B.name() = super.name() + getID();
+}

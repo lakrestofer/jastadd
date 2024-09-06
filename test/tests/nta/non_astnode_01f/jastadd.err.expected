@@ -1,0 +1,1 @@
+Error at tests/nta/non_astnode_01f/Test.jrag:9: return type of NTA must be an AST node

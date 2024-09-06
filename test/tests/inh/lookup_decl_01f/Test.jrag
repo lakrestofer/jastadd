@@ -1,0 +1,6 @@
+// JastAdd should not print a stack trace when an inherited attribute declaration is missing.
+// .result=JASTADD_ERR_OUTPUT
+aspect Test {
+	inh int A.value();
+	eq Node.getChild().value(int i) = 0;
+}

@@ -1,0 +1,5 @@
+// ;oops
+import static java.lang.Runtime.getRuntime;
+
+aspect Test {
+}

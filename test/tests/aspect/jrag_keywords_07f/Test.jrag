@@ -1,0 +1,8 @@
+// Can not use keywords as attribute names.
+// .result=JASTADD_FAIL
+import java.util.Iterator;
+
+aspect Test {
+  syn int A.cache() = 3;
+  syn int A.uncache() = 3;
+}

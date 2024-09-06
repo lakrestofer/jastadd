@@ -1,0 +1,1 @@
+Node ::= <Token1> <Token2:String>;

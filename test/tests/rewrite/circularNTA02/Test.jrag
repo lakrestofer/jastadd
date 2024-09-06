@@ -1,0 +1,22 @@
+aspect Test {
+	syn int A.value();
+	eq B.value() = 32;
+	eq C.value() = -1;
+
+	rewrite B {
+		to A {
+			return new C();
+		}
+	}
+
+	inh int A.a();
+	eq Program.getChild(int i).a() = 1;
+
+	inh int A.b();
+	eq Program.getChild().b() = 1;
+
+	inh int A.c();
+	inh int D.c();
+	eq Program.getA().c() = 1;
+	eq Program.getD().c() = 2;
+}

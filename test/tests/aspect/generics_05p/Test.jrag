@@ -1,0 +1,12 @@
+// An aspect-declared class can contain a nested generic interface.
+// See https://bitbucket.org/jastadd/jastadd2/issues/246/nested-generic-types
+// .result: COMPILE_PASS
+// .grammar: {A;}
+import java.util.Iterator;
+
+aspect Test {
+  class Test {
+    interface Inner<U> extends Iterable<U> {
+    }
+  }
+}

@@ -1,0 +1,9 @@
+import java.util.*;
+
+aspect Test {
+  inh A B.a();
+  eq A.getB().a() = this;
+
+  coll Collection<B> A.set() [new HashSet<B>()] with add root Root;
+  B contributes this to A.set() for a();
+}

@@ -1,0 +1,5 @@
+aspect Test {
+  syn int Node.circ() circular [0] = Math.min(circ() + 1, limit());
+
+  syn int Node.limit() = 6;
+}

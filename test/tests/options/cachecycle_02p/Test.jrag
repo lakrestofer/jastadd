@@ -1,0 +1,5 @@
+aspect CacheCycle {
+  syn int A.x() circular [0] = Math.min(109302087, y() + z());
+  syn int A.y() circular [0] = 2 * x();
+  syn int A.z() circular [0] = 5 * x();
+}

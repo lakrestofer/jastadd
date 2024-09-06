@@ -1,0 +1,4 @@
+Node ::= First:A Second:A <Name:String>;
+abstract A ::= <Col:int> <Line:int>;
+B : A ::= <Line:int>;
+C : A ::= <Col:int>;

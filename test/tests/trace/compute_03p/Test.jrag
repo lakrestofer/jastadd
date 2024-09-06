@@ -1,0 +1,6 @@
+aspect Test {
+
+	syn String Node.echo(String v) {
+		return v;
+	}
+}

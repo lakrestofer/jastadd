@@ -1,0 +1,10 @@
+// Contribution statements may not omit the 'for'-part if the collection root
+// type is different from the target node type.
+// .result=JASTADD_ERR
+import java.util.LinkedList;
+
+aspect Test {
+  coll LinkedList<Leaf> Node.leaves() [new LinkedList<Leaf>()] root Tree;
+
+  Leaf contributes this to Node.leaves(); // Missing contribution target (for clause).
+}

@@ -1,0 +1,6 @@
+// JastAdd keywords can not be used as attribute names.
+// .result=JASTADD_FAIL
+aspect Test {
+  // Can not use keyword as attribute name.
+  syn int Node.to() = foo;
+}

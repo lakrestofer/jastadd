@@ -1,0 +1,9 @@
+// JSON encoding for JastAdd.
+// Note: the grammar has no root node.
+// TODO: add something interesting.
+// .result: COMPILE_PASS
+import java.util.Set;
+import java.util.HashSet;
+
+aspect Test {
+}

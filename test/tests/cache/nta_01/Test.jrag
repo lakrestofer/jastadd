@@ -1,0 +1,5 @@
+aspect Test {
+  syn nta A A.ntaA() = new A();
+
+  uncache A.ntaA(); // Should not be possible to change cache configuration for NTAs like this.
+}

@@ -1,0 +1,10 @@
+aspect Test {
+  syn int A.c() circular [0] = Math.min(15, b() + b() + b() + c());
+
+  public int A.bComputeCount = 0; // Used to measure recomputations of A.b().
+
+  syn lazy int A.b() {
+    bComputeCount += 1;
+    return 1;
+  }
+}

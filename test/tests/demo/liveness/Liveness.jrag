@@ -1,0 +1,26 @@
+import java.util.BitSet;
+import java.util.Collection;
+import java.util.ArrayList;
+
+aspect Liveness {
+  public Collection<Vertex> Vertex.succ = new ArrayList<Vertex>();
+  public Collection<Vertex> Vertex.pred = new ArrayList<Vertex>();
+  public BitSet Vertex.def = new BitSet();
+  public BitSet Vertex.use = new BitSet();
+
+  syn lazy BitSet Vertex.out() {
+    BitSet out = new BitSet();
+    for (Vertex s : succ) {
+      out.or(s.in());
+    }
+    return out;
+  }
+
+  syn BitSet Vertex.in() circular [new BitSet()] {
+    BitSet in = new BitSet();
+    in.or(out()); 
+    in.andNot(def);  
+    in.or(use);
+    return in;
+  }
+}

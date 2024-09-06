@@ -1,0 +1,4 @@
+An equation for an inherited attribute applies to the whole subtree of the
+child it is defined for.  An equation for an inherited attribute can be be
+shadowed somewhere in the subtree.  A shadowing equation for an inherited
+attribute can apply to an individual child (and its subtree).

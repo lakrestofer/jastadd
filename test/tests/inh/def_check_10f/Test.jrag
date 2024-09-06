@@ -1,0 +1,3 @@
+aspect Test {
+  inh boolean B.attr();
+}

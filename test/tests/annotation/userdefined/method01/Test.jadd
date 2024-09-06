@@ -1,0 +1,6 @@
+aspect Test {
+	@Silly
+	public String A.name() {
+		return "piderman";
+	}
+}

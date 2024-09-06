@@ -1,0 +1,6 @@
+ExprStmt ::= Expr;
+
+abstract Expr;
+Add : Expr ::= Left:Expr Right:Expr;
+Const : Expr ::= <VALUE:Integer>;
+Var : Expr ::= <ID>;

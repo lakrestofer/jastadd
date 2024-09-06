@@ -1,0 +1,2 @@
+Tests that a getChild equation for an inherited attribute shadows
+equations of inherited children

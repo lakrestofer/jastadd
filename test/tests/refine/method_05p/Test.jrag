@@ -1,0 +1,14 @@
+aspect A1 {
+	public int X.addSomething(int i) {
+		return i + 2;
+	}
+	public ASTNode X.returnSomething(ASTNode n) {
+		return n;
+	}
+}
+
+aspect A2 {
+	refine A1 public int X.addSomething(final int i) {
+		return i + 13;
+	}
+}

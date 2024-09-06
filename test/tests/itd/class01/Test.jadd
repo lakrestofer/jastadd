@@ -1,0 +1,4 @@
+aspect Test {
+  /** Aspect class declaration. */
+  class C {}
+}

@@ -1,0 +1,11 @@
+// Test that the aspect parser allows Java 8 array constructor reference expression syntax.
+// https://bitbucket.org/jastadd/jastadd2/issues/323/parsing-of-array-constructor-references
+// .grammar: { A; }
+// .result: JASTADD_PASS
+aspect Java8_ConsRef {
+  interface IntFun<R> {
+    R fun(int x);
+  }
+
+  IntFun A.fun = String[]::new;
+}

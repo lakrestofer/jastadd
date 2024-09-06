@@ -1,0 +1,15 @@
+Node ::= X0:X Y Z;
+
+/* constructor parameters: Z W Y X1 X0  */
+/* <FUTURE> order of children in SubNode: X0 Y Z W X1  */
+/* <CURRENT> order of children in SubNode: Z W Y X1 X0  */
+SubNode : Node ::= W Y X1:X X0:X;
+
+/* constructor parameters: Z W Y X1 X0  */
+/* <FUTURE> order of children in SubSubNode: X0 Y Z W X1  */
+/* <CURRENT> order of children in SubSubNode: X0 Y W Z X1  */
+SubSubNode : Node ::= X0:X Y W Z X1:X;
+X;
+Y;
+Z;
+W;

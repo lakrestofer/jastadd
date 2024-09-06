@@ -1,0 +1,6 @@
+aspect B {
+	refine B
+	public boolean FolderPart.find(String name) {
+		return name.equals("blue");
+	}
+}

@@ -1,0 +1,5 @@
+aspect Test {
+  syn Object A.build(int a, Float b) = new Object();
+
+  cache A.build(int, Float);
+}

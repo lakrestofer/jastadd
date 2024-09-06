@@ -1,0 +1,3 @@
+Father;
+SpecialFather : Father ::= Son;
+Son;

@@ -1,0 +1,38 @@
+aspect Lookup {
+
+  syn Node Use.decl() = lookup(getID());
+
+  inh Decl Use.lookup(String id);
+  eq Root.getChild(int i).lookup(String id) {
+    for (Node node : getNodeList()) {
+      if (node instanceof Decl && node.getID().equals(id)) {
+        return (Decl)node;
+      }
+    }
+    return unknown();
+  }
+
+}
+
+aspect Unknown {
+  syn nta Decl Root.unknown() = new Unknown();
+
+  syn boolean Node.isUnknown() = false;
+  eq Unknown.isUnknown() = true;
+}
+
+aspect Check {
+
+  syn boolean Root.ok() {
+    boolean ok = true;
+    for (Node node : getNodeList()) {
+      if (!node.ok()) {
+        ok = false;
+      }
+    }
+    return ok;
+  }
+
+  syn boolean Node.ok() = true;
+  eq Use.ok() = !decl().isUnknown();
+}

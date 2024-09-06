@@ -1,0 +1,3 @@
+Tests the --generateImplicits=false option.
+
+https://bitbucket.org/jastadd/jastadd2/issue/102/custom-implementation-of-implicit-node

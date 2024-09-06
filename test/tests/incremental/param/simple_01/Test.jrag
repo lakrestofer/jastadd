@@ -1,0 +1,9 @@
+aspect Test {
+  syn Object A.unmemoized() {
+    return new Object();
+  }
+
+  syn lazy Object A.memoized() {
+    return new Object();
+  }
+}

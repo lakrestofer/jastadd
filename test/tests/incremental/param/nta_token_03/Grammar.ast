@@ -1,0 +1,4 @@
+Root ::= WorkingType ErroneousType ;
+WorkingType ::= <ID> /A:A/ /<ComputedName:String>/;
+A ::= <ID> ;
+ErroneousType ::= <ID> ;

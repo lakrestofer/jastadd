@@ -1,0 +1,12 @@
+// Test that JastAdd generates a nice error message when the
+// error token includes a format character (%s).
+//
+// This tests a bug in JastAdd that caused an exception due
+// to the token being used as format string during error reporting.
+//
+// See https://bitbucket.org/jastadd/jastadd2/issues/267/exception-when-printing-error-message-for
+// .grammar: {A;}
+// .result: JASTADD_ERR_OUTPUT
+aspect Test {
+  "%s
+}

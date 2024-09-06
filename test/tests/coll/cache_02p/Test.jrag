@@ -1,0 +1,25 @@
+import java.util.*;
+
+aspect Test {
+  inh A B.a();
+
+  eq A.getB().a() = this;
+
+  coll Collection<Integer> A.childCounts() [new HashSet<Integer>()] with add root A;
+
+  A contributes getNumB()
+      to A.childCounts()
+      for targetNode();
+
+  B contributes 0
+      to A.childCounts()
+      for a();
+
+  public int A.targetEval = 0;
+
+  // Compute contribution target. Also tracks number of evaluations.
+  public A A.targetNode() {
+    targetEval += 1;
+    return this;
+  }
+}

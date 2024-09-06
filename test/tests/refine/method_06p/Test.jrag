@@ -1,0 +1,12 @@
+aspect A1 {
+  interface Interface {
+  }
+  Node implements Interface;
+  public ASTNode Interface.returnSomething(ASTNode n) { }
+}
+
+aspect A2 {
+  refine A1 public ASTNode Interface.returnSomething(final ASTNode n) {
+  	return null;
+  }
+}

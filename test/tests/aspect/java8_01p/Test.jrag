@@ -1,0 +1,64 @@
+// Test that the aspect parser allows Java 8 lambda expression syntax.
+// https://bitbucket.org/jastadd/jastadd2/issues/192/support-for-java-8-syntax-in-aspects
+// .grammar: { A; }
+// .result: JASTADD_PASS
+import java.util.*;
+import java.util.stream.*;
+
+aspect Java8_Lambdas {
+  // 1. Expression lambdas.
+
+  // No parameter.
+  syn F0 A.noparam() = () -> 1;
+
+  // Single untyped lambda parameter.
+  syn F1 A.untyped1() = i -> i * 2;
+
+  // Multiple untyped lambda parameters.
+  syn F2 A.untyped2() = (a, b) -> a / b;
+  syn F3 A.untyped3() = (a, b, c) -> a + b - c;
+
+  // Single typed lambda parameter.
+  syn F1 A.typed1() = (int i) -> i * i;
+
+  // Multiple untyped lambda parameters.
+  syn F2 A.typed2() = (int a, int b) -> a * b;
+  syn F3 A.typed3() = (int a, int b, int c) -> a * b / c;
+
+  // 2. Block lambdas.
+
+  // No parameter.
+  syn F0 A.noparam_block() = () -> { return 100; };
+
+  // Single untyped lambda parameter.
+  syn F1 A.untyped1block() = i -> { return i; };
+
+  // Multiple untyped lambda parameters.
+  syn F2 A.untyped2block() = (a, b) -> {
+    if (a > b) {
+      return a - b;
+    } else {
+      return b - a;
+    }
+  };
+  syn F3 A.untyped3block() = (a, b, c) -> {
+    if (a > b) {
+      return (a - b) * c;
+    } else {
+      return (b - a) * c;
+    }
+  };
+
+  // Single typed lambda parameter.
+  syn F1 A.typed1block() = (int i) -> { return i * i; };
+
+  // Multiple untyped lambda parameters.
+  syn F2 A.typed2block() = (int a, int b) -> { return a * b; };
+  syn F3 A.typed3block() = (int a, int b, int c) -> { return a * b / c; };
+
+  // Function types:
+  interface F0 { int apply(); }
+  interface F1 { int apply(int a); }
+  interface F2 { int apply(int a, int b); }
+  interface F3 { int apply(int a, int b, int c); }
+}

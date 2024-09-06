@@ -1,0 +1,16 @@
+aspect A1 {
+  public void Node.toBeRefined() { }
+}
+
+aspect A2 {
+  public String[] Node.str = { "", "", "", "", "", "", "" };
+  refine A1 public void Node.toBeRefined() {
+    str[0] = "Test.Node.toBeRefined";
+    str[1] = "aTest.Node.toBeRefined";
+    str[2] = "Test.Node.toBeRefinedd";
+    str[3] = "refined";
+    str[4] = "unrefined";
+    str[5] = "rrrefineddd";
+    str[6] = "refinedrefined";
+  }
+}

@@ -1,0 +1,9 @@
+aspect Test {
+  syn nta Named A.lr(boolean left) {
+    if (left) {
+      return new Named(getLeft().getName());
+    } else {
+      return new Named(getRight().getName());
+    }
+  }
+}

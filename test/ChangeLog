@@ -1,0 +1,60 @@
+2013-08-21  Jesper Öqvist <jesper.oqvist@cs.lth.se>
+
+    * Moved JastAdd2 JUnit test suites into the tests.jastadd2 package
+    * Test includes and excludes can now be managed using the TestProperties
+    class
+
+2013-04-08  Jesper Öqvist <jesper.oqvist@cs.lth.se>
+
+    * Tests can now run JastAdd in the same JVM, without forking a new
+    process.  This behaviour is enabled by setting the 'fork' option to
+    'false'.  It is not enabled by default currently because it does not work
+    well with parallel test running.
+
+2013-02-07  Jesper Öqvist <jesper.oqvist@cs.lth.se>
+
+    * All test paths are specified relative to the "tests" directory
+
+2013-02-06  Jesper Öqvist <jesper.oqvist@cs.lth.se>
+
+    * Added new result option to compare the error output from JastAdd:
+      JASTADD_ERR_OUTPUT
+    * The JastAdd source file list is sorted, so that source files are always
+      parsed in the same order by JastAdd (diagnostic output may be dependent
+      on source file order)
+
+2013-01-30  Jesper Öqvist <jesper.oqvist@cs.lth.se>
+
+    * Added gendoc.sh - a shell script to generate HTML documentation
+    (index.html) for all tests using the description files
+
+2013-01-24  Jesper Öqvist <jesper.oqvist@cs.lth.se>
+
+	* Added result aliases (EXEC_PASS, EXEC_FAIL, etc.)
+
+2013-01-11  Niklas Fors <niklas.fors@cs.lth.se>
+	
+	* Added a runtime framework with methods like testTrue, which is similar
+	  to assertTrue in Junit. They can be used as follows:
+	  import static runtime.Test.*;
+	  ...
+	  testTrue(true);
+	  testSame(a, b);
+
+	  All errors in a test case are reported, in contrast to JUnit, where only
+	  the first error is reported.
+
+	  The test system includes the jar file lib/runtime-framework.jar. 
+	  The source code is located in src/runtime/.
+	  The jar file can be updated by: ant update-runtime-framework
+
+2012-11-01  Jesper Öqvist <jesper.oqvist@cs.lth.se>
+
+	* Removed obsolete configuration factory class
+	* Invoke javac programmatically
+
+2012-10-18  Jesper Öqvist <jesper.oqvist@cs.lth.se>
+
+	* Use assertEquals to report failures in output comparison
+	* Added README
+	* Added ChangeLog

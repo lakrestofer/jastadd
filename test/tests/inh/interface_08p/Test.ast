@@ -1,0 +1,3 @@
+GrandFather ::= Father;
+Father ::= Son;
+Son;

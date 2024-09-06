@@ -1,0 +1,12 @@
+// Tests adding an multiple interfaces to an AST class with the implements statement.
+// .grammar: { A; }
+// .result: COMPILE_PASS
+aspect Test {
+	interface I { }
+	interface J { }
+	A implements I, J;
+
+  // Test that A implements I and J:
+  I A.testI = new A();
+  J A.testJ = new A();
+}

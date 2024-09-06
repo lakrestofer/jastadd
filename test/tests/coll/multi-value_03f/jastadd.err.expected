@@ -1,0 +1,4 @@
+Problems during JRAG parsing:
+Error at tests/coll/multi-value_03f/Test.jrag:11:24: unexpected token ",":
+  Leaf contributes this, this, this to Tree.leaves();
+                       ^

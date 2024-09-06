@@ -1,0 +1,12 @@
+// Test code generation for incremental=param,debug and an NTA token.
+// Test case from:
+// https://bitbucket.org/jastadd/jastadd2/issues/333
+// .result: COMPILE_PASS
+// .options: incremental=param,debug flush=full tracing=cache,flush cache=all rewrite=cnta
+// .source: 1.8
+aspect Test {
+  syn A WorkingType.getA() = new A();
+  syn String WorkingType.getComputedName() = getID() + "more";
+  inh int ErroneousType.ivalue();
+  eq Root.getErroneousType().ivalue() = 1;
+}

@@ -1,0 +1,13 @@
+aspect Test {
+	public static String Node.overloaded() {
+		return "overloaded1";
+	}
+
+	public static String Node.overloaded(int i) {
+		return "overloaded2";
+	}
+
+	public static String Node.overloaded(String s) {
+		return "overloaded3";
+	}
+}

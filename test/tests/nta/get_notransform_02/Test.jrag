@@ -1,0 +1,4 @@
+aspect Test {
+  syn lazy List<B> A.getC1List() = new List<B>(new B(), new B());
+  syn lazy Opt<B> A.getC2Opt() = new Opt<B>(new B());
+}

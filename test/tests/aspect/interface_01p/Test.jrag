@@ -1,0 +1,10 @@
+// Tests adding an interface to an AST class with the implements statement.
+// .grammar: { A; }
+// .result: COMPILE_PASS
+aspect Test {
+	interface I { }
+	A implements I;
+
+  // The following line only compiles if A implements I:
+  I A.test = new A();
+}

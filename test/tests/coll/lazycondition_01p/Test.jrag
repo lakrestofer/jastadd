@@ -1,0 +1,35 @@
+import java.util.Collection;
+import java.util.LinkedList;
+
+aspect Test {
+
+  class Problem {
+    public final String message;
+    public Problem(String message) {
+      this.message = message;
+    }
+  }
+
+  @LazyCondition
+  coll Collection<Problem> Program.problems() [ new LinkedList<Problem>() ] with add;
+
+  CompilationUnit contributes new Problem("Problem: " + getName())
+      when contributeCondition()
+      to Program.problems()
+      for program();
+
+  /**
+   * This method increments the conditionEvals counter in the root Proram node by one
+   * each time the contribution condition is evaluated.  We use this in the
+   * test to check if too many condition evaluation calls have been made.
+   */
+  public boolean CompilationUnit.contributeCondition() {
+    program().conditionEvals += 1;
+    return !getName().equals("Potato");
+  }
+
+  public int Program.conditionEvals = 0;
+
+  inh Program CompilationUnit.program();
+  eq Program.getChild().program() = this;
+}

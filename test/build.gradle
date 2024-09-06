@@ -1,0 +1,29 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+
+defaultTasks 'test'
+
+repositories {
+	mavenCentral()
+}
+
+sourceSets {
+	test {
+		java {
+			srcDirs 'src/core', 'src/tests'
+		}
+	}
+}
+
+dependencies {
+	testCompile 'junit:junit:4.12'
+}
+
+test {
+	dependsOn 'cleanTest'
+	include 'tests/jastadd2/TestShouldPass.class'
+
+	systemProperty 'debug_jastadd', System.getProperty('jastadd_debug', 'false')
+	systemProperty 'org.jastadd.testTimeout', 5000
+	systemProperty 'org.jastadd.testThreads', 8
+}

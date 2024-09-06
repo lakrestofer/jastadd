@@ -1,0 +1,4 @@
+aspect A {
+	syn int Node.calc(int value) = value + 13;
+	eq SubNode.calc(int value) = value - 1;
+}

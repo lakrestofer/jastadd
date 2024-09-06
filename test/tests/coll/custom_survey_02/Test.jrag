@@ -1,0 +1,26 @@
+import java.util.LinkedList;
+
+aspect Test {
+  coll LinkedList<B> A.bList();
+
+  // Skips default collection survey by omitting super.collectContributions().
+  A contributes {
+    implicitB().collectContributions();
+  }
+  to A.bList();
+
+  B contributes this to A.bList();
+
+  syn nta B A.implicitB() = new B();
+}
+
+aspect BList2 {
+  coll LinkedList<B> A.bList2();
+
+  A contributes { implicitB().collectContributions(); } to A.bList2();
+
+  // An additional survey block adds the super.collectContributions() call for bList2.
+  A contributes { super.collectContributions(); } to A.bList2();
+
+  B contributes this to A.bList2();
+}

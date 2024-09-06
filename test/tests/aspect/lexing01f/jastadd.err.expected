@@ -1,0 +1,2 @@
+Problems during JRAG parsing:
+Error at tests/aspect/lexing01f/Test.jrag: Lexical error at line 2, column 31.  Encountered: "c" (99), after : "\'c"

@@ -1,0 +1,5 @@
+aspect Test {
+	inh boolean List.childOfY();
+	eq X.getChild().childOfY() = false;
+	eq Y.getChild().childOfY() = true;
+}

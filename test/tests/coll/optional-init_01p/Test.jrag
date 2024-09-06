@@ -1,0 +1,7 @@
+import java.util.LinkedList;
+
+aspect Test {
+  coll LinkedList<Leaf> Tree.leaves();
+
+  Leaf contributes this to Tree.leaves();
+}

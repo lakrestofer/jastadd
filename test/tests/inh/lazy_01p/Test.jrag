@@ -1,0 +1,15 @@
+aspect Test {
+    public int Program.lazyEvalCount = 0;
+    inh lazy int Package.lazyAttr();
+    eq Program.getPackage().lazyAttr() {
+        lazyEvalCount += 1;
+        return 0;
+    }
+
+    public int Program.nonLazyEvalCount = 0;
+    inh int Package.nonLazyAttr();
+    eq Program.getPackage().nonLazyAttr() {
+        nonLazyEvalCount += 1;
+        return 0;
+    }
+}

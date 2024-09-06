@@ -32,3 +32,14 @@
 # Local git repos.
 /website/
 /tests/
+
+# Ignore JUnit output:
+/test/test-reports/
+/test/reports/
+/test/*.log
+/test/junit*.properties
+
+# Misc test files
+/test/tmp/
+/test/ant-bin/
+/test/*.jar

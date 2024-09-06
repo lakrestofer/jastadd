@@ -1,0 +1,6 @@
+aspect Test {
+  syn lazy List<B> A.getBList() = new List<B>(new B(), new B(), new B());
+
+  inh int B.value();
+  eq A.getB(int i).value() = i;
+}

@@ -1,0 +1,1 @@
+Warning at tests\diagnostics\multidecl02\B.jrag:2: multiple declarations of inherited attribute A.x, previously declared in tests\diagnostics\multidecl02\A.jrag:2

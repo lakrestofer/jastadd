@@ -1,0 +1,12 @@
+import java.util.*;
+
+aspect Test {
+  /**
+   * This should not compile with JastAdd because the grammar has no root node.
+   */
+  coll Collection<Node> Node.self() [new HashSet<Node>()] with add;
+
+  Node contributes
+    this when true
+  to Node.self() for this;
+}

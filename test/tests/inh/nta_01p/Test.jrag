@@ -1,0 +1,7 @@
+aspect Test {
+  syn nta B A.selectB(int i) = new B();
+
+  inh int B.value();
+  eq A.getChild().value() = -1;
+  eq A.selectB(int i).value() = i;
+}

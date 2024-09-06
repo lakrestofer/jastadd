@@ -1,0 +1,2 @@
+Tests that the order of including aspect files does not affect weaving
+of methods in aspect-declared classes.

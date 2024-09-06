@@ -1,0 +1,21 @@
+ ------------------
+| after construction
+ ------------------
+A(CREATED) listeners: []
+A/List[0](CREATED) listeners: []
+A/List[0]/B[0](CREATED) listeners: []
+A/List[0]/B[1](CREATED) listeners: []
+ -------------------------
+| after b1.decl and b2.decl
+ -------------------------
+A(COMPUTED) listeners: [A/List[0](COMPUTED)]
+A/List[0](COMPUTED) listeners: [A(COMPUTED), A/List[0]/B[0](COMPUTED), A/List[0]/B[1](COMPUTED)]
+A/List[0]/B[0](COMPUTED) listeners: [A/List[0](COMPUTED)]
+A/List[0]/B[1](COMPUTED) listeners: [A/List[0](COMPUTED)]
+ ------------------
+| after a.setB(B, 1)
+ ------------------
+A(EMPTY) listeners: []
+A/List[0](EMPTY) listeners: []
+A/List[0]/B[0](EMPTY) listeners: []
+A/List[0]/B[1](CREATED) listeners: []

@@ -1,0 +1,1 @@
+An "nta"-declared nta must be a subclass of ASTNode.

@@ -1,6 +1,3 @@
 [submodule "tinytemplate"]
 	path = tinytemplate
 	url = https://bitbucket.org/jastadd/tinytemplate
-[submodule "test"]
-	path = test
-	url = https://bitbucket.org/jastadd/jastadd-test.git

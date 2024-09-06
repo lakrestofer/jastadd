@@ -1,0 +1,8 @@
+aspect Test {
+
+	rewrite B {
+		to A {
+			return new C();
+		}
+	}	
+}

@@ -1,0 +1,18 @@
+// Typical name lookup pattern.
+aspect Lookup {
+  inh Decl Use.lookup(String name);
+
+  eq Block.getStmt(int index).lookup(String name) {
+    for (int i = index - 1; i >= 0; --i) {
+      if (getStmt(i).declares(name)) {
+        return (Decl) getStmt(i);
+      }
+    }
+    return null;
+  }
+
+  syn lazy Value<Decl> Use.decl() = Value.of(lookup(getName()));
+
+  syn boolean Stmt.declares(String name) = false;
+  eq Decl.declares(String name) = name.equals(getName());
+}

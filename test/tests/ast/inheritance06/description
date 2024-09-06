@@ -1,0 +1,2 @@
+It is possible to reorder the components of an AST node type in order to
+get a different constructor

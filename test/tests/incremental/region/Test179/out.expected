@@ -1,0 +1,31 @@
+ ------------------
+| after construction
+ ------------------
+A(CREATED) listeners: []
+node: a=A
+node: a.parent=null
+ ---------
+| after a.d
+ ---------
+A(COMPUTED) listeners: [A/ASTNode/B(COMPUTED)]
+A/ASTNode(CREATED) listeners: []
+node: a=A
+value(A:d, false)
+value(A:b_String[a], A/ASTNode/B)
+node: a.parent=null
+ -----------------------
+| after a.b(String) + b.a
+ -----------------------
+A(COMPUTED) listeners: [A/ASTNode(COMPUTED), A/ASTNode/B(COMPUTED)]
+A/ASTNode(COMPUTED) listeners: [A/ASTNode/B(COMPUTED)]
+node: a=A
+value(A:d, false)
+value(A:b_String[a], A/ASTNode/B)
+node: a.parent=null
+ ---------
+| a.setName
+ ---------
+A(EMPTY) listeners: []
+A/ASTNode(EMPTY) listeners: []
+node: a=A
+node: a.parent=null

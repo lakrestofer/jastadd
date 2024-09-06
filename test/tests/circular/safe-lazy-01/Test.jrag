@@ -1,0 +1,6 @@
+aspect Test {
+  syn int A.c() circular [0] = Math.min(5, 1 + b());
+
+  // --safeLazy makes this safe, even though it circularly defined:
+  syn lazy int A.b() = c();
+}

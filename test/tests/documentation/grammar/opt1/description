@@ -1,0 +1,12 @@
+An AST node can have an optional component:
+
+$include(Grammar.ast)
+
+Here the node `A` has an optional child `B`. This child is represented
+by an instance of the `Opt` node. When a new `A` node is constructed
+one must add `B` wrapped in an `Opt`, or just an empty `Opt`:
+
+$include(Test.java)
+
+#TestOutputAsDiagram
+

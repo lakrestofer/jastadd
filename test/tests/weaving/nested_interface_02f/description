@@ -1,0 +1,3 @@
+Tests that a nested interface declaration does not create a top-level interface
+
+Related issue: https://bitbucket.org/jastadd/jastadd2/issue/185/interfaces-inside-classes-are-handled

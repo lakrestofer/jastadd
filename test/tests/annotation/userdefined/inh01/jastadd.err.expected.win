@@ -1,0 +1,2 @@
+Error at tests\annotation\userdefined\inh01\Test.jrag:9: unsupported annotations for this attribute equation: @Silly
+Error at tests\annotation\userdefined\inh01\Test.jrag:17: unsupported annotations for this attribute equation: @NotSilly

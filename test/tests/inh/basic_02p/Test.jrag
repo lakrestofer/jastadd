@@ -1,0 +1,4 @@
+aspect Test {
+	inh ASTNode Node.root();
+	eq Root.getChild().root() = this;
+}

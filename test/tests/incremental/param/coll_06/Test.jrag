@@ -1,0 +1,12 @@
+import java.util.*;
+
+aspect Test {
+  inh A C.a();
+  eq A.getChild().a() = this;
+
+  coll HashSet<C> B.cs() root A;
+
+  C contributes this
+      to B.cs()
+      for a().getB(getTO());
+}

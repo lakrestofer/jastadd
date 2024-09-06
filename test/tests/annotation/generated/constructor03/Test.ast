@@ -1,0 +1,4 @@
+A ::= B <c:int> [d:D] hej:E*;
+B;
+D;
+E;

@@ -1,0 +1,4 @@
+aspect Test {
+	@Silly
+	syn String A.name() = "piderman";
+}

@@ -1,0 +1,8 @@
+aspect Test {
+	// /**
+ 	//  * qwer
+ 	//  */
+ 	//
+ 	//  asdf
+	public void A.a() {}
+}

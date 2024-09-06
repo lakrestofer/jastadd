@@ -1,0 +1,2 @@
+An AST subclass can override a normal child with an /X/-declared nta.
+A child overridden with an /X/-declared nta is no longer regarded as a child: it is not traversed with getChild(int i), etc.

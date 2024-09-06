@@ -1,0 +1,3 @@
+Root ::= MyA:A Many:A* /B/ ;
+A ::= <Value:int> ;
+B ::= A ;

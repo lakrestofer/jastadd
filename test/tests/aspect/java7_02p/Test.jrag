@@ -1,0 +1,41 @@
+// Test that the aspect parser allows Java 7 multi-catch syntax.
+// https://bitbucket.org/jastadd/jastadd2/issues/308/java-7-multi-catch-clauses-are-not
+// .grammar: { A; }
+// .result: COMPILE_PASS
+
+aspect Java7_MultiCatch {
+  // No semicolon after last resource declaration.
+  public void A.check(boolean t1, boolean t2) {
+    try {
+      throw1(t1);
+      throw2(t2);
+    } catch (Exception1 | Exception2 e) {
+    }
+
+    try {
+      throw1(t1);
+      throw2(t2);
+      throw3(true);
+    } catch (Exception1 | Exception2 | Exception3 e) {
+    }
+  }
+
+  public void A.throw1(boolean doThrow) throws Exception1 {
+    if (doThrow)
+      throw new Exception1();
+  }
+
+  public void A.throw2(boolean doThrow) throws Exception2 {
+    if (doThrow)
+      throw new Exception2();
+  }
+
+  public void A.throw3(boolean doThrow) throws Exception3 {
+    if (doThrow)
+      throw new Exception3();
+  }
+
+  public class Exception1 extends Exception { }
+  public class Exception2 extends Exception { }
+  public class Exception3 extends Exception { }
+}

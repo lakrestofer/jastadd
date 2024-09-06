@@ -1,0 +1,5 @@
+aspect A {
+	refine public boolean X.getFlag() {
+		return !refined();
+	}
+}

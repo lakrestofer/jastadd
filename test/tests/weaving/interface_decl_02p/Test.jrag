@@ -1,0 +1,16 @@
+aspect Test {
+  public interface Variable {
+  }
+
+  boolean Variable.needsQualifier();
+
+  Declarator implements Variable;
+
+  @Override public boolean FieldDecl.needsQualifier() {
+    return true;
+  }
+
+  @Override public boolean VarDecl.needsQualifier() {
+    return false;
+  }
+}

@@ -1,0 +1,8 @@
+public class A {
+	interface I {};
+}
+aspect Test {
+	public class B {
+		public A.I i = null;
+	}
+}

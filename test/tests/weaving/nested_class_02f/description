@@ -1,0 +1,3 @@
+Tests that a nested class declaration does not create a top-level class
+
+Related issue: https://bitbucket.org/jastadd/jastadd2/issue/185/interfaces-inside-classes-are-handled

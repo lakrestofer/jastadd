@@ -1,0 +1,3 @@
+Error at tests/diagnostics/ast_syntax_03f/Test.ast:1:1: unexpected token "boolean":
+boolean : int;
+^^^^^^^

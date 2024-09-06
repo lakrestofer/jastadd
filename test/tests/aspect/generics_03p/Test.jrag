@@ -1,0 +1,13 @@
+// An aspect-declared interface can contain a nested generic interface.
+// See https://bitbucket.org/jastadd/jastadd2/issues/246/nested-generic-types
+// .result: COMPILE_PASS
+// .grammar: {A;}
+aspect Test {
+  interface Test<T> {
+    public void f(T o);
+
+    interface Inner<U> extends Test<U> {
+      static final int CONST = 3;
+    }
+  }
+}

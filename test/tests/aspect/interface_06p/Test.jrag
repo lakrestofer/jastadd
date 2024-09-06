@@ -1,0 +1,14 @@
+// Test adding a default method in an interface.
+// https://bitbucket.org/jastadd/jastadd2/issues/320/interfaces-with-default-or-static-methods
+// .grammar: { A; }
+// .result: COMPILE_PASS
+// .source: 8
+aspect Test {
+  interface I {
+    default void f() { }
+  }
+
+  public void A.test(I i) {
+    i.f();
+  }
+}

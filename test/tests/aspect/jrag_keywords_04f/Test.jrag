@@ -1,0 +1,7 @@
+// JastAdd keywords can not be used as class or interface names.
+// .result=JASTADD_FAIL
+aspect Test {
+  // Can not use keyword as class name.
+  class refine {
+  }
+}

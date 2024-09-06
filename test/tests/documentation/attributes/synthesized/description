@@ -1,0 +1,17 @@
+The simplest form of attribute is the synthesized attribute. Synthesized
+attributes are used to compute things in an AST node. For example,
+to compute the maximum depth of an expression tree, using the grammar
+from the previous example, we can declare a `maxDepth` attribute as below:
+
+$include(Test.jrag)
+
+An attribute works sort of like a Java method. In fact, synthesized
+attributes are reified as Java methods. To evaluate the attribute, just
+call the method with the same name, for example:
+
+$include(Test.java)
+
+This digaram shows the value of `maxDepth` at each node in the tree
+constructed by the above code:
+
+#TestOutputAsDiagram

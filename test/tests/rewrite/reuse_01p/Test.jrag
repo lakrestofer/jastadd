@@ -1,0 +1,15 @@
+aspect Test {
+
+  rewrite A {
+    when (getB().a() != null && isA()) to A2 {
+      return new A2(getB());
+    }
+  }
+  
+  syn boolean A.isA() = true;
+  eq A2.isA() = false;
+  
+  // B.a() can not be lazy because it is part of circular evaluation.
+  inh A B.a();
+  eq Root.getA().a() = getA();
+}

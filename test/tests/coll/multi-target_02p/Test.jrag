@@ -1,0 +1,29 @@
+// Test that the target expression for a multi-target contribution can be a
+// collection of a subclass of the target type.
+// .result=COMPILE_PASS
+import java.util.LinkedList;
+import java.util.Collection;
+
+aspect Test {
+  inh Root Decl.root();
+
+  eq Root.getChild().root() = this;
+
+  coll LinkedList<UseSubclass> Root.uses();
+
+  UseSubclass contributes this to Root.uses();
+
+  coll LinkedList<Decl> Use.decls();
+
+  Decl contributes this to Use.decls() for each myUses();
+
+  syn Collection<UseSubclass> Decl.myUses() {
+    Collection<UseSubclass> uses = new LinkedList<UseSubclass>();
+    for (UseSubclass use : root().uses()) {
+      if (use.getID().equals(getID())) {
+        uses.add(use);
+      }
+    }
+    return uses;
+  }
+}

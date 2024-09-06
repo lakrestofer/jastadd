@@ -1,0 +1,4 @@
+NodeA ::= /A/;
+NodeB ::= /NtaB:B/;
+A;
+B;

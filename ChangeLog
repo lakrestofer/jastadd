@@ -1,3 +1,7 @@
+2024-09-06  Jesper Öqvist <jesper.oqvist@cs.lth.se>
+
+    * Merge regression tests into JastAdd git main repository.
+
 2023-09-04  Jesper Öqvist <jesper.oqvist@cs.lth.se>
 
     * Release 2.3.6

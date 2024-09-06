@@ -1,0 +1,9 @@
+// Test that the aspect parser allows Java 8 default interface methods.
+// https://bitbucket.org/jastadd/jastadd2/issues/320/interfaces-with-default-or-static-methods
+// .grammar: { A; }
+// .result: JASTADD_PASS
+aspect Java8_Default {
+  interface I {
+    default int x() { return 10; }
+  }
+}

@@ -1,0 +1,21 @@
+import java.util.*;
+
+aspect Test {
+  inh A B.a();
+
+  eq A.getB().a() = this;
+
+  coll Collection<A> B.parent() [new HashSet<A>()] root A;
+
+  A contributes this
+      to B.parent()
+      for each targetNodes();
+
+  public int A.targetEval = 0;
+
+  // Compute contribution target. Also tracks number of evaluations.
+  public List<B> A.targetNodes() {
+    targetEval += 1;
+    return getBList();
+  }
+}

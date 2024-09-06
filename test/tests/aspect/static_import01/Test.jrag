@@ -1,0 +1,8 @@
+// single static import
+import static java.lang.Runtime.getRuntime;
+
+// multi-static import
+import static java.lang.Double.*;
+
+aspect Test {
+}

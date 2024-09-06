@@ -1,0 +1,14 @@
+// Tests that JastAdd refuses to build when rewrites are disabled yet there exist
+// rewrites in an aspect.
+// .result=JASTADD_ERR_OUTPUT
+aspect Test {
+	syn int A.value();
+	eq B.value() = 32;
+	eq C.value() = -1;
+
+	rewrite B {
+		to A {
+			return new C();
+		}
+	}
+}

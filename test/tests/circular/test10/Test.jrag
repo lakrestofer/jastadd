@@ -1,0 +1,27 @@
+aspect Test {
+	syn int A.c2_a() circular [1]  {
+		return c2_b();
+	}
+
+	syn int A.c2_b() circular [1]  {
+		int c = c2_a();
+		return c == 2 ? 2 : c + 1;
+	}
+
+	syn int A.c3() {
+		return c2_a();
+	}
+
+	syn int A.c1_a() circular [1]  {
+		int c = c1_b() + c3();
+		return c >= 5 ? 5 : c + 1;
+	}
+
+	syn int A.c1_b() circular [1]  {
+		return c1_a();
+	}
+
+	syn int A.x(boolean b, String y) circular [1] {
+		return 1;
+	}
+}

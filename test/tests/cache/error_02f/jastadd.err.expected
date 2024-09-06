@@ -1,0 +1,2 @@
+Problems during cache configuration:
+Error at tests/cache/error_02f/Test.jrag:8: conflicting cache declaration for attribute A.attr, previous declaration is at tests/cache/error_02f/Test.jrag:7

@@ -1,0 +1,3 @@
+Node ::= A:X B:X C:X;
+SubNode : Node;
+X;

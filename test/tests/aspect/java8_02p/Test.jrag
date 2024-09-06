@@ -1,0 +1,33 @@
+// Test that the aspect parser allows Java 8 method reference expression syntax.
+// https://bitbucket.org/jastadd/jastadd2/issues/192/support-for-java-8-syntax-in-aspects
+// .grammar: { A; }
+// .result: JASTADD_PASS
+import java.util.*;
+import java.util.stream.*;
+
+aspect Java8_MethodRefs {
+  // 1. Expression lambdas.
+
+  // Single untyped lambda parameter.
+  syn AProvider A.consref() = A::new;
+
+  // Static method reference.
+  syn F2 A.methref1() = A::add;
+
+  // Instance method reference.
+  syn F1 A.methref2() = this::ident;
+  syn F1 A.methref3(A a) = a::ident;
+
+  public static int A.add(int a, int b) {
+    return a + b;
+  }
+
+  public int A.ident(int a) {
+    return a;
+  }
+
+  // Function types:
+  interface AProvider { A apply(); }
+  interface F1 { int apply(int a); }
+  interface F2 { int apply(int a, int b); }
+}

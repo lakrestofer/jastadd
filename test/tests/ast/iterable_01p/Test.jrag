@@ -1,0 +1,18 @@
+import java.util.LinkedList;
+
+aspect Test {
+  syn Iterable<ASTNode> A.children() = astChildren();
+
+  public LinkedList<String> A.childList() {
+    LinkedList<String> list = new LinkedList<String>();
+    for (ASTNode child : astChildren()) {
+      list.add(child.toString());
+    }
+    return list;
+  }
+
+  @Override
+  public String B.toString() {
+    return getID();
+  }
+}

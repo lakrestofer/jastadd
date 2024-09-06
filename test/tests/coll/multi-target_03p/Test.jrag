@@ -1,0 +1,12 @@
+import java.util.ArrayList;
+import java.util.Collection;
+aspect Test {
+  inh A B.a1();
+  inh A B.a2();
+  eq Root.getB().a1() = getA1();
+  eq Root.getB().a2() = getA2();
+
+  coll Collection<Integer> A.nbrs()[new ArrayList<Integer>()] with add;
+  B contributes 1 to A.nbrs() for a1();
+  B contributes 2 to A.nbrs() for a2();
+}

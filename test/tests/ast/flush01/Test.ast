@@ -1,0 +1,2 @@
+Node ::= <A:Size> <B:boolean[]> <C:C> <D>;
+C;
