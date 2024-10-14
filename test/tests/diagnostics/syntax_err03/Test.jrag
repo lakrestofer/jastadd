@@ -1,0 +1,5 @@
+// Package declarations are no longer in the aspect syntax.
+// .result=JASTADD_ERR_OUTPUT
+package ast;
+aspect Test {
+}

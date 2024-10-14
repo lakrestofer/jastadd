@@ -1,0 +1,5 @@
+aspect Test {
+  inh boolean BodyDecl.isDAbefore(Variable v, BodyDecl b);
+
+  eq TypeDecl.getChild().isDAbefore(Variable v, BodyDecl b) = false;
+}

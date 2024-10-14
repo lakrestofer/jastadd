@@ -1,0 +1,4 @@
+aspect Test {
+  inh Object ASTNode.attr();
+  eq Program.getChild().attr() = new Object();
+}

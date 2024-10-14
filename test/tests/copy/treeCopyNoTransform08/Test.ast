@@ -1,0 +1,5 @@
+AnonymousDecl ::= Modifiers <ID:String> /[SuperClass:Access]/ /Implements:Access*/ BodyDecl*;
+Modifiers ::= Modifier*;
+Modifier ::= <ID>;
+Access ::= <ID>;
+BodyDecl;

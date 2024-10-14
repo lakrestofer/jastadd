@@ -1,0 +1,4 @@
+aspect Test {
+  syn nta B A.b(int index)
+      = new B(String.format("A_%d_%s", index, getB(index).getID()));
+}

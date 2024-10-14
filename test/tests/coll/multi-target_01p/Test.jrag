@@ -1,0 +1,26 @@
+import java.util.LinkedList;
+import java.util.Collection;
+
+aspect Test {
+  inh Root Decl.root();
+
+  eq Root.getChild().root() = this;
+
+  coll LinkedList<Use> Root.uses();
+
+  Use contributes this to Root.uses();
+
+  coll LinkedList<Decl> Use.decls();
+
+  Decl contributes this to Use.decls() for each myUses();
+
+  syn Collection<Use> Decl.myUses() {
+    Collection<Use> uses = new LinkedList<Use>();
+    for (Use use : root().uses()) {
+      if (use.getID().equals(getID())) {
+        uses.add(use);
+      }
+    }
+    return uses;
+  }
+}

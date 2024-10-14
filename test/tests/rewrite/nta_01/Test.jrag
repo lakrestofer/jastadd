@@ -1,0 +1,10 @@
+aspect Test {
+  rewrite A {
+    when (!getTransformed())
+    to A {
+      return new A(true);
+    }
+  }
+
+  syn lazy A X.getA() = new A(false);
+}

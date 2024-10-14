@@ -1,0 +1,5 @@
+aspect A3 {
+	refine A1 public ASTNode X.returnSomething(final ASTNode n) {
+		return null;
+	}
+}

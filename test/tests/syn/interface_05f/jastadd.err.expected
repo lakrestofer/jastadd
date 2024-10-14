@@ -1,0 +1,2 @@
+Error at tests/syn/interface_05f/Test.jrag:11: equation for synthesized attribute attr missing in the following classes:
+    Node

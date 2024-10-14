@@ -1,0 +1,3 @@
+Tests accessing a null child when rewrites are enabled.
+
+[Related trac ticket](http://svn.cs.lth.se/trac/jastadd-trac/ticket/113)

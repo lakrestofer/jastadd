@@ -1,0 +1,6 @@
+aspect Test {
+	syn int Node.value();
+	eq SubNode.value() = 3212988;
+
+	syn int Node.value(int i) = -32;
+}

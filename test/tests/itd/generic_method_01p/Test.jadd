@@ -1,0 +1,5 @@
+aspect Test {
+	public <T> void Node.addToList(java.util.List<T> list, T value) {
+		list.add(value);
+	}
+}

@@ -1,0 +1,7 @@
+// Test that 'child' can be used as a parameter name for an inherited attribute equation.
+// .result=COMPILE_PASS
+aspect Test {
+	inh int Node.attr(int child);
+	eq Root.getNode().attr(int child) = child;
+	eq Node.getChild().attr(int child) = 0;
+}

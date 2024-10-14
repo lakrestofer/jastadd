@@ -1,0 +1,26 @@
+import java.util.LinkedList;
+
+aspect Test {
+
+  // LazyCondition used for a collection attribute with unsafe lazy condition contributions.
+  @LazyCondition
+  coll LinkedList<X> R.x();
+
+  // Unsafe lazy condition contribution, because the contribution target expression can
+  // throw a null pointer exception when the condition is false.
+  X contributes this
+      when insideA()
+      to R.x()
+      for enclosingA().r(); // Null pointer exception thrown here.
+
+  inh R A.r();
+  eq R.getA().r() = this;
+
+  inh boolean X.insideA();
+  eq A.getChild().insideA() = true;
+  eq R.getChild().insideA() = false;
+
+  inh A X.enclosingA();
+  eq A.getChild().enclosingA() = this;
+  eq R.getChild().enclosingA() = null;
+}

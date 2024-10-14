@@ -1,0 +1,9 @@
+Node ::= X0:X Y Z;
+
+/* <FUTURE> order of children in SubNode: X0 Y Z W X1 */
+/* <CURRENT> order of children in SubNode: Z W X0 X1 Y (NTA PLACED LAST) */
+SubNode : Node ::= W /Y/ X0:X X1:X;
+X;
+Y;
+Z;
+W;

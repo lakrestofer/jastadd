@@ -1,0 +1,13 @@
+aspect Test {
+  syn int Node.circ() circular [0] = min(circ() + 1, limit());
+
+  syn int Node.limit() circular [0] = min(limit() + 1, 12);
+
+  syn int Node.min(int a, int b) {
+    if (a < b) {
+      return a;
+    } else {
+      return b;
+    }
+  }
+}

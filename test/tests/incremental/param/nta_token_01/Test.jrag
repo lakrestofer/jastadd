@@ -1,0 +1,8 @@
+// Test code generation for incremental=param with circular evaluation and an NTA token.
+// https://bitbucket.org/jastadd/jastadd2/issues/313/incremental-param-on-extendj-compares
+// .result: COMPILE_PASS
+// .options: incremental=param rewrite=cnta
+// .grammar: { A ::= /<ID:String>/; }
+aspect Test {
+  syn String A.getID() = "A";
+}

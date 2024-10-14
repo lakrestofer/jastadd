@@ -1,0 +1,4 @@
+Problems during JRAG parsing:
+Error at tests/diagnostics/syntax_err04/Test.jrag:4:7: unexpected token "void":
+  syn void A.v() = 3;
+      ^^^^

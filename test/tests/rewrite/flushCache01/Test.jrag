@@ -1,0 +1,5 @@
+aspect Test {
+	syn nta B A.b(int n) = new B();
+	
+	syn boolean A.valueListFlushed() = b_int_proxy == null;
+}

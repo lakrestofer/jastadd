@@ -1,0 +1,5 @@
+import java.util.*;
+
+aspect Test {
+  coll Collection<B> A.set() [new HashSet<B>()] with add root A;
+}

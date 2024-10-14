@@ -1,0 +1,11 @@
+// Test that a setter method is not generated for an NTA.
+// .result=COMPILE_FAIL
+// .tags=nta,codegen
+aspect Test {
+	syn B A.getB() = new B();
+
+	public void A.error() {
+		// ERROR: no set method generated for the NTA B
+		setB(new B());
+	}
+}

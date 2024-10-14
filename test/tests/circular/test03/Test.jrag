@@ -1,0 +1,3 @@
+aspect Test {
+  syn lazy boolean A.a() circular [false] = a();
+}

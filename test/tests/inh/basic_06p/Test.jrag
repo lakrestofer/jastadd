@@ -1,0 +1,8 @@
+aspect Test {
+	inh int A.value();
+	inh int B.value();
+
+	eq Node.getChild().value() = 0xBEEF;
+	eq Node.getLeft().value() = 77;
+	eq Node.getRight().value() = -1;
+}

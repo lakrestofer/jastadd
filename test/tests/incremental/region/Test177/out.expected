@@ -1,0 +1,42 @@
+ ------------------
+| after construction
+ ------------------
+A(CREATED) listeners: []
+A/B[0](CREATED) listeners: []
+node: a=A
+node: a.parent=null
+node: a/child[0]=A/B[0]
+node: a/child[0].parent=A
+ ---------
+| after a.d
+ ---------
+A(COMPUTED) listeners: [A/B(COMPUTED)]
+A/B[0](CREATED) listeners: []
+A/B(COMPUTED) listeners: [A(COMPUTED)]
+node: a=A
+value(A:d, false)
+value(A:makeB, A/B)
+node: a.parent=null
+node: a/child[0]=A/B[0]
+node: a/child[0].parent=A
+ ---------
+| after b.a
+ ---------
+A(COMPUTED) listeners: [A/B(COMPUTED)]
+A/B[0](CREATED) listeners: [A(COMPUTED)]
+A/B(COMPUTED) listeners: [A(COMPUTED)]
+node: a=A
+value(A:d, false)
+value(A:makeB, A/B)
+node: a.parent=null
+node: a/child[0]=A/B[0]
+node: a/child[0].parent=A
+ ---------
+| a.setName
+ ---------
+A(EMPTY) listeners: []
+A/B[0](CREATED) listeners: []
+node: a=A
+node: a.parent=null
+node: a/child[0]=A/B[0]
+node: a/child[0].parent=A

@@ -1,0 +1,1 @@
+Error at tests/coll/optional-for_02f/Test.jrag:9: contribution target expression missing for attribute 'Node.leaves'. Contribution target expression is optional only when the collection root node is the target.

@@ -1,0 +1,12 @@
+// .result: JASTADD_PASS
+// .grammar: { A; }
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.util.*;
+
+aspect Test {
+  public File A.file;
+  interface I<T> { }
+  class C { }
+}

@@ -1,0 +1,7 @@
+// Test that 'caller' can be used as a parameter name for an inherited attribute equation.
+// .result=COMPILE_PASS
+aspect Test {
+	inh int Node.attr(int caller);
+	eq Root.getNode().attr(int caller) = caller;
+	eq Node.getChild().attr(int caller) = 0;
+}

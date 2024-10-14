@@ -1,0 +1,11 @@
+// Test that a setter method is not generated for an optional NTA.
+// .result=COMPILE_FAIL
+// .tags=nta,codegen
+aspect Test {
+	syn Opt<B> A.getBOpt() = new Opt<B>();
+
+	public void A.error() {
+		// ERROR: no set method generated for the NTA B
+		setBOpt(new Opt<B>());
+	}
+}

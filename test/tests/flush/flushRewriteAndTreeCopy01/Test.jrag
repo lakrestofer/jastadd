@@ -1,0 +1,10 @@
+aspect Test {
+    rewrite B {
+        when (false)
+        to B {
+            return new B();
+        }
+    }
+
+    syn nta A Root.ntaA() = getA().treeCopy(); 
+}

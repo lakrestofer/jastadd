@@ -1,0 +1,14 @@
+aspect Test {
+
+  rewrite A {
+    when (getB().a() != null && !isRewritten()) to A2 {
+      return new A2(getB()); // Error: reusing child in rewrite result.
+    }
+  }
+
+  syn boolean A.isRewritten() = false;
+  eq A2.isRewritten() = true;
+
+  inh lazy A B.a();
+  eq A.getB().a() = this;
+}

@@ -1,0 +1,11 @@
+aspect Test {
+	inh int B.value();
+	inh int C.value();
+	eq A.getB().value() {
+		return 3;
+	}
+	eq A.getChild().value() {
+		// Note the missing return statement!
+		// The generated code should not compile without error!
+	}
+}

@@ -1,0 +1,1 @@
+If an interface declares an inherited attribute, and the equation is missing, there should be an error message. Currently there isn’t, and the compilation will fail later on. This behavior is a bug, and should preferrably be corrected at some point.

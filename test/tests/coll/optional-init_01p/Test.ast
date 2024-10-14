@@ -1,0 +1,4 @@
+Tree ::= Node;
+abstract Node;
+Branch : Node ::= Left:Node Right:Node;
+Leaf : Node;

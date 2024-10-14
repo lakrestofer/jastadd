@@ -1,0 +1,14 @@
+aspect Test {
+	public int Node.lazyEvalCount = 0;
+	public int Node.nonLazyEvalCount = 0;
+	
+	syn lazy int Node.lazyAttr() {
+		lazyEvalCount += 1;// side effect to test attribute evaluations
+		return 0;
+	}
+
+	syn int Node.nonLazyAttr() {
+		nonLazyEvalCount += 1;// side effect to test attribute evaluations
+		return 0;
+	}
+}

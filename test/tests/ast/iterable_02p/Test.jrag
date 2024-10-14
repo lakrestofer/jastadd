@@ -1,0 +1,11 @@
+import java.util.LinkedList;
+
+aspect Test {
+  public LinkedList<String> A.childList() {
+    LinkedList<String> list = new LinkedList<String>();
+    for (B b : getBList()) {
+      list.add(b.getID());
+    }
+    return list;
+  }
+}

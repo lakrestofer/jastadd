@@ -1,0 +1,12 @@
+// Test for removed feature.
+// Collection attributes used to support multiple value-expressions per
+// contribution statement. This is no longer supported. Test that syntax
+// error is generated.
+// .result=JASTADD_ERR
+import java.util.LinkedList;
+
+aspect Test {
+  coll LinkedList<Leaf> Tree.leaves() [new LinkedList<Leaf>()];
+
+  Leaf contributes this, this, this to Tree.leaves();
+}

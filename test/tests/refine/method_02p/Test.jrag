@@ -1,0 +1,11 @@
+aspect A1 {
+	public int X.value() {
+		return 2;
+	}
+}
+
+aspect A2 {
+	refine A1 public int X.value() {
+		return refined() + 13;
+	}
+}

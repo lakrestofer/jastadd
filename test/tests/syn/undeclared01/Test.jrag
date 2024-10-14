@@ -1,0 +1,3 @@
+aspect Test {
+	eq Node.attribute() = false;
+}

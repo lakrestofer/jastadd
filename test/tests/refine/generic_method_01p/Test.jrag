@@ -1,0 +1,22 @@
+// Refining works for generic methods.
+// https://bitbucket.org/jastadd/jastadd2/issues/277/generated-code-for-refined-methods-with
+// .grammar: { R; }
+// .result: COMPILE_PASS
+import java.util.*;
+
+aspect Test {
+  public class Klass {}
+
+  public static <T extends List<?>> T Klass.method() {
+    return null;
+  }
+
+  refine Test public static <T extends List<?>> T Klass.method() {
+    return refined();
+  }
+
+  public void R.foo() {
+    // Simple use of the method to test that it was actually generated.
+    Klass.method();
+  }
+}

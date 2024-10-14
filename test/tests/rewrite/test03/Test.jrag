@@ -1,0 +1,19 @@
+aspect Test {
+	syn int A.value();
+	eq B.value() = 32;
+	eq C.value() = -1;
+
+	rewrite B {
+		when (value() == 32)
+		to A {
+			return new C();
+		}
+	}
+
+	rewrite B {
+		when (true)
+		to A {
+			throw new Error("This should not happen");
+		}
+	}
+}

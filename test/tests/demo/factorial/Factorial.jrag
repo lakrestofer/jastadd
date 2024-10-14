@@ -1,0 +1,4 @@
+aspect Liveness {
+  syn int A.factorial(int n) circular [1] =
+      Math.max(1,n) * factorial(Math.max(0,n-1));
+}

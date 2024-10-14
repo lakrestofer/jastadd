@@ -1,0 +1,124 @@
+<project name="JastAddTest" default="test">
+	<description>Test JastAdd
+
+Test Properties:
+    testSuite       set the JUnit test class name to run
+                    (default = tests.jastadd2.TestShouldPass)
+    jastadd3        set to true if jastadd3 is being tested
+    jastadd.jar     the path to the JastAdd jar file to test
+    options         space separated list of options to pass to JastAdd
+    extraoptions    space separated list of extra options to pass to JastAdd
+    includes        comma separated list of included test directories
+    excludes        comma separated list of excluded test directories
+    test            comma separated list of test directories (overrides
+                    the includes and excludes properties)
+    debug_jastadd   use remote debugging to attach to JastAdd process
+    threads         number of parallel test threads
+
+Set any of the test properties to override the default values using
+    $ ant -Dproperty=value
+
+To enable logging of passed tests:
+    -Dverbose=true
+
+</description>
+
+	<property name="jastadd3" value=""/>
+	<property name="jastadd.jar" value="jastadd2.jar"/>
+	<property name="options" value=""/>
+	<property name="extraoptions" value=""/>
+	<property name="includes" value=""/>
+	<property name="test" value=""/>
+	<property name="excludes" value=""/>
+	<property name="verbose" value=""/>
+	<property name="debug_jastadd" value="false"/>
+	<property name="timeout" value="5000"/>
+	<property name="threads" value="8"/>
+
+
+	<property name="junit.version" value="4.11"/>
+	<property name="hamcrest.version" value="1.3"/>
+	<property name="tinytemplate.version" value="1.3"/>
+
+	<property name="bin.dir" location="ant-bin"/>
+
+	<!-- default test suite -->
+	<property name="testSuite" value="tests.jastadd2.TestShouldPass"/>
+
+	<target name="build"
+		description="Compile the unit tests">
+		<mkdir dir="${bin.dir}"/>
+		<javac
+			debug="false"
+			encoding="utf-8"
+			source="1.6"
+			target="1.6"
+			nowarn="true"
+			destdir="${bin.dir}"
+			includeantruntime="false">
+			<classpath>
+				<pathelement path="lib/junit-${junit.version}.jar"/>
+				<pathelement path="lib/hamcrest-core-${hamcrest.version}.jar"/>
+				<pathelement path="lib/ant.jar"/>
+				<pathelement path="lib/ant-junit.jar"/>
+				<pathelement path="lib/tinytemplate-${tinytemplate.version}.jar"/>
+			</classpath>
+			<src path="src"/>
+		</javac>
+	</target>
+
+	<target name="clean">
+		<delete dir="${bin.dir}"/>
+		<delete dir="${basedir}/tmp"/>
+	</target>
+
+	<property name="test-src.dir" location="src/tests"/>
+	<property name="test-reports.dir" location="reports"/>
+
+	<target name="test" depends="build" description="run JastAdd2 tests">
+		<java fork="true" classpath="${jastadd.jar}" classname="org.jastadd.JastAdd"
+			failonerror="false">
+			<arg value="--version"/>
+		</java>
+		<mkdir dir="${test-reports.dir}"/>
+		<junit fork="yes" showoutput="yes">
+			<sysproperty key="jastadd3" value="${jastadd3}"/>
+			<sysproperty key="jastadd.jar" value="${jastadd.jar}"/>
+			<sysproperty key="options" value="${options}"/>
+			<sysproperty key="extraoptions" value="${extraoptions}"/>
+			<sysproperty key="includes" value="${includes}"/>
+			<sysproperty key="test" value="${test}"/>
+			<sysproperty key="excludes" value="${excludes}"/>
+			<sysproperty key="verbose" value="${verbose}"/>
+			<sysproperty key="debug_jastadd" value="${debug_jastadd}"/>
+			<sysproperty key="org.jastadd.testTimeout" value="${timeout}"/>
+			<sysproperty key="org.jastadd.testThreads" value="${threads}"/>
+			<classpath>
+				<pathelement path="${bin.dir}"/>
+				<pathelement path="lib/junit-${junit.version}.jar"/>
+				<pathelement path="lib/hamcrest-core-${hamcrest.version}.jar"/>
+			</classpath>
+			<test name="${testSuite}"
+				todir="${test-reports.dir}"/>
+			<formatter type="xml"/>
+			<formatter classname="ant.SimpleTestFormatter" usefile="false"/>
+		</junit>
+	</target>
+
+	<target name="test-failing" description="run JastAdd2 failing tests">
+		<antcall target="test">
+			<param name="testSuite" value="tests.jastadd2.TestErrors"/>
+		</antcall>
+	</target>
+
+	<target name="doc" depends="build" description="generate JastAdd documentation from test files">
+		<java classname="doc.DocGen" output="doc.md" logError="true" failonerror="true">
+			<classpath>
+				<pathelement path="${bin.dir}"/>
+				<pathelement path="lib/junit-${junit.version}.jar"/>
+				<pathelement path="lib/hamcrest-core-${hamcrest.version}.jar"/>
+				<pathelement path="lib/tinytemplate-${tinytemplate.version}.jar"/>
+			</classpath>
+		</java>
+	</target>
+</project>

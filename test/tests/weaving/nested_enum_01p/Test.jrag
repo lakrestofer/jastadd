@@ -1,0 +1,8 @@
+aspect Test {
+	public class MyClass {
+		enum Fruit {
+			CHERRY,
+			BANANA
+		}
+	}
+}

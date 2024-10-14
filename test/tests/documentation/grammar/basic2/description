@@ -1,0 +1,15 @@
+In order to create a useful abstract grammar it is necessary to have grammar
+nodes with child components, for example:
+
+$include(Grammar.ast)
+
+Here the node `A` has two child components of type `B` and `C`.  JastAdd
+generates a constructor for each node that matches the declaration in the
+`.ast` file. An AST can be built using these generated constructors:
+
+$include(Test.java)
+
+The above code constructs the following AST:
+
+#TestOutputAsDiagram
+

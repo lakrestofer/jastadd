@@ -1,0 +1,2 @@
+Tests that JastAdd can handle simple interface declarations, both in and
+outside an aspect, with a single abstract method.

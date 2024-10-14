@@ -1,0 +1,5 @@
+aspect AspectA {
+    public enum TEnum { A }
+    public interface TInterface {}
+    public class TClass {}
+}

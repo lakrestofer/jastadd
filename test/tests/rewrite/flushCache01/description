@@ -1,0 +1,3 @@
+Tests that the value-list of a parameterized NTA is set to null during flushCache
+
+[Related trac ticket](http://svn.cs.lth.se/trac/jastadd-trac/ticket/114)

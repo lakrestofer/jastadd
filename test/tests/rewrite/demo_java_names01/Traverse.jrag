@@ -1,0 +1,7 @@
+aspect Traverse {
+  public void ASTNode.traverse() {
+    for(int i = 0; i < getNumChild(); i++) {
+      getChild(i).traverse();
+    }
+  }
+}

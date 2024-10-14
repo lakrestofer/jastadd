@@ -1,0 +1,14 @@
+import java.util.LinkedList;
+
+aspect Test {
+  coll LinkedList<B> R.bList();
+
+  // Exclude supertype contributions.
+  A2 contributes { } to R.bList();
+
+  A contributes getThing() to R.bList();
+
+  B contributes this to R.bList();
+
+  syn nta B A.implicitB() = new B();
+}

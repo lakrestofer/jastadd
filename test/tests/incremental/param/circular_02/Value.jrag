@@ -1,0 +1,21 @@
+/**
+ * This aspect adds container class to store an attribute value in an object.
+ * With a container object it is possible to compare refrence identity
+ * to check if an attribute has been re-computed.
+ */
+aspect Value {
+  class Value {
+    final int x;
+    Value(int x) {
+      this.x = x;
+    }
+
+    public static Value of(int x) {
+      return new Value(x);
+    }
+
+    @Override public boolean equals(Object other) {
+      return (other instanceof Value) && ((Value) other).x == x;
+    }
+  }
+}

@@ -1,0 +1,3 @@
+Tests that inter-type method declarations may have type parameters.
+
+Related issue: https://bitbucket.org/jastadd/jastadd2/issue/183/syntax-error-when-declaring-generic

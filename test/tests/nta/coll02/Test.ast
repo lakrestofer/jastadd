@@ -1,0 +1,2 @@
+Node ::= B:NamedNode;
+NamedNode ::= <Name>;

@@ -1,0 +1,11 @@
+/* multi-static import */
+import static java.lang.Integer.*;
+
+// single static import
+import static java.lang.Float.parseFloat;
+
+aspect Test {
+	public void Node.test() {
+		highestOneBit(1234);
+	}
+}

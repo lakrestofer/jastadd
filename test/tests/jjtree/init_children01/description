@@ -1,0 +1,5 @@
+Tests that the list child of Node is initialized to an empty list,
+so that it is not null. If adding a new list element raises an NPE
+then the list was not initialized properly.
+
+[Trac link](http://svn.cs.lth.se/trac/jastadd-trac/ticket/109)

@@ -1,0 +1,3 @@
+Tests that inter-type method declarations may have type parameters with bounds.
+
+Related issue: https://bitbucket.org/jastadd/jastadd2/issue/187/generic-method-inter-type-declarations-do

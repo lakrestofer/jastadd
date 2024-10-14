@@ -1,0 +1,2 @@
+Tests that a node type can define different equations for an inherited
+attribute for each of its children

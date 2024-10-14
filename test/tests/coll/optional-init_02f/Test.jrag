@@ -1,0 +1,11 @@
+// Omitting the initialization expression of a collection
+// attribute does not work when the attribute type is not a
+// concrete type. This results in a Java compile error.
+// .result=COMPILE_FAIL
+import java.util.Collection;
+
+aspect Test {
+  coll Collection<Leaf> Tree.leaves(); // Missing initialization expression.
+
+  Leaf contributes this to Tree.leaves();
+}

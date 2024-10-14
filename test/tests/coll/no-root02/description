@@ -1,0 +1,2 @@
+Tests that JastAdd allows a collection attribute in grammar with no root node
+if a root is declared in the collection declaration.

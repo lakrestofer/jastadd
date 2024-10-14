@@ -1,0 +1,16 @@
+aspect Test {
+
+  rewrite A {
+    when (getB().a() != null && isA()) to A2 {
+      return new A2(getB());
+    }
+  }
+  
+  syn boolean A.isA() = true;
+  eq A2.isA() = false;
+  
+  // The attribute B.a() should cause a component check exception because it is
+  // used in a circular attribute evaluation.
+  inh lazy A B.a();
+  eq Root.getA().a() = getA();
+}

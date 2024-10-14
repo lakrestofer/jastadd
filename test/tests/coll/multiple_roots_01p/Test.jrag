@@ -1,0 +1,10 @@
+import java.util.HashSet;
+
+aspect Test {
+  coll HashSet<String> Root.literals();
+
+  Leaf contributes getVALUE() to Root.literals() for root();
+
+  inh Root Leaf.root();
+  eq Root.getChild().root() = this;
+}

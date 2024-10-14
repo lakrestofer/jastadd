@@ -1,0 +1,9 @@
+aspect AspectA {
+	public int Node.foo() { return 1; }
+	public int Node.tfield;
+	public Node.Node(int i) { super(); tfield = i; }
+
+}
+aspect AspectB {
+	public int Node.bar() { return 2; }
+}

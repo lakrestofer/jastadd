@@ -1,0 +1,7 @@
+aspect T {
+    syn nta B A.b() = new B();
+
+    inh int B.attr();
+    eq A.getChild().attr() = 20;
+    eq A.b().attr() = 10;
+}

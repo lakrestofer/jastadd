@@ -1,0 +1,2 @@
+Error: multiple production rule for non-terminal A
+Error at tests/diagnostics/multiple_production_01f/Test.ast:2: multiple production rule for non-terminal A

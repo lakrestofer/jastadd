@@ -1,0 +1,9 @@
+aspect Test {
+  syn lazy int A.attr() = 123;
+  eq B.attr() = 456;
+  syn boolean B.different(){
+    this.attr();
+    super.attr(); // could cause the first value to be "shadowed"/overwritten if the caches aren't separated
+    return this.attr()==456&&super.attr()==123;
+  }
+}

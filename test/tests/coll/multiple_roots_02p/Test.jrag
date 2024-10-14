@@ -1,0 +1,17 @@
+import java.util.HashSet;
+
+aspect Test {
+  // RootA version.
+  coll HashSet<String> RootA.literals();
+  Leaf contributes getVALUE() to RootA.literals() for rootA();
+
+  inh RootA Leaf.rootA();
+  eq RootA.getChild().rootA() = this;
+
+  // RootB version.
+  coll HashSet<String> RootB.literals();
+  Leaf contributes getVALUE() to RootB.literals() for rootB();
+
+  inh RootB Leaf.rootB();
+  eq RootB.getChild().rootB() = this;
+}

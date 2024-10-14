@@ -1,0 +1,3 @@
+aspect Test {
+  syn nta A ASTNode.b(int n) = (n == 0) ? new B(): new A();
+}

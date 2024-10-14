@@ -1,0 +1,3 @@
+aspect B {
+	syn boolean Node.x();
+}

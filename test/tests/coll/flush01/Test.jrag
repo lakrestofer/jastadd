@@ -1,0 +1,12 @@
+import java.util.Collection;
+import java.util.HashSet;
+
+aspect Test {
+  inh A B.a();
+  eq A.getB().a() {
+    return this;
+  }
+
+  coll Collection<String> A.set() [new HashSet<String>()] with add root A;
+  B contributes getId() to A.set() for a();
+}

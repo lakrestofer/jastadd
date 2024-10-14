@@ -1,0 +1,5 @@
+aspect Test {
+  syn int Node.attr() {
+    return 0;
+  }
+}

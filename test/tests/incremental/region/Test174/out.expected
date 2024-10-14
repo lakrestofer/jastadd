@@ -1,0 +1,67 @@
+ ------------------
+| after construction
+ ------------------
+A(CREATED) listeners: []
+A/B[0](CREATED) listeners: []
+A/D[1](CREATED) listeners: []
+node: a=A
+node: a.parent=null
+node: a/child[0]=A/B[0]
+node: a/child[0].parent=A
+node: a/child[1]=A/D[1]
+node: a/child[1].parent=A
+ -------------
+| after rewrite
+ -------------
+A(COMPUTED) listeners: [A/B[0](COMPUTED), A/C(COMPUTED)]
+A/B[0](COMPUTED) listeners: [A(COMPUTED), A/B[0](COMPUTED), A/C(COMPUTED)]
+A/C(COMPUTED) listeners: [A(COMPUTED), A/B[0](COMPUTED)]
+A/D[1](CREATED) listeners: []
+node: a=A
+node: a.parent=null
+node: a/child[0]=A/B[0]
+value(A/B[0]:rewrittenNode, A/C)
+node: a/child[0].parent=A
+node: a/child[1]=A/D[1]
+node: a/child[1].parent=A
+ --------------------
+| after a.getD.sibling
+ --------------------
+A(COMPUTED) listeners: [A/B[0](COMPUTED), A/C(COMPUTED), A/D[1](COMPUTED)]
+A/B[0](COMPUTED) listeners: [A(COMPUTED), A/B[0](COMPUTED), A/C(COMPUTED)]
+A/C(COMPUTED) listeners: [A(COMPUTED), A/B[0](COMPUTED)]
+A/D[1](COMPUTED) listeners: [A(COMPUTED)]
+node: a=A
+node: a.parent=null
+node: a/child[0]=A/B[0]
+value(A/B[0]:rewrittenNode, A/C)
+node: a/child[0].parent=A
+node: a/child[1]=A/D[1]
+value(A/D[1]:sibling, A/C)
+node: a/child[1].parent=A
+ ---------------
+| after a.setName
+ ---------------
+A(EMPTY) listeners: []
+A/B[0](EMPTY) listeners: []
+A/D[1](EMPTY) listeners: []
+node: a=A
+node: a.parent=null
+node: a/child[0]=A/B[0]
+node: a/child[0].parent=A
+node: a/child[1]=A/D[1]
+node: a/child[1].parent=A
+ -------------
+| after rewrite
+ -------------
+A(COMPUTED) listeners: [A/B[0](COMPUTED), A/C(COMPUTED)]
+A/B[0](COMPUTED) listeners: [A(COMPUTED), A/B[0](COMPUTED), A/C(COMPUTED)]
+A/C(COMPUTED) listeners: [A(COMPUTED), A/B[0](COMPUTED)]
+A/D[1](EMPTY) listeners: []
+node: a=A
+node: a.parent=null
+node: a/child[0]=A/B[0]
+value(A/B[0]:rewrittenNode, A/C)
+node: a/child[0].parent=A
+node: a/child[1]=A/D[1]
+node: a/child[1].parent=A

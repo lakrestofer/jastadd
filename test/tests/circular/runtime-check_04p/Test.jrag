@@ -1,0 +1,12 @@
+aspect Test {
+  syn int Node.circ() circular [0] = min(circ() + 1, 6);
+
+  // Same as runtime-check_03p but using a parameterized non-circular attribute.
+  syn int Node.min(int a, int b) {
+    if (a < b) {
+      return a;
+    } else {
+      return b;
+    }
+  }
+}

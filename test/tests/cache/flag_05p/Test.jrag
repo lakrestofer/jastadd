@@ -1,0 +1,9 @@
+aspect Test {
+  syn lazy int Node.attr(int a) {
+    return a * 3;
+  }
+}
+
+aspect CacheConfig {
+  uncache Node.attr(int b);
+}

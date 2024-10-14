@@ -1,0 +1,10 @@
+digraph {
+  n0[label="A \"a1\""];
+  n1[label="Opt"];
+  n2[label="B"];
+  n1 -> n2;
+  n0 -> n1;
+  n3[label="A \"a2\""];
+  n4[label="Opt"];
+  n3 -> n4;
+}

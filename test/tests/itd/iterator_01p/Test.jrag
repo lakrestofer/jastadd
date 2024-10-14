@@ -1,0 +1,28 @@
+// Example of adding an iterator to ASTNode.
+// .result=COMPILE_PASS
+import java.util.Iterator;
+aspect Iterator {
+  ASTNode implements Iterable<T>;
+
+  @Override
+  public Iterator<T> ASTNode.iterator() {
+    return new Iterator<T>() {
+      private int index = 0;
+
+      @Override
+      public boolean hasNext() {
+        return index < getNumChild();
+      }
+
+      @Override
+      public T next() {
+        return hasNext() ? (T) getChild(index++) : null;
+      }
+
+      @Override
+      public void remove() {
+        throw new UnsupportedOperationException();
+      }
+    };
+  }
+}

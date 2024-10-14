@@ -1,0 +1,7 @@
+// Test code generation for incremental=param,debug and an NTA token.
+// .result: COMPILE_PASS
+// .options: incremental=param,debug rewrite=cnta
+// .grammar: { A ::= /<ID:String>/; }
+aspect Test {
+  syn String A.getID() = "A";
+}

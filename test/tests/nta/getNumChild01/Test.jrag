@@ -1,0 +1,3 @@
+aspect Test {
+	syn nta B A.B2() = new B();
+}

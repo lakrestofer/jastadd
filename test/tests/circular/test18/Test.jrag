@@ -1,0 +1,14 @@
+import java.util.*;
+
+aspect Test {
+	syn boolean Root.a1() circular [true] = a2();
+	syn boolean Root.a2() circular [true] = a3();
+	syn boolean Root.a3() circular [true] {
+		c1();
+		return a1();
+	}
+
+	syn int Root.c1() circular [0] = Math.min(5, c2() + 1);
+	syn int Root.c2() circular [0] = c3();
+	syn int Root.c3() circular [0] = c1();
+}

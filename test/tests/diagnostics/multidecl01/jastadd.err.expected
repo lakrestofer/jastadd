@@ -1,0 +1,1 @@
+Error at tests/diagnostics/multidecl01/B.jrag:2: multiple declaration of attribute Node.x, previously declared in tests/diagnostics/multidecl01/A.jrag:2

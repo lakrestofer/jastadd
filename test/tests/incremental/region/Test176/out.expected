@@ -1,0 +1,14 @@
+ ------------------
+| after construction
+ ------------------
+A(CREATED) listeners: []
+ ---------
+| after a.a
+ ---------
+A(CREATED) listeners: []
+value(A:a, 1)
+value(A:b, 1)
+ ---------------
+| after a.setName
+ ---------------
+A(EMPTY) listeners: []

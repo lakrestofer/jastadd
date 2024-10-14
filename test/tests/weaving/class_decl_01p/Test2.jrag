@@ -1,0 +1,3 @@
+aspect Test2 {
+	public class MyClass {}
+}

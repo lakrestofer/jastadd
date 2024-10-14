@@ -1,0 +1,21 @@
+aspect Test {
+  refine public Node Node.clone() throws CloneNotSupportedException {
+    return null;
+  }
+  refine public Node Node.copy() {
+    return null;
+  }
+  refine public Node Node.fullCopy() {
+    return null;
+  }
+  
+  public boolean Node.cacheFlushed = false; 
+  refine public void Node.flushAttrCache() {
+    cacheFlushed = true;
+  }
+  
+  public boolean Node.collectionCacheFlushed = false;
+  refine public void Node.flushCollectionCache() {
+    collectionCacheFlushed = true;
+  }
+}

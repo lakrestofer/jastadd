@@ -1,0 +1,5 @@
+Root ::= Node*;
+abstract Node ::= <ID:String>;
+Decl : Node;
+Use : Node;
+Unknown : Decl;

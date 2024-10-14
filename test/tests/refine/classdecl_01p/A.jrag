@@ -1,0 +1,7 @@
+aspect A {
+	public class FolderPart {
+		public boolean find(String name) {
+			return false;
+		}
+	}
+}

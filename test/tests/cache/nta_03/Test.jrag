@@ -1,0 +1,4 @@
+aspect Test {
+  syn nta A A.getA(int i) = new A();
+
+}

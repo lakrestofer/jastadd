@@ -1,0 +1,12 @@
+// An interface can declare a synthesized attribute without an equation.
+// If a node implements the interface without supplying an equation for it,
+// there will be an error message.
+// .grammar: { Node; }
+// .result: JASTADD_ERR_OUTPUT
+
+aspect Test {
+	interface I { }
+	Node implements I;
+
+	syn boolean I.attr();
+}

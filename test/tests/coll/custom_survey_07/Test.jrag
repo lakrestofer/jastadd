@@ -1,0 +1,21 @@
+import java.util.LinkedList;
+
+aspect Test {
+  coll LinkedList<B> R.bList();
+
+  // Regular contribution:
+  B contributes this to R.bList();
+}
+
+aspect B1 {
+  // A single NTA child can be searched for contributions:
+  A contributes nta implicitB1() to R.bList();
+
+  syn nta B A.implicitB1() = new B();
+}
+
+aspect B2 {
+  A contributes nta implicitB2() to R.bList();
+
+  syn nta B A.implicitB2() = new B();
+}

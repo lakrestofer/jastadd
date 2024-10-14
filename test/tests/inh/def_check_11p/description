@@ -1,0 +1,2 @@
+This test tests that JastAdd does not find a missing inherited equation for isDAbefore
+through analyzing token components.

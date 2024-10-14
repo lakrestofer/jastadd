@@ -1,0 +1,29 @@
+import java.util.*;
+
+aspect Test175 {
+
+  inh String B.name();
+  inh String D.name();
+  eq A.getB().name() = getName();
+
+  syn boolean B.doRewrite() = true;
+  eq C.doRewrite() = false;
+
+  rewrite B {
+    when ( getD().doOuterRewrite() && name().equals("a") && doRewrite() ) to C {
+      return new C(getD().treeCopyNoTransform());
+    }
+  }
+
+  syn boolean D.doOuterRewrite() = false;
+  eq E.doOuterRewrite() = true;
+
+  syn boolean D.doRewrite() = true;
+  eq E.doRewrite() = false;
+
+  rewrite D {
+    when ( doRewrite() && name().equals("a")) to E {
+      return new E();
+    } 
+  }
+}

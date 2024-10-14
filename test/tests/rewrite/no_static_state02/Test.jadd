@@ -1,0 +1,6 @@
+aspect TestHelper {
+	public Object ASTNode.testGetState() {
+		// helper to access the private state field
+		return state;
+	}
+}

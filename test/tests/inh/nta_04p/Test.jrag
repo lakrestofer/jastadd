@@ -1,0 +1,13 @@
+// Test that a missing inherited equation error is not reported for a subtype of a node type used
+// in a synthesized NTA.
+//
+// Also tests that a subtype of a node type used in a synthesized NTA is not treated as a root node.
+// .result=JASTADD_PASS
+// .options=| rewrite
+aspect Test {
+  syn nta B A.b() = new B();
+
+  inh A C.a();
+
+  eq A.b().a() = this;
+}

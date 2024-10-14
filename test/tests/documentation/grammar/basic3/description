@@ -1,0 +1,4 @@
+It is also possible to replace a child component after a node is constructed.
+For example this constructs an identical AST:
+
+$include(Test.java)

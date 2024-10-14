@@ -1,0 +1,3 @@
+aspect Test {
+	syn char Node.c() = 'ccc';
+}

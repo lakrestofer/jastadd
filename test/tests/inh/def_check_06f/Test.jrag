@@ -1,0 +1,4 @@
+aspect Test {
+  inh Object Expr.attr();
+  eq A.getB1().attr() = new Object();
+}

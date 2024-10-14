@@ -1,0 +1,5 @@
+aspect Test {
+  syn nta Y X.myY(String name) {
+    return new Y(name);
+  }
+}

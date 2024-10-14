@@ -1,0 +1,8 @@
+/* multi-static; import */
+import static java.lang.Integer.*;
+
+aspect Test {
+	public void Node.test() {
+		highestOneBit(1234);
+	}
+}

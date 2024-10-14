@@ -1,0 +1,8 @@
+aspect Test {
+	public class A {
+	}
+
+	// inter-type class declaration
+	public class A.B {
+	}
+}

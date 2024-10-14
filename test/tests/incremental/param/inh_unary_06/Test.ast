@@ -1,0 +1,4 @@
+Block ::= Stmt*;
+abstract Stmt;
+Decl : Stmt ::= <Name>;
+Use : Stmt ::= <Name>;

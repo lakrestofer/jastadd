@@ -1,0 +1,2 @@
+A ::= <Token:int>;
+B : A ;

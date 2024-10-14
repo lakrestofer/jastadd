@@ -1,0 +1,8 @@
+// Inherited attributes on parameterized NTAs can not use a child index in the
+// inherited equations.
+// .result=JASTADD_FAIL
+aspect Test {
+  syn nta B A.selectB(int i) = new B();
+  inh int B.value();
+  eq A.selectB(int i).value() = i; // Error: can not use child index.
+}

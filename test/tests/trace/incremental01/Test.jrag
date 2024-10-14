@@ -1,0 +1,8 @@
+aspect Computation {
+  syn B Root.getB() {
+    B result = new B();
+    A inner = new A(0);
+    result.setA(inner);
+    return result;
+  }
+}

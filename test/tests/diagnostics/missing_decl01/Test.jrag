@@ -1,0 +1,9 @@
+aspect Test {
+	interface I {}
+	
+	Node implements I;
+	
+	syn int Node.x();
+	
+	eq I.x() = 3;
+}

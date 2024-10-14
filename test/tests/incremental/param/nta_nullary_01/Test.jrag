@@ -1,0 +1,3 @@
+aspect Test {
+  syn nta A A.x() = new A("x" + getName());
+}

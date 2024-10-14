@@ -1,0 +1,1 @@
+Consider an interface with an equation defining an inherited attribute via getChild(). A subclass of the node implementing the interface can override this equation by using getChild().

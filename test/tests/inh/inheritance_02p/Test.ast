@@ -1,0 +1,3 @@
+Node ::= Left:A;
+SubNode : Node ::= Right:A;
+A;

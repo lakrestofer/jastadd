@@ -1,0 +1,5 @@
+Program ::= A D;
+abstract A;
+B : A;
+C : A;
+D;

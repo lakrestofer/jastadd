@@ -1,0 +1,11 @@
+// Missing refinement target should generate an error.
+// .result: JASTADD_ERR_OUTPUT
+aspect Test {
+	/*public void Node.qux() {
+		System.out.println("qux");
+	}*/
+
+	refine Test public void Node.qux() {
+		System.out.println("norf");
+	}
+}

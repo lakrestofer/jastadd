@@ -1,0 +1,4 @@
+Problems during JRAG parsing:
+Error at tests/coll/syntax_02f/Test.jrag:6:58: unexpected token "with":
+  coll Collection<B> A.set() [new HashSet<B>()] root add with A;
+                                                         ^^^^

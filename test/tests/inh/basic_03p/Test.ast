@@ -1,0 +1,2 @@
+Node ::= Left:A Right:A;
+A;

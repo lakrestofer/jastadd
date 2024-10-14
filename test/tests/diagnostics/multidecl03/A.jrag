@@ -1,0 +1,3 @@
+aspect A {
+	syn boolean Node.x() = false;
+}

@@ -1,0 +1,2 @@
+Warning at tests/inh/lookup_decl_01f/Test.jrag:4: missing inherited equation for attribute value in class A when being child of Node (path: Node->A)
+Error at tests/inh/lookup_decl_01f/Test.jrag:5: missing declaration for inherited attribute value(int i)

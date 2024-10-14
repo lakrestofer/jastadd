@@ -1,0 +1,1 @@
+Error at tests/coll/undeclared_01f/Test.jrag:4: undeclared collection attribute 'A.childCounts'

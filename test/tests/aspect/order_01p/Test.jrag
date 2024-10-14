@@ -1,0 +1,10 @@
+aspect Test {
+  B implements I;
+
+  inh A I.a();
+
+  interface I {
+  }
+
+  eq A.getChild().a() = this;
+}

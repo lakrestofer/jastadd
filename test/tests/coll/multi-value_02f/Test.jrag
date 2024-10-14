@@ -1,0 +1,16 @@
+import java.util.LinkedList;
+
+aspect Test {
+  coll LinkedList<String> A.b() [new LinkedList<String>()];
+
+  B contributes each multiplyId(getNUM()) to A.b();
+
+  /** Creates a collection containing num copies of this ID. */
+  syn Iterable<String> B.multiplyId(int num) {
+    LinkedList<String> ids = new LinkedList<String>();
+    for (int i = 0; i < num; ++i) {
+      ids.add(getID());
+    }
+    return ids;
+  }
+}

@@ -1,0 +1,7 @@
+aspect Test {
+  // Attribute referencing a token
+  syn int A.value();
+  eq A.value() = getToken();
+  // semantically same definition as in A
+  eq B.value() = getToken() * 1;
+}

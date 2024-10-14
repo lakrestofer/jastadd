@@ -1,0 +1,13 @@
+import java.util.LinkedList;
+
+aspect Test {
+  inh Root A.root();
+
+  eq Root.getA().root() = this;
+
+  coll LinkedList<String> Root.names() [new LinkedList<>()] with add;
+
+  A contributes "A" to Root.names() for root();
+
+  B contributes "B" to Root.names() for root();
+}

@@ -1,0 +1,28 @@
+aspect Test {
+	inh int A.c2_a() circular [1];
+	eq B.getA().c2_a() {
+		return getA().c2_b();
+	}
+
+	inh int A.c2_b() circular [1];
+	eq B.getA().c2_b() {
+		int c = getA().c2_a();
+		return c == 2 ? 2 : c + 1;
+	}
+
+	inh int A.c3();
+	eq B.getA().c3() {
+		return getA().c2_a();
+	}
+
+	inh int A.c1_a() circular [1];
+	eq B.getA().c1_a() {
+		int c = getA().c1_b() + getA().c3();
+		return c >= 5 ? 5 : c + 1;
+	}
+
+	inh int A.c1_b() circular [1];
+	eq B.getA().c1_b() {
+		return getA().c1_a();
+	}
+}

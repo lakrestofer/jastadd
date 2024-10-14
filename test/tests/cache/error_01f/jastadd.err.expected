@@ -1,0 +1,2 @@
+Problems during cache configuration:
+Error at tests/cache/error_01f/Test.jrag:5: cannot find attribute A.missing

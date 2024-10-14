@@ -1,0 +1,3 @@
+It is possible to reorder the components of an AST node type in order to
+get a different constructor.
+This works for each class in a chain of subclasses.

@@ -1,0 +1,9 @@
+aspect Test {
+	inh int X.value();
+
+	eq Node.getA().value() = 3;
+	eq Node.getC().value() = 7;
+	eq Node.getChild().value() = 0;
+
+	eq SubNode.getChild().value() = -1;
+}

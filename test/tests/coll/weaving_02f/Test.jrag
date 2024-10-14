@@ -1,0 +1,9 @@
+// Test that an error is reported when trying to weave a collection attribute in an unknown type.
+// .grammar: { A; }
+// .result: JASTADD_ERR
+import java.util.*;
+aspect Test {
+  coll Collection<String> I.set();
+}
+
+

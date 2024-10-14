@@ -1,0 +1,40 @@
+import java.util.*;
+
+aspect Test {
+  syn boolean Root.a1() circular [true] = a2();
+  syn boolean Root.a2() circular [true] {
+    f1();  // Call non-circular attribute.
+    return a3();
+  }
+  syn boolean Root.a3() circular [true] {
+    b1();
+    return a1();
+  }
+
+  // Non-circular attribute that depends on circular attributes
+  // and non-circular attributes.
+  syn lazy int Root.b1() {
+    int b = b2(); // b2 should be called before d1
+    return b + d1();
+  }
+
+  syn lazy int Root.b2() {
+    int c = c1();
+    return c + e1();
+  }
+
+  // Non-circular attributes that do not depend on circular attributes.
+  syn lazy int Root.d1() = d2() + 1;
+  syn lazy int Root.d2() = 1;
+
+  syn lazy int Root.e1() = d2() + 1;
+  syn lazy int Root.e2() = 1;
+
+  syn lazy int Root.f1() = f2() + 1;
+  syn lazy int Root.f2() = 1;
+
+  // Circular attributes.
+  syn int Root.c1() circular [0] = Math.min(5, c2() + 1);
+  syn int Root.c2() circular [0] = c3();
+  syn int Root.c3() circular [0] = c1();
+}

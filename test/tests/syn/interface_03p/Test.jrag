@@ -1,0 +1,11 @@
+aspect Test1 {
+	interface I { }
+	A implements I;
+    B implements I;
+	syn boolean I.attr() = false;
+}
+aspect Test2 {
+
+	refine Test1 eq A.attr() = true;
+
+}

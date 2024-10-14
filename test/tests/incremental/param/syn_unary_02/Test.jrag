@@ -1,0 +1,19 @@
+aspect Test {
+  public class Named {
+    private final String name;
+    public Named(String name) {
+      this.name = name;
+    }
+    public String getName() {
+      return name;
+    }
+  }
+
+  syn lazy Named A.lr(boolean left) {
+    if (left) {
+      return new Named(getLeft().getName());
+    } else {
+      return new Named(getRight().getName());
+    }
+  }
+}

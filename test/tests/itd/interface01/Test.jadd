@@ -1,0 +1,6 @@
+aspect Test {
+	interface B {
+	}
+
+	A implements B;
+}

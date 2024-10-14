@@ -1,0 +1,4 @@
+aspect Test {
+	syn boolean Node.attribute();
+	eq SubNode.attribute() = false;
+}

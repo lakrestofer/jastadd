@@ -1,0 +1,1 @@
+Error at tests/diagnostics/multidecl03/B.jrag:2: multiple equations for synthesized attribute Node.x, previously defined in tests/diagnostics/multidecl03/A.jrag:2

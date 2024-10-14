@@ -1,0 +1,3 @@
+Error at tests/diagnostics/syntax_err01/Test.ast:1:10: unexpected token "::=":
+Node ::= ::=
+         ^^^

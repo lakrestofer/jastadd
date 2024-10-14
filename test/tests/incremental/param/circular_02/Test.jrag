@@ -1,0 +1,5 @@
+aspect Test {
+  // The value of cv iterates from 0 to A.Max.
+  syn Value A.cv() circular [ Value.of(0) ] =
+      Value.of(Math.min(cv().x + 1, getMax()));
+}

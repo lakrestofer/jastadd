@@ -1,0 +1,30 @@
+// Tests the flag --tracing=coll.
+// .options: tracing=coll rewrite
+// .source: 1.8
+import java.util.Set;
+import java.util.HashSet;
+
+aspect Test {
+	
+	inh Node A.node();
+	eq Node.getChild().node() = this;
+
+	syn Set<String> A.strings();
+	eq B.strings() {
+	    Set<String> res = new HashSet<String>();
+	    res.add("hello");
+	    res.add("hi");
+	    return res;
+	}
+	eq C.strings() {
+            Set<String> res = new HashSet<String>();
+	    res.add("hej");
+	    return res;
+	}
+	
+	coll Set<String> Node.greetings() [new HashSet<String>()] with add;
+	A contributes each strings() when true
+    &&
+    true
+    to Node.greetings() for node();
+}

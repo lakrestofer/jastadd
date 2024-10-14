@@ -1,0 +1,4 @@
+A ::= <Name:String>; 
+B;
+C : B;
+region ASTNode;

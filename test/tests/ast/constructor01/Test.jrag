@@ -1,0 +1,5 @@
+aspect Test {
+	syn X Node.getB() = new X();
+	syn Opt<X> Node.getCOpt() = new Opt<X>();
+	syn List<X> Node.getDList() = new List<X>();
+}

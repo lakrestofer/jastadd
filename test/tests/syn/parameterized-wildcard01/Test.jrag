@@ -1,0 +1,10 @@
+import java.util.Collection;
+
+aspect Test {
+	syn lazy Collection<?> Node.wildcardAttribute(Collection<?> list) {
+		return list;
+	}
+	syn lazy boolean Node.wildcardAttribute2(Collection<? extends ASTNode> list) {
+		return true;
+	}
+}

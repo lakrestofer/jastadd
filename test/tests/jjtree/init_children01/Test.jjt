@@ -1,0 +1,21 @@
+options {
+  MULTI=true;
+  VISITOR=true;
+  NODE_PREFIX="";
+}
+
+PARSER_BEGIN(TestParser)
+
+public class TestParser { }
+
+PARSER_END(TestParser)
+
+SKIP: { " " }
+
+Program Program() : {}
+{
+  <EOF>
+  {
+		return jjtThis;
+	}	
+}

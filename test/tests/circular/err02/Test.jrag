@@ -1,0 +1,20 @@
+aspect Test {
+	// Based on a bug reported by Anton Risberg Alaküla
+
+	syn int Node.goodUncache() circular [3] = Math.min(goodUncache() + 1, 100);
+	syn int Node.badUncache() = Math.min(badUncache() + 1, 100);
+	syn int Node.uglyUncache() circular [3] = Math.min(badUncache() + 1, 100);
+
+	syn int Node.goodCache() circular [3] = Math.min(goodCache() + 1, 100);
+	syn int Node.badCache() = Math.min(badCache() + 1, 100);
+	syn int Node.uglyCache() circular [3] = Math.min(badCache() + 1, 100);
+
+	uncache Node.goodUncache();
+	uncache Node.badUncache();
+	uncache Node.uglyUncache();
+
+	cache Node.goodCache();
+	cache Node.badCache();
+	cache Node.uglyCache();
+
+}

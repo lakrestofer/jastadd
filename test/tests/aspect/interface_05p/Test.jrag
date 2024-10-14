@@ -1,0 +1,15 @@
+// Tests adding an multiple interfaces to an AST class with the implements statement.
+// https://bitbucket.org/jastadd/jastadd2/issues/324/multiple-types-in-implements-statement-are
+// .grammar: { A; }
+// .result: COMPILE_PASS
+aspect Test {
+	interface I { }
+	interface J { }
+	A implements I, J;
+
+  syn int I.x();
+  syn int J.y();
+
+  eq A.x() = 7;
+  eq A.y() = 8;
+}

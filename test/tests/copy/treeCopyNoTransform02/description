@@ -1,0 +1,1 @@
+Tests bug causing memory leak in generated code with --beaver flag

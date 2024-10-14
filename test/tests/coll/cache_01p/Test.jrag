@@ -1,0 +1,21 @@
+import java.util.*;
+
+aspect Test {
+  inh A B.a();
+
+  eq A.getB().a() = this;
+
+  coll Collection<B> A.b() [new HashSet<B>()] with add root A;
+
+  B contributes this
+      to A.b()
+      for targetNode();
+
+  public int B.targetEval = 0;
+
+  // Compute contribution target. Also tracks number of evaluations.
+  public A B.targetNode() {
+    targetEval += 1;
+    return a();
+  }
+}

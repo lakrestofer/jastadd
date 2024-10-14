@@ -1,0 +1,6 @@
+aspect Test {
+	syn nta B A.getB() = new B();
+
+	inh int B.value();
+	eq A.getB().value() = -1;
+}

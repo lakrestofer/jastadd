@@ -1,0 +1,4 @@
+aspect Test {
+  inh boolean B.attr();
+  eq Program.getChild().attr() = true;
+}

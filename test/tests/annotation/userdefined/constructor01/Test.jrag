@@ -1,0 +1,7 @@
+aspect Test {
+
+    @Silly
+    public A.A(int i){
+        super();
+    }
+}

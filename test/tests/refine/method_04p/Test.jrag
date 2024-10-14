@@ -1,0 +1,10 @@
+aspect A1 {
+  interface Interface {
+  }
+  Node implements Interface;
+  public void Interface.toBeRefined() { }
+}
+
+aspect A2 {
+  refine A1 public void Interface.toBeRefined() { }
+}

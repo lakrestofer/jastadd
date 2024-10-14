@@ -1,0 +1,10 @@
+// Test that it is an error if an NTA is not of ASTNode-type.
+// https://bitbucket.org/jastadd/jastadd2/issues/280/genrate-warning-when-nta-not-subclass-of
+// .grammar: { A; }
+// .result: JASTADD_ERR_OUTPUT
+aspect Test {
+  interface InterfaceB {}
+
+  // Error: InterfaceB is not an AST class.
+	syn nta InterfaceB A.getA() = null;
+}

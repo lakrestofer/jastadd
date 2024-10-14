@@ -1,0 +1,7 @@
+aspect A1 {
+	syn int X.value() = 2;
+}
+
+aspect A2 {
+	refine A1 eq X.value() = Test.X.value() + 13;
+}

@@ -1,0 +1,4 @@
+aspect Test {
+	@Silly
+	interface MyInterface { }
+}

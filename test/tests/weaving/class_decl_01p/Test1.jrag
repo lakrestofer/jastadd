@@ -1,0 +1,3 @@
+aspect Test1 {
+	public void MyClass.myFun() {}
+}

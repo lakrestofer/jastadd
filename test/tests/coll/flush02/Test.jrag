@@ -1,0 +1,12 @@
+import java.util.Collection;
+import java.util.HashSet;
+
+aspect Test {
+  inh B B.succ();
+  eq A.getB(int i).succ() {
+    return getB((i + 1) % getNumB());
+  }
+
+  coll Collection<B> B.pred() [new HashSet<B>()] with add root A;
+  B contributes this to B.pred() for succ();
+}

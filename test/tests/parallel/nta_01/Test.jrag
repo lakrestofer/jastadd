@@ -1,0 +1,7 @@
+aspect Test {
+  syn nta C B.getC() = new C(getID() + fact(getNUM()));
+
+  public static long B.fact(int num) {
+    return (num == 0) ? 1 : num * fact(num-1);
+  }
+}

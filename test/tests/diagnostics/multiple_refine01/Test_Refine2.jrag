@@ -1,0 +1,5 @@
+aspect Refine2 {
+	refine A1 public int X.value() {
+		return 13;
+	}
+}

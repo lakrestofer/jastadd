@@ -1,0 +1,7 @@
+abstract Root;
+RootA : Root ::= Node;
+RootB : Root ::= Node;
+
+abstract Node;
+Leaf : Node ::= <VALUE>;
+Branch : Node ::= Left:Node Right:Node;

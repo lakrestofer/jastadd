@@ -1,0 +1,4 @@
+aspect Test {
+  syn lazy String A.c(String prefix) = prefix + getName();
+}
+

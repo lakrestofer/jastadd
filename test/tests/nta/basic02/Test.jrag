@@ -1,0 +1,9 @@
+aspect Test {
+	public A NodeA.theA = new A();
+	syn nta A NodeA.getA() = theA;
+
+	public B NodeB.theB = new B();
+	syn nta B NodeB.getNtaB() {
+		return theB;
+	}
+}

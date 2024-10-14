@@ -1,0 +1,9 @@
+aspect Test {
+  syn nta N N.b() = treeCopy();
+
+  inh int N.attr();
+
+  eq N.b().attr() = -80;
+
+  eq P.getA().attr() = 80;
+}

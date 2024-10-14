@@ -1,0 +1,1 @@
+Warning at tests/inh/def_check_10f/Test.jrag:2: missing inherited equation for attribute attr in class B when being child of T (path: P->T->B), S (path: P->S->B), and in class C when being child of U (path: P->U->C)

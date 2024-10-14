@@ -1,0 +1,6 @@
+aspect Test {
+	interface SonI { }
+	Son implements SonI;
+
+	inh boolean SonI.attr();
+}

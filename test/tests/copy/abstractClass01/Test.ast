@@ -1,0 +1,3 @@
+Root ::= A;
+abstract A;
+B : A;

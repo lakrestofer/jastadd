@@ -1,0 +1,9 @@
+aspect Test1 {
+	interface GrandFatherI { }
+	GrandFather implements GrandFatherI;
+
+	inh boolean Son.attr();
+
+	eq GrandFatherI.getChild().attr() = true;
+	eq Father.getChild().attr() = false;
+}

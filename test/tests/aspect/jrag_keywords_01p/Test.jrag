@@ -1,0 +1,17 @@
+// It is possible to use JastAdd reserved words in certain contexts as legal Java identifiers.
+// See https://bitbucket.org/jastadd/jastadd2/issue/195/jastadd-keywords-in-java-code
+// .result=COMPILE_PASS
+aspect Test {
+  public int Node.compute() {
+    // keywords in method body
+    int syn = 0;
+    int eq = syn + 1;
+    int inh = 4;
+    String lazy, rewrite, each, to, when, aspect, circular, coll, contributes, refine, nta, cache, uncache;
+    return eq * 3 + syn / inh;
+  }
+
+  public int Node.eq = 3; // keyword as inter-type field name
+  public void Node.when() { // keyword as inter-type method name
+  }
+}

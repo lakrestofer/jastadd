@@ -1,0 +1,3 @@
+aspect Test {
+  syn nta B A.getB() = new B();
+}

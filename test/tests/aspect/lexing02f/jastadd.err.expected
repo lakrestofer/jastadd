@@ -1,0 +1,2 @@
+Problems during JRAG parsing:
+Error at tests/aspect/lexing02f/Test.jrag: Lexical error at line 4, column 0.  Encountered: <EOF> after : ""

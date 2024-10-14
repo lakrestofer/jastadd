@@ -1,0 +1,7 @@
+aspect Test {
+  syn boolean Root.circular_unparameterized() circular [false] = true;
+
+  syn boolean Root.not_circular_parameterized(boolean b) = true;
+
+  syn boolean Root.circular_parameterized(Boolean b) circular [false] = true;
+}

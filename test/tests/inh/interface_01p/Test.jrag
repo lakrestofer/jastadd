@@ -1,0 +1,8 @@
+aspect Test {
+	interface I { }
+	Son implements I;
+
+	inh boolean I.attr();
+
+	eq Father.getChild().attr() = true;
+}

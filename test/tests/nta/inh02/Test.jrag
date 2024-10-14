@@ -1,0 +1,7 @@
+aspect Test {
+	syn nta B A.getNtaB() = new B();
+
+	inh int B.value();
+	eq A.getB().value() = 1;
+	eq A.getNtaB().value() = 2;
+}

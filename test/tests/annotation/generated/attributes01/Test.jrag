@@ -1,0 +1,22 @@
+import java.util.HashSet;
+
+aspect Test {
+	syn boolean A.synA() = true;
+	syn boolean A.synParA(int i) = true;
+	
+	syn nta B A.ntaA() = new B();
+	syn nta B A.ntaParA(int i) = new B();
+
+	syn boolean A.circularA() circular [true] = circularA();
+	syn boolean A.circularParA(int i) circular [true] = circularParA(i);
+
+	coll HashSet<B> A.collA() [new HashSet<B>()] with add;
+	B contributes this
+	  to A.collA() for getParent();
+
+	inh boolean B.inhB();
+	eq A.getB().inhB() = true;
+	inh boolean B.inhParB(int i);
+	eq A.getB().inhParB(int i) = true;
+	
+}

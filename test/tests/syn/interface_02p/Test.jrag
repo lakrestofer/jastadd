@@ -1,0 +1,9 @@
+aspect Test {
+	interface I { }
+	A implements I;
+
+	syn boolean I.attr() = false;
+
+	eq B2.attr() = true;
+
+}

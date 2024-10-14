@@ -1,0 +1,12 @@
+// Test that we can set the value of an optional NTA via the setB method.
+// .result=COMPILE_PASS
+// .tags=nta,codegen
+// .grammar: { A ::= /[B]/; B; }
+aspect Test {
+	syn Opt<B> A.getBOpt() = new Opt<B>();
+
+	public void A.pass() {
+		// OK: we can set the optional value
+		setB(new B());
+	}
+}

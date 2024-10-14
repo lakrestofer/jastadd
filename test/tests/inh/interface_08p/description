@@ -1,0 +1,2 @@
+A class can have an inherited attribute that is defined in an interface, but where the definition is shadowed by an equation in an intermediate node.
+

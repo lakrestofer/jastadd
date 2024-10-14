@@ -1,0 +1,1 @@
+Error at tests/rewrite/no_rewrite_01f/Test.jrag:9: cannot use rewrites while rewrites are disabled (enable with --rewrite=cnta)

@@ -1,0 +1,2 @@
+Tests that the missing equation warning is not printed for an attribute
+declared on ASTNode.

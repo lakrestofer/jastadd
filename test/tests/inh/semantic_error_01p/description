@@ -1,0 +1,2 @@
+Compilation should fail if the equation for an inherited attribute does not
+contain a return statement.

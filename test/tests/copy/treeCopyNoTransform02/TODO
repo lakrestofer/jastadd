@@ -1,0 +1,3 @@
+The static value field in ASTNode (inherited from beaver.Symbol) should not be cloned
+
+This test should be updated when JastAdd supports Beaver 1.0

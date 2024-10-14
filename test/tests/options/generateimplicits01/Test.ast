@@ -1,0 +1,7 @@
+abstract ASTNode;
+Opt;
+List;
+
+Node ::= [A] B*;
+A;
+B;

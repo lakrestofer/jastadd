@@ -1,0 +1,23 @@
+aspect Test129 {
+
+  inh String B.name();
+  eq A.getB().name() = getName();
+
+  syn boolean B.isC() = false;
+  eq C.isC() = true;
+
+  rewrite B {
+    when (getD().isE() && name().equals("a") && !isC()) to C {
+      return new C(getD().treeCopyNoTransform());
+    }
+  }
+
+  syn boolean D.isE() = false;
+  eq E.isE() = true;
+
+  rewrite D {
+    when (!isE()) to E {
+      return new E();
+    } 
+  }
+}

@@ -1,0 +1,1 @@
+Error at tests/diagnostics/multiple_refine01/Test.jrag:8: refinement previously defined at tests/diagnostics/multiple_refine01/Test_Refine2.jrag:2

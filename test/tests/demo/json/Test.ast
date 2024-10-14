@@ -1,0 +1,5 @@
+abstract JsonValue;
+JsonObject : JsonValue ::= Member:JsonMember;
+JsonString : JsonValue ::= <VALUE>;
+JsonNumber : JsonValue ::= <VALUE>;
+JsonMember ::= <ID> Value:JsonValue;

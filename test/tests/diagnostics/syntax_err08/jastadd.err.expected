@@ -1,0 +1,2 @@
+Problems during JRAG parsing:
+Error at tests/diagnostics/syntax_err08/Test.jrag: Lexical error at line 11, column 6.  Encountered: "\n" (10), after : "\"%s"

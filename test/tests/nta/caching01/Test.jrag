@@ -1,0 +1,4 @@
+aspect Test {
+  syn B A.getB() = new B();
+  syn lazy B A.getLazyB() = new B();
+}

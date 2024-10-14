@@ -1,0 +1,31 @@
+// Tests if generated tracing code compiles. Similar to compiles01 but with the flag noVisitCheck.
+// .options: tracing rewrite visitCheck=false
+// .source: 1.8
+// .result: COMPILE_PASS
+import java.util.Set;
+import java.util.HashSet;
+
+aspect Test {
+  syn Integer Node.a1() = 1;
+  syn Integer Node.a2(Integer i) = 2 + i;
+  syn Integer Node.a3(Integer i1, Integer i2) = 3 + i1 + i2;
+  syn lazy Integer Node.a4() = 4;
+  syn lazy Integer Node.a5(Integer i) = 5 + i;
+  syn lazy Integer Node.a6(Integer i1, Integer i2) = 6 + i1 + i2;
+
+  syn Integer Node.a7() circular [7] = a7();
+  syn Integer Node.a8(Integer i) circular [8] = a8(0);
+  syn Integer Node.a9(Integer i, Integer i2) circular [9] = a9(0, 0);
+
+  rewrite B {
+    to C {
+      return new C();
+    }
+  }
+
+  inh Node A.node();
+  eq Node.getA().node() = this;
+
+  coll Set<A> Node.children() [new HashSet<A>()] with add;
+  C contributes this to Node.children() for node();
+}

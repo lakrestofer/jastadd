@@ -1,0 +1,9 @@
+aspect Test {
+	syn      Object A.attr() = new Object();
+	syn lazy Object B.attr() = new Object();
+	syn      Object C.attr() = new Object();
+	eq              D.attr() = new Object();	
+	
+	// invoke attr twice to find out if it is cached
+	syn boolean A.isAttrCached() = attr() == attr();
+}

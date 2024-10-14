@@ -1,0 +1,4 @@
+Problems during JRAG parsing:
+Error at tests/diagnostics/syntax_err07/Test.jrag:4:7: unexpected token "4":
+  syn 4 A.v() = 3;
+      ^

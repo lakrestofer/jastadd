@@ -1,0 +1,16 @@
+// An aspect-declared class can contain a nested generic class.
+// See https://bitbucket.org/jastadd/jastadd2/issues/246/nested-generic-types
+// .result: COMPILE_PASS
+// .grammar: {A;}
+aspect Test {
+  class Test<T> {
+    public void f(T o) {
+    }
+
+    class Inner<U> extends Test<U> {
+      @Override
+      public void f(U o) {
+      }
+    }
+  }
+}

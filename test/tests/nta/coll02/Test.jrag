@@ -1,0 +1,12 @@
+import java.util.Collection;
+import java.util.HashSet;
+
+aspect Test {
+	syn nta NamedNode Node.getA() = new NamedNode("nta");
+
+	coll Collection<String> Node.childNames()
+		[new HashSet<String>()] with add;
+
+	NamedNode contributes getName() to Node.childNames()
+		for (Node) getParent();
+}

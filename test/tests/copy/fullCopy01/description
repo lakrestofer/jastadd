@@ -1,0 +1,3 @@
+Tests that an abstract fullCopy is declared in abstract node types.
+
+https://bitbucket.org/jastadd/jastadd2/issue/42/abstract-node-types-should-declare

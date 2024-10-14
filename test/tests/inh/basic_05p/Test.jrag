@@ -1,0 +1,7 @@
+aspect Test {
+	inh int A.value();
+	eq Node.getA().value() {
+		int v = 13;
+		return v;
+	}
+}

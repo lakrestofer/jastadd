@@ -1,0 +1,13 @@
+/**
+ * Generic preorder traversal from
+ * "Contributions ot Declarative Implementation Static Program Analysis", J. Öqvist,
+ * §3.7.
+ */
+aspect PreorderTraversal {
+  inh lazy Value<ASTNode> ASTNode.pred();
+  eq ASTNode.getChild(int i).pred() =
+      Value.of(prevNode(i)); // Wrapped in Value for tracking recomputes.
+
+  syn ASTNode ASTNode.prevNode(int i) = i > 0 ? getChild(i - 1).last() : this;
+  syn ASTNode ASTNode.last() = prevNode(getNumChild());
+}

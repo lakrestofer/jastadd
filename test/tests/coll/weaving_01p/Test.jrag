@@ -1,0 +1,11 @@
+// https://bitbucket.org/jastadd/jastadd2/issues/322/file-name-influences-jastadd-code
+// .grammar: { A; }
+// .result: JASTADD_PASS
+import java.util.*;
+aspect Test {
+  coll Collection<String> I.set();
+  public interface I { }
+  A implements I;
+}
+
+

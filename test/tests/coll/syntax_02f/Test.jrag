@@ -1,0 +1,10 @@
+// Confusing root and with should cause a compile error in this test.
+// .result=JASTADD_ERR_OUTPUT
+import java.util.*;
+
+aspect Test {
+  coll Collection<B> A.set() [new HashSet<B>()] root add with A;
+
+  inh A B.a();
+  eq A.getB().a() = this;
+}

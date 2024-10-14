@@ -1,0 +1,6 @@
+// Test cache configuration for missing attribute.
+// .grammar={ A; }
+// .result=JASTADD_ERR_OUTPUT
+aspect Cache {
+  uncache A.missing(); // No such attribute.
+}

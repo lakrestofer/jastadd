@@ -1,0 +1,11 @@
+aspect Test {
+	syn int A.value();
+	eq B.value() = 32;
+	eq C.value() = -1;
+
+	rewrite B {
+		to A {
+			return new C();
+		}
+	}
+}
