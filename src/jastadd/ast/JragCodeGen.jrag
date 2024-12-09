@@ -76,7 +76,7 @@ aspect JragCodeGen {
       return "@declaredat " + sourceLocation(fileName, line);
     }
   }
-  
+
   /**
    * @return a formatted source location with escaped filename suitable to be
    * used in documentation comments.
@@ -325,8 +325,8 @@ aspect JragCodeGen {
   public void ASTDecl.emitAbstractSyns(PrintStream out) {
     for (AttrDecl attr : synDecls()) {
       boolean equ = false;
-      for (int j = 0; j < getNumSynEq(); j++) {
-        if (getSynEq(j).signature().equals(attr.signature())) {
+      for (SynEq equation: getSynEqList()) {
+        if (equation.signature().equals(attr.signature())) {
           equ = true;
         }
       }
@@ -713,8 +713,7 @@ aspect JragCodeGen {
   syn String AttrEq.getType() = decl().getType();
 
   public void ASTDecl.emitSynEquations(PrintStream out) {
-    for (int i = 0; i < getNumSynEq(); i++) {
-       AttrEq equ = getSynEq(i);
+    for(SynEq equ: getSynEqList()) {
        AttrDecl attr = equ.decl();
        emitCacheDeclarations(out, attr);
        attr.emitSynEquation(out, equ);
@@ -960,9 +959,9 @@ aspect JragCodeGen {
 
   syn lazy HashMap Grammar.inhEqMap() {
     HashMap map = new LinkedHashMap();
-    for (int i = 0; i < getNumTypeDecl(); i++) {
-      if (getTypeDecl(i) instanceof ASTDecl) {
-        map.putAll(((ASTDecl)getTypeDecl(i)).inhEqMap());
+    for (TypeDecl td : getTypeDecls()) {
+      if (td instanceof ASTDecl) {
+        map.putAll(((ASTDecl)td).inhEqMap());
       }
     }
     return map;

@@ -160,8 +160,8 @@ aspect CollectionAttributes {
   syn boolean TypeDecl.hasCollEq(CollDecl decl) = false;
 
   eq ASTDecl.hasCollEq(CollDecl decl) {
-    for (int i = 0; i < getNumCollEq(); i++) {
-      if (getCollEq(i).decl() == decl) {
+    for (CollEq collEq : getCollEqList()) {
+      if (collEq.decl().equals(decl)) {
         return true;
       }
     }
@@ -455,8 +455,8 @@ aspect CollectionAttributes {
   eq ASTDecl.getCollEq().hostClass() = this;
 
   public void Grammar.weaveCollectionAttributes() {
-    for (int i = 0; i < getNumTypeDecl(); i++) {
-      getTypeDecl(i).weaveCollectionAttributes();
+    for (TypeDecl td : getTypeDecls()) {
+      td.weaveCollectionAttributes();
     }
   }
 
@@ -475,8 +475,7 @@ aspect CollectionAttributes {
 
   protected String TypeDecl.collectionReset() {
     StringBuilder res = new StringBuilder();
-    for (int k = 0; k < grammar().getNumTypeDecl(); k++) {
-      TypeDecl typeDecl = grammar().getTypeDecl(k);
+    for (TypeDecl typeDecl : grammar().getTypeDecls()) {
       for (CollDecl decl : typeDecl.collDecls()) {
         TemplateContext tt = decl.templateContext();
         if (decl.root() == this) {
@@ -565,7 +564,7 @@ aspect CollectionAttributes {
     decl.setTarget(className);
     decl.root = root;
     decl.setAspectName(aspectName);
-		decl.hostName = className;
+                decl.hostName = className;
     decl.grammar = this;
     // Defer collection attribute declaration.
     collDecls.add(decl);

@@ -408,8 +408,7 @@ public aspect Attributes {
   }
 
   public void Grammar.processRefinements() {
-    for (int i = 0; i < getNumTypeDecl(); i++) {
-      TypeDecl typeDecl = getTypeDecl(i);
+    for (TypeDecl typeDecl : getTypeDecls()) {
       if (!(typeDecl instanceof InterfaceDecl)) {
         typeDecl.processRefinedClassBodyDecls();
         typeDecl.processRefinedSynEqs();
@@ -419,8 +418,7 @@ public aspect Attributes {
   }
 
   public void Grammar.processInterfaceRefinements() {
-    for (int i = 0; i < getNumTypeDecl(); i++) {
-      TypeDecl typeDecl = getTypeDecl(i);
+    for (TypeDecl typeDecl : getTypeDecls()) {
       if (typeDecl instanceof InterfaceDecl) {
         typeDecl.processRefinedClassBodyDecls();
         typeDecl.processRefinedSynEqs();
