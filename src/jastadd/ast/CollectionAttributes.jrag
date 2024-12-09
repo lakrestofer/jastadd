@@ -160,7 +160,7 @@ aspect CollectionAttributes {
   syn boolean TypeDecl.hasCollEq(CollDecl decl) = false;
 
   eq ASTDecl.hasCollEq(CollDecl decl) {
-    for (CollEq collEq : getCollEqList()) {
+    for (CollEq collEq : collEqs()) {
       if (collEq.decl().equals(decl)) {
         return true;
       }
@@ -326,7 +326,7 @@ aspect CollectionAttributes {
     HashMap<CollDecl, Collection<SurveyContribution>> map =
         new LinkedHashMap<CollDecl, Collection<SurveyContribution>>();
 
-    for (CollEq attr : getCollEqList()) {
+    for (CollEq attr : collEqs()) {
       CollDecl decl = attr.decl();
       Collection<SurveyContribution> equations = map.get(decl);
       if (equations == null) {
@@ -371,7 +371,7 @@ aspect CollectionAttributes {
 
   private void ASTDecl.contributeTo(PrintStream out) {
     HashMap<CollDecl, Collection<CollEq>> map = new LinkedHashMap<CollDecl, Collection<CollEq>>();
-    for (CollEq attr : getCollEqList()) {
+    for (CollEq attr : collEqs()) {
       if (!attr.onePhase()) {
         CollDecl decl = attr.decl();
         Collection<CollEq> equations = map.get(decl);
@@ -478,7 +478,8 @@ aspect CollectionAttributes {
     for (TypeDecl typeDecl : grammar().getTypeDecls()) {
       for (CollDecl decl : typeDecl.collDecls()) {
         TemplateContext tt = decl.templateContext();
-        if (decl.root() == this) {
+        if (decl.root() == this || decl.root() instanceof
+            InterfaceDecl && this.implementsInterface(decl.root().name())) {
           res.append(tt.expand("Collection.flush"));
         }
       }
@@ -490,6 +491,7 @@ aspect CollectionAttributes {
     for (CollDecl decl : collDecls()) {
       decl.weaveCollectionAttribute();
     }
+    grammar().collDecls.clear();
   }
 
   public void CollDecl.weaveCollectionAttribute() {
@@ -509,10 +511,27 @@ aspect CollectionAttributes {
           astNode.addClassDeclaration(s, getFileName(), getStartLine());
         }
         String surveyMethod = tt.expand("CollDecl.surveyMethod");
-        rootDecl.addClassDeclaration(surveyMethod, getFileName(), getStartLine());
+        if (rootDecl instanceof InterfaceDecl) {
+          String surveyInterface =
+              tt.expand("CollDecl.surveyDeclarationInterface");
+          rootDecl.addClassDeclaration(surveyInterface, rootDecl.getFileName(),
+                                       rootDecl.getStartLine());
+          for (TypeDecl td : grammar.getTypeDecls()) {
+            if (!(td instanceof InterfaceDecl) &&
+                td.implementsInterface(rootDecl.name())) {
+              td.addClassDeclaration(surveyMethod, getFileName(),
+                                     getStartLine());
+            }
+          }
+        } else {
+          rootDecl.addClassDeclaration(surveyMethod, getFileName(),
+                                       getStartLine());
+        }
       }
     }
   }
+
+  syn String CollDecl.hostRealName() = hostName;
 
   /**
    * Finds the declaration node of a collection equation.
@@ -540,7 +559,11 @@ aspect CollectionAttributes {
 
   public Collection<CollDecl> Grammar.collDecls = new ArrayList<CollDecl>();
 
+  public Collection<CollEq> Grammar.collEqs = new ArrayList<CollEq>();
+
   public Grammar CollDecl.grammar;
+
+  public Grammar CollEq.grammar;
 
   public void Grammar.addCollDecl(String name, String type, String className,
       String fileName, int startLine, int endLine, String startValue,
@@ -668,36 +691,31 @@ aspect CollectionAttributes {
       int startLine, int endLine, boolean iterableValue, boolean iterableTarget,
       org.jastadd.jrag.AST.SimpleNode commentNode, String aspectName,
       ArrayList<String> annotations) {
-    TypeDecl type = lookup(nodeType);
-    if (type != null && type instanceof ASTDecl) {
-      CollEq equ = new CollEq(
-          new List(),
-          new List(),
-          collHost,
-          fileName,
-          startLine,
-          endLine,
-          Unparser.unparseComment(commentNode),
-          aspectName,
-          "",
-          "",
-          collHost,
-          collName,
-          reference);
-      equ.setIterableValue(iterableValue);
-      equ.setIterableTarget(iterableTarget);
-      for (String annotation : annotations) {
-        equ.addAnnotation(new Annotation(annotation));
-      }
-      // TODO(joqvist): defer collection attribute weaving.
-      ((ASTDecl) type).addCollEq(equ);
-      return equ;
-    } else {
-      errorf("Cannot add collection contribution to unknown class %s in %s at line %d",
-          nodeType, fileName, startLine);
-      // TODO(joqvist): defer weaving so we can return non-null.
-      return null;
+    CollEq equ = new CollEq();
+    equ.setChild(new List(), 0);
+    equ.setChild(new List(), 1);
+    equ.setName(collName);
+    equ.hostName = collHost;
+    equ.setTarget(nodeType);
+    equ.setReference(reference);
+    equ.setFileName(fileName);
+    equ.setStartLine(startLine);
+    equ.setEndLine(endLine);
+    equ.setIterableValue(iterableValue);
+    equ.setIterableTarget(iterableTarget);
+    equ.setAspectName(aspectName);
+    equ.setComment(Unparser.unparseComment(commentNode));
+    equ.grammar=this;
+    equ.setParameterList(new List());
+    equ.setTargetAttributeName(collName);
+    equ.setTargetName(collHost);
+    equ.setValue("");
+    for (String annotation : annotations) {
+      equ.addAnnotation(new Annotation(annotation));
     }
+    // defer collection attribute weaving.
+    collEqs.add(equ);
+    return equ;
   }
 
   private String CollDecl.startValue;

@@ -211,8 +211,10 @@ aspect AttributeProblems {
   syn SynDecl SynDecl.prevDecl() = hostClass().lookupSynDecl(signature());
 
   TypeDecl contributes {
+    synEqs().collectContributions();
     synDecls().collectContributions();
     collDecls().collectContributions();
+    collEqs().collectContributions();
     super.collectContributions();
   } to TypeDecl.attributeProblems();
 
@@ -483,7 +485,11 @@ aspect AttributeProblems {
 
   syn boolean CollDecl.hasNoRootProblem() = root == null && grammar().roots().isEmpty();
 
-  CollDecl contributes warning("no contributions for this collection attribute")
+
+  TypeDecl contributes nta collEqs() to CollDecl.uses();
+  TypeDecl contributes nta collDecls() to TypeDecl.attributeProblems();
+
+  CollDecl contributes warning("no contributions for this collection attribute. Target:" + getTarget() + ". Target attribute name:"+name())
       when uses().isEmpty()
       to TypeDecl.attributeProblems()
       for hostClass();

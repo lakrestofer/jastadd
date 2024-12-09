@@ -47,7 +47,7 @@ aspect Lookup {
     TypeDecl t = lookup(name);
     if (t == null) {
       t = new ClassDecl(new IdDecl(name), new List(), new List(),
-          new List(), new List(), new List(), new List(),
+          new List(), new List(), new List(), new List(), new List(),
           fileName, beginLine, -1, comment,
           enclosingAspect);
       addTypeDecl(t);
@@ -65,7 +65,7 @@ aspect Lookup {
     if (t == null) {
       t = new InterfaceDecl(new IdDecl(name), new List(),
           new List(), new List(), new List(), new List(), new List(),
-          fileName, beginLine, -1, comment, enclosingAspect);
+          new List(), fileName, beginLine, -1, comment, enclosingAspect);
       addTypeDecl(t);
     }
     return t;
@@ -81,7 +81,7 @@ aspect Lookup {
     if (t == null) {
       t = new EnumDecl(new IdDecl(name), new List(),
           new List(), new List(), new List(), new List(), new List(),
-          fileName, beginLine, -1, comment, enclosingAspect);
+          new List(), fileName, beginLine, -1, comment, enclosingAspect);
       addTypeDecl(t);
     }
     return t;

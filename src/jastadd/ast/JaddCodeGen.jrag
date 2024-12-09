@@ -106,7 +106,7 @@ aspect JaddCodeGen {
   }
 
   syn boolean ASTDecl.hasSynEq(String name) {
-    for (SynEq eq : getSynEqList()) {
+    for (SynEq eq : synEqs()) {
       if (eq.name().equals(name)) {
         return true;
       }

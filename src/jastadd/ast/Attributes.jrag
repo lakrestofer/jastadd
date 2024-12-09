@@ -268,6 +268,7 @@ public aspect Attributes {
       equ.addAnnotation(new Annotation(annotation));
     }
     equ.hostName = className;
+    this.recordAttributeForUnknownType(className, equ.signature());
     synEqs.add(equ);
   }
 
@@ -329,7 +330,28 @@ public aspect Attributes {
       equ.setIndex(p);
     }
     equ.hostName = className;
+    this.recordAttributeForUnknownType(className, equ.signature());
     inhEqs.add(equ);
+  }
+
+  private HashMap<String, ArrayList<String>> Grammar.lateBindingAttributes = new HashMap<String, ArrayList<String>>();
+  private void Grammar.recordAttributeForUnknownType(String type, String sig) {
+    ArrayList<String> signatures = null;
+    if (!this.lateBindingAttributes.containsKey(type)) {
+      signatures = new ArrayList<String>();
+      this.lateBindingAttributes.put(type, signatures);
+    } else {
+      signatures = this.lateBindingAttributes.get(type);
+    }
+    signatures.add(sig);
+  }
+
+  public ArrayList<String> Grammar.removeLateBoundAttributeSignaturesForType(String type) {
+    ArrayList<String> result = this.lateBindingAttributes.get(type);
+    if (result != null) {
+      this.lateBindingAttributes.put(type, null);
+    }
+    return result;
   }
 
   public void Grammar.addComponents(String className, org.jastadd.ast.AST.List componentsList) {
@@ -427,8 +449,42 @@ public aspect Attributes {
     }
   }
 
+  private Set<String> TypeDecl.implementedAttributeSignatures = new HashSet<String>();
+  // Some attribute signatures are bound late.  To make sure that we report consistent answers,
+  // we don't allow any late binding after this flag is set.
+  private boolean TypeDecl.finalizedAttributeSignatures = false;
+  /**
+   * Locally defined or redefined signatures
+   */
+  public Set<String> TypeDecl.implementedAttributeSignatures() {
+    ArrayList<String> late_signatures = grammar().removeLateBoundAttributeSignaturesForType(this.name());
+    if (late_signatures != null) {
+      if (this.finalizedAttributeSignatures) {
+        throw new RuntimeException("Internal error in JastAdd: TypeDecl.implementedAttributeSignatures()"
+                                   + " was called before we had seen all late-bound signatures.  The earlier"
+                                   + " call may therefore have reported incomplete results.  Fix your"
+                                   + " evaluation order!");
+      } else {
+        this.finalizedAttributeSignatures = true;
+      }
+      for (String s : late_signatures) {
+        this.storeDefinedSignature(s);
+      }
+    }
+    return this.implementedAttributeSignatures;
+  }
+
+  public void TypeDecl.storeDefinedSignature(String sig) {
+    this.implementedAttributeSignatures.add(sig);
+  }
+
   public int TypeDecl.numRefinedSynEqs = 0;
-  public Collection<SynEq> TypeDecl.refinedSynEqs = new LinkedList<SynEq>();
+  private Collection<SynEq> TypeDecl.refinedSynEqsQueue = new LinkedList<SynEq>();
+  public void TypeDecl.addRefinedSynEq(SynEq eqn) {
+    this.numRefinedSynEqs += 1;
+    this.refinedSynEqsQueue.add(eqn);
+    this.storeDefinedSignature(eqn.signature());
+  }
 
   public void Grammar.addRefinedSynEq(String name, String className,
       org.jastadd.jrag.AST.SimpleNode rhs, String fileName, int startLine, int endLine,
@@ -446,8 +502,8 @@ public aspect Attributes {
       equ.refinesAspect = aspectName;
       equ.setComment(Unparser.unparseComment(node));
       equ.setAspectName(declaredAspect);
-      c.refinedSynEqs.add(equ);
-      c.numRefinedSynEqs += 1;
+      c.addRefinedSynEq(equ);
+      equ.hostName = className;
     } else {
       error("cannot add equation for synthesized attribute " + name + " to unknown class "
           + className, fileName, startLine);
@@ -464,18 +520,18 @@ public aspect Attributes {
   //   detect multiple attempts to refine an equation using the same aspect name
   public void TypeDecl.processRefinedSynEqs() {
     boolean change = true;
-    while (change && !refinedSynEqs.isEmpty()) {
+    while (change && !refinedSynEqsQueue.isEmpty()) {
       change = false;
-      for (int i = 0; i < getNumSynEq(); i++) {
-        SynEq equ = getSynEq(i);
+      for (SynEq equ : synEqs()) {
         SynEq refinedEqu = null;
-        Iterator<SynEq> outerIter = refinedSynEqs.iterator();
+        Iterator<SynEq> outerIter = refinedSynEqsQueue.iterator();
         while (outerIter.hasNext()) {
           SynEq refinedCandidate = outerIter.next();
           boolean legacyCondition = config().refineLegacy()
               && equ.legacyAspectName().equals(refinedCandidate.refinesAspect);
-          if (equ.signature().equals(refinedCandidate.signature())
-             && (equ.aspectName().equals(refinedCandidate.refinesAspect) || legacyCondition)) {
+          if (equ.signature().equals(refinedCandidate.signature()) &&
+              (equ.aspectName().equals(refinedCandidate.refinesAspect) ||
+               legacyCondition)) {
             change = true;
             if (refinedEqu == null) {
               refinedEqu = refinedCandidate;
@@ -492,7 +548,7 @@ public aspect Attributes {
         }
       }
     }
-    for (SynEq equ : refinedSynEqs) {
+    for (SynEq equ : refinedSynEqsQueue) {
       refineError("syn equation", equ.getFileName(), equ.getStartLine());
     }
   }
@@ -558,7 +614,13 @@ public aspect Attributes {
   }
 
   public int TypeDecl.numRefinedInhEqs = 0;
-  public Collection<InhEq> TypeDecl.refinedInhEqs = new LinkedList<InhEq>();
+  private Collection<InhEq> TypeDecl.refinedInhEqsQueue = new HashSet<InhEq>();
+
+  public void TypeDecl.addRefinedInhEq(InhEq eqn) {
+    this.numRefinedInhEqs += 1;
+    this.refinedInhEqsQueue.add(eqn);
+    this.storeDefinedSignature(eqn.signature());
+  }
 
   public void Grammar.addRefinedInhEq(String childName, String name, String className,
       org.jastadd.jrag.AST.SimpleNode rhs, String fileName, int startLine, int endLine,
@@ -588,8 +650,7 @@ public aspect Attributes {
         if (p != null) {
           equ.setIndex(p);
         }
-        c.refinedInhEqs.add(equ); // Sort in alphabetical order, then non-NTAs first.
-        c.numRefinedInhEqs += 1;
+        c.addRefinedInhEq(equ); // Sort in alphabetical order, then non-NTAs first.
     } else {
       error("cannot add equation for inherited attribute " + name + " to unknown class "
           + className, fileName, startLine);
@@ -598,12 +659,12 @@ public aspect Attributes {
 
   public void TypeDecl.processRefinedInhEqs() {
     boolean change = true;
-    while (change && !refinedInhEqs.isEmpty()) {
+    while (change && !refinedInhEqsQueue.isEmpty()) {
       change = false;
       for (int i = 0; i < getNumInhEq(); i++) {
         InhEq equ = getInhEq(i);
         InhEq refinedEqu = null;
-        Iterator<InhEq> outerIter = refinedInhEqs.iterator();
+        Iterator<InhEq> outerIter = refinedInhEqsQueue.iterator();
         while (outerIter.hasNext()) {
           InhEq refinedCandidate = outerIter.next();
           boolean legacyCondition = config().refineLegacy() &&
@@ -627,7 +688,7 @@ public aspect Attributes {
         }
       }
     }
-    for (InhEq equ : refinedInhEqs) {
+    for (InhEq equ : refinedInhEqsQueue) {
       refineError("inh equation", equ.getFileName(), equ.getStartLine());
     }
   }

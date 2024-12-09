@@ -41,7 +41,7 @@ aspect AttributeWeaving {
    */
   syn lazy Map<String, Collection<SynDecl>> Grammar.synDeclMap() {
     Map<String, Collection<SynDecl>> map = new HashMap<String, Collection<SynDecl>>();
-    for (TypeDecl type : getTypeDeclList()) {
+    for (TypeDecl type : getTypeDecls()) {
       map.put(type.name(), new ArrayList<SynDecl>());
     }
     for (SynDecl decl : grammar().synDecls) {
@@ -60,16 +60,72 @@ aspect AttributeWeaving {
     Collection<SynDecl> parsedDecls = grammar().synDeclMap().get(name());
     if (parsedDecls != null) {
       for (SynDecl decl : parsedDecls) {
-        decls.add((SynDecl) decl.fullCopy());
+        decls.add(decl);
       }
     }
     for (InterfaceDecl iface : implementedInterfaces()) {
-      for (SynDecl decl : iface.synDecls()) {
-        decls.add((SynDecl) decl.fullCopy());
+      for (SynDecl declInt : iface.synDecls()) {
+        Boolean equFlag = false;
+        for (SynDecl decl : decls) {
+          if (decl.signature().equals(declInt.signature())) {
+            equFlag = true;
+          }
+        }
+        if (!equFlag) {
+          declInt.hostName = name();
+          decls.add(declInt);
+        }
       }
     }
     return decls;
   }
+
+  /**
+   * Maps AST types, by name, to synthesized attribute equations.
+   *
+   * <p>This is computed from top-level attribute equations and interface
+   * introductions from interface types.
+   */
+  syn lazy Map<String, Collection<SynEq>> Grammar.synEqMap() {
+    Map<String, Collection<SynEq>> map = new HashMap<String, Collection<SynEq>>();
+    for (TypeDecl type : getTypeDecls()) {
+      map.put(type.name(), new ArrayList<SynEq>());
+    }
+    for (SynEq equ : grammar().synEqs) {
+      if (map.containsKey(equ.hostName)) {
+        map.get(equ.hostName).add(equ);
+      }
+    }
+    return map;
+  }
+
+  /**
+   * @return the set of all synthesized equations for this type declaration.
+   */
+  syn nta List<SynEq> TypeDecl.synEqs() {
+    List<SynEq> equations = new List<SynEq>();
+    Collection<SynEq> parsedEqs = grammar().synEqMap().get(name());
+      for (SynEq equ : parsedEqs) {
+        equations.add(equ);
+      }
+    for (InterfaceDecl iface : implementedInterfaces()) {
+      for (SynEq declInt : iface.synEqs()) {
+        Boolean equFlag = false;
+        for (SynEq decl : equations){
+          if (decl.signature().equals(declInt.signature())) {
+            equFlag = true;
+          }
+        }
+        if (!equFlag) {
+          SynEq eq = declInt.treeCopyNoTransform();
+          eq.hostName = name();
+          equations.add(eq);
+        }
+      }
+    }
+    return equations;
+  }
+
 
   /**
    * @return the set of all synthesized nta declarations for this type declaration.
@@ -90,9 +146,9 @@ aspect AttributeWeaving {
    * <p>This is computed from top-level attribute declarations and interface
    * introductions from interface types.
    */
-  syn lazy Map<String, Collection<CollDecl>> Grammar.collDeclMap() {
+  syn Map<String, Collection<CollDecl>> Grammar.collDeclMap() {
     Map<String, Collection<CollDecl>> map = new HashMap<String, Collection<CollDecl>>();
-    for (TypeDecl type : getTypeDeclList()) {
+    for (TypeDecl type : getTypeDecls()) {
       map.put(type.name(), new ArrayList<CollDecl>());
     }
     for (CollDecl decl : grammar().collDecls) {
@@ -109,17 +165,71 @@ aspect AttributeWeaving {
   syn nta List<CollDecl> TypeDecl.collDecls() {
     List<CollDecl> decls = new List<CollDecl>();
     Collection<CollDecl> parsedDecls = grammar().collDeclMap().get(name());
-    if (parsedDecls != null) {
       for (CollDecl decl : parsedDecls) {
-        decls.add((CollDecl) decl.fullCopy());
+        decls.add(decl);
       }
-    }
     for (InterfaceDecl iface : implementedInterfaces()) {
-      for (CollDecl decl : iface.collDecls()) {
-        decls.add((CollDecl) decl.fullCopy());
+      for (CollDecl declInt : iface.collDecls()) {
+        Boolean equFlag = false;
+        for (CollDecl decl : decls){
+          if (decl.signature().equals(declInt.signature())) {
+            equFlag=true;
+          }
+        }
+        if (!equFlag) {
+          decls.add(declInt);
+        }
       }
     }
     return decls;
   }
 
+  /**
+   * Maps AST types, by name, to collection attribute equations.
+   *
+   * <p>This is computed from top-level attribute equations and interface
+   * introductions from interface types.
+   */
+  syn lazy Map<TypeDecl, Collection<CollEq>> Grammar.collEqMap() {
+    Map<TypeDecl, Collection<CollEq>> typeDeclMap =
+        new HashMap<TypeDecl, Collection<CollEq>>();
+
+    for (TypeDecl type : getTypeDecls()) {
+      typeDeclMap.put(type, new ArrayList<CollEq>());
+    }
+
+    for (CollEq collEq : grammar().collEqs) {
+      TypeDecl target = lookup(collEq.getTarget());
+
+      if (typeDeclMap.containsKey(target)) {
+        typeDeclMap.get(target).add(collEq);
+      }
+    }
+    return typeDeclMap;
+  }
+
+  /**
+   * @return the set of all synthesized equations for this type declaration.
+   */
+  syn nta List<CollEq> TypeDecl.collEqs() {
+    List<CollEq> equations = new List<CollEq>();
+    Collection<CollEq> parsedEqs = grammar().collEqMap().get(this);
+    for (CollEq equ : parsedEqs) {
+      equations.add(equ);
+    }
+    for (InterfaceDecl iface : implementedInterfaces()) {
+      for (CollEq declInt : iface.collEqs()) {
+        Boolean equFlag = false;
+        for (CollEq decl : equations){
+          if (decl.signature().equals(declInt.signature())) {
+            equFlag=true;
+          }
+        }
+        if (!equFlag) {
+          equations.add(declInt);
+        }
+      }
+    }
+    return equations;
+  }
 }

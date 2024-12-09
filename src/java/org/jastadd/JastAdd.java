@@ -48,10 +48,13 @@ import java.util.Scanner;
 import org.jastadd.ast.AST.ASTDecl;
 import org.jastadd.ast.AST.Ast;
 import org.jastadd.ast.AST.CacheDecl;
+import org.jastadd.ast.AST.CollDecl;
+import org.jastadd.ast.AST.CollEq;
 import org.jastadd.ast.AST.Component;
 import org.jastadd.ast.AST.Grammar;
 import org.jastadd.ast.AST.InhDecl;
 import org.jastadd.ast.AST.InhEq;
+import org.jastadd.ast.AST.InterfaceDecl;
 import org.jastadd.ast.AST.List;
 import org.jastadd.ast.AST.SynDecl;
 import org.jastadd.ast.AST.SynEq;
@@ -224,6 +227,10 @@ public class JastAdd {
         return 1;
       }
 
+      if (checkErrors(grammar.interfaceProblems(), err)) {
+        return 1;
+      }
+
       grammar.removeDuplicateInhDecls();
 
       grammar.jastAddGen(config.getPublicModifier());
@@ -319,38 +326,35 @@ public class JastAdd {
   }
 
   protected static Collection<Problem> weaveAttributes(Grammar grammar) {
-    Collection<Problem> problems = new LinkedList<Problem>();
-    for (SynDecl decl : grammar.synDecls) {
-      String className = decl.hostName;
-      TypeDecl clazz = grammar.lookup(className);
-      if (clazz == null) {
-        problems.add(decl.errorf(
-            "cannot add synthesized attribute %s %s to unknown class %s",
-            decl.getType(), decl.getName(), className));
-      }
-    }
-    for (SynEq equ : grammar.synEqs) {
-      String className = equ.hostName;
-      TypeDecl clazz = grammar.lookup(className);
-      if (clazz != null) {
-        clazz.addSynEq(equ);
-      } else {
-        problems.add(equ.errorf(
-            "cannot add equation for synthesized attribute %s to unknown class %s",
-            equ.getName(), className));
-      }
-    }
-    grammar.synEqs.clear();
-    for (InhDecl decl : grammar.inhDecls) {
-      String className = decl.hostName;
-      TypeDecl clazz = grammar.lookup(className);
-      if (clazz != null) {
-        clazz.addInhDecl(decl);
-      } else {
-        problems.add(decl.errorf(
-            "cannot add inherited attribute %s %s to unknown class %s",
-            decl.getType(), decl.getName(), className));
-      }
+     Collection<Problem> problems = new LinkedList<Problem>();
+     for (SynDecl decl : grammar.synDecls) {
+       String className = decl.hostName;
+       TypeDecl clazz = grammar.lookup(className);
+       if (clazz == null) {
+         problems.add(decl.errorf(
+             "cannot add synthesized attribute %s %s to unknown class %s",
+             decl.getType(), decl.getName(), className));
+       }
+     }
+     for (SynEq equ : grammar.synEqs) {
+       String className = equ.hostName;
+       TypeDecl clazz = grammar.lookup(className);
+       if (clazz == null) {
+         problems.add(equ.errorf(
+             "cannot add equation for synthesized attribute %s to unknown class %s",
+             equ.getName(), className));
+       }
+     }
+     for (InhDecl decl : grammar.inhDecls) {
+       String className = decl.hostName;
+       TypeDecl clazz = grammar.lookup(className);
+       if (clazz != null) {
+         clazz.addInhDecl(decl);
+       } else {
+         problems.add(decl.errorf(
+             "cannot add inherited attribute %s %s to unknown class %s",
+             decl.getType(), decl.getName(), className));
+       }
     }
     grammar.inhDecls.clear();
     for (InhEq equ : grammar.inhEqs) {
@@ -360,11 +364,30 @@ public class JastAdd {
         clazz.addInhEq(equ);
       } else {
         problems.add(equ.errorf(
-            "cannot add equation for inhertied attribute %s to unknown class %s",
+            "cannot add equation for inherited attribute %s to unknown class %s",
             equ.getName(), className));
       }
     }
     grammar.inhEqs.clear();
+    for (CollDecl decl : grammar.collDecls) {
+      String className = decl.getTarget();
+      TypeDecl clazz = grammar.lookup(className);
+      if (clazz == null) {
+        problems.add(decl.errorf(
+            "cannot add collection attribute %s %s to unknown class %s",
+            decl.getType(), decl.getName(), className));
+      }
+    }
+    for (CollEq equ : grammar.collEqs) {
+      String className = equ.getTarget();
+      TypeDecl clazz = grammar.lookup(className);
+      if (clazz == null) {
+        problems.add(equ.errorf(
+            "cannot add equation for collection contribution %s to unknown class %s",
+            equ.getName(), className));
+      }
+    }
+
     return problems;
   }
 

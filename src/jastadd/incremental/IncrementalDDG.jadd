@@ -115,7 +115,7 @@ aspect IncrementalDDG {
   public ArrayList<SynEq> ASTDecl.gatherIncrementalHandlersForSynEqs() {
     // Collect eq for lazy syn attributes where eq is defined on a subtype.
     ArrayList<SynEq> eqs = new ArrayList<SynEq>();
-    for (SynEq eq : getSynEqList()) {
+    for (SynEq eq : synEqs()) {
       AttrDecl decl = eq.decl();
       if (decl.isMemoized() && !decl.hostClass().equals(eq.hostClass())) {
         eqs.add(eq);

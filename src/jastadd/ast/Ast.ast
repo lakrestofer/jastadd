@@ -4,7 +4,7 @@ Grammar ::= TypeDecl*  RegionDecl*;
 RegionDecl ::= IdUse;
 
 abstract TypeDecl ::= IdDecl ClassBodyDecl* SynEq* InhDecl* InhEq*
-    Component* CollDecl* <FileName> <StartLine:int> <EndLine:int>
+    Component* CollDecl* CollEq* <FileName> <StartLine:int> <EndLine:int>
     <Comment:String> <AspectName:String>;
 
 ClassDecl : TypeDecl;
@@ -52,7 +52,7 @@ InhEq : AttrEq ::= Parameter* <Name> <FileName> <StartLine:int> <EndLine:int> <C
 
 CollEq : AttrEq ::= Parameter* <Name> <FileName> <StartLine:int> <EndLine:int> <Comment:String>
     <AspectName:String> <Value:String> <Condition:String> <TargetName:String>
-    <TargetAttributeName:String> <Reference:String>;
+    <TargetAttributeName:String> <Reference:String> <Target:String>;
 
 ClassBodyDecl ::= <Name> <FileName> <StartLine:int> <EndLine:int> <AspectName:String>;
 

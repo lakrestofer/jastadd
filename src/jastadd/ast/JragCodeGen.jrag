@@ -275,7 +275,11 @@ aspect JragCodeGen {
           e.printStackTrace();
         }
       } else if (n instanceof org.jastadd.jrag.AST.ASTBlock) {
-        // Do not emit refined implementations.
+        String block = Unparser.unparse(n);
+        // todo(riouak): create an ASTAspeectMethodDeclaration for this case
+        if (block.contains("/* interface implementation */")) {
+          out.print(block);
+        }
       } else {
         if (!obj.comments.isEmpty()) {
           out.print(obj.comments + " ");
@@ -325,7 +329,7 @@ aspect JragCodeGen {
   public void ASTDecl.emitAbstractSyns(PrintStream out) {
     for (AttrDecl attr : synDecls()) {
       boolean equ = false;
-      for (SynEq equation: getSynEqList()) {
+      for (SynEq equation: synEqs()) {
         if (equation.signature().equals(attr.signature())) {
           equ = true;
         }
@@ -713,7 +717,7 @@ aspect JragCodeGen {
   syn String AttrEq.getType() = decl().getType();
 
   public void ASTDecl.emitSynEquations(PrintStream out) {
-    for(SynEq equ: getSynEqList()) {
+    for(SynEq equ: synEqs()) {
        AttrDecl attr = equ.decl();
        emitCacheDeclarations(out, attr);
        attr.emitSynEquation(out, equ);

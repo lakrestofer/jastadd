@@ -1,1 +1,2 @@
+Problems during attribute weaving:
 Error at tests/coll/weaving_02f/Test.jrag:6: cannot add collection attribute Collection<String> set to unknown class I

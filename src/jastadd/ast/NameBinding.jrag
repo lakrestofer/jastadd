@@ -120,7 +120,7 @@ aspect BindSynEquations {
   }
 
   syn lazy SynEq TypeDecl.lookupSynEq(String signature) {
-    for (SynEq equ: getSynEqList()) {
+    for (SynEq equ: synEqs()) {
       if (equ.signature().equals(signature)) {
         return equ;
       }
