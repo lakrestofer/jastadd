@@ -173,7 +173,7 @@ aspect AttributeWeaving {
         Boolean equFlag = false;
         for (CollDecl decl : decls){
           if (decl.signature().equals(declInt.signature())) {
-            equFlag=true;
+            equFlag = true;
           }
         }
         if (!equFlag) {
@@ -222,7 +222,7 @@ aspect AttributeWeaving {
         Boolean equFlag = false;
         for (CollEq decl : equations){
           if (decl.signature().equals(declInt.signature())) {
-            equFlag=true;
+            equFlag = true;
           }
         }
         if (!equFlag) {

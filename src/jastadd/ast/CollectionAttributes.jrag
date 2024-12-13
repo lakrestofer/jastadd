@@ -705,7 +705,7 @@ aspect CollectionAttributes {
     equ.setIterableTarget(iterableTarget);
     equ.setAspectName(aspectName);
     equ.setComment(Unparser.unparseComment(commentNode));
-    equ.grammar=this;
+    equ.grammar = this;
     equ.setParameterList(new List());
     equ.setTargetAttributeName(collName);
     equ.setTargetName(collHost);

@@ -717,7 +717,7 @@ aspect JragCodeGen {
   syn String AttrEq.getType() = decl().getType();
 
   public void ASTDecl.emitSynEquations(PrintStream out) {
-    for(SynEq equ: synEqs()) {
+    for (SynEq equ: synEqs()) {
        AttrDecl attr = equ.decl();
        emitCacheDeclarations(out, attr);
        attr.emitSynEquation(out, equ);
