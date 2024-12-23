@@ -58,8 +58,8 @@ aspect IncrementalEval {
     if (config().rewriteCircularNTA() && hasRewriteAttribute()) {
       list.add(getCircularRewriteDecl());
     }
-    for (int k = 0; k < getNumSynEq(); k++) {
-      AttrDecl attr = getSynEq(k).decl();
+    for (SynEq equ : synEqs()) {
+      AttrDecl attr = equ.decl();
       if (attr != null && attr.isMemoized()) {
         list.add(attr);
       }

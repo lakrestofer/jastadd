@@ -42,67 +42,60 @@ import org.jastadd.jrag.ClassBodyObject;
 
 aspect JastAddCodeGen {
   public void Grammar.weaveInterfaceIntroductions() {
-    for (TypeDecl decl : getTypeDeclList()) {
-      if (decl instanceof InterfaceDecl) {
-        InterfaceDecl d = (InterfaceDecl) decl;
-        String name = d.name();
-        for (TypeDecl decl2 : getTypeDeclList()) {
-          if (decl2 instanceof ASTDecl) {
-            ASTDecl dest = (ASTDecl) decl2;
-            if (dest.implementsInterface(name)) {
-              for (ClassBodyObject o : d.classBodyDecls) {
-                if (o.node instanceof ASTAspectMethodDeclaration) {
-                  // Only add interface method if it has a body.
-                  if (hasMethodBody((ASTAspectMethodDeclaration) o.node)) {
-                    if (!dest.hasClassBodyDecl(o.signature())) {
-                      dest.classBodyDecls.add(new ClassBodyObject(o.node, o.fileName, o.line,
-                            o.getAspectName()));
-                    }
-                  }
-                } else if (o.node instanceof ASTAspectFieldDeclaration) {
+    for (TypeDecl tydecl : getTypeDeclList()) {
+      if (tydecl instanceof ASTDecl) {
+        ASTDecl dest = (ASTDecl) tydecl;
+        for (InterfaceDecl idecl : dest.implementedInterfaces()) {
+          String name = idecl.name();
+          if (dest.implementsInterface(name)) {
+            for (ClassBodyObject o : idecl.classBodyDecls) {
+              if (o.node instanceof ASTAspectMethodDeclaration) {
+                // Only add interface method if it has a body.
+                if (hasMethodBody((ASTAspectMethodDeclaration) o.node)) {
                   if (!dest.hasClassBodyDecl(o.signature())) {
                     dest.classBodyDecls.add(new ClassBodyObject(o.node, o.fileName, o.line,
-                          o.getAspectName()));
+                                                                o.getAspectName()));
                   }
-                } else if (o.node instanceof ASTAspectRefineMethodDeclaration) {
-                  ClassBodyObject object = new ClassBodyObject(o.node, o.fileName, o.line,
-                      o.getAspectName());
-                  object.refinesAspect = o.refinesAspect;
-                  dest.classBodyDecls.add(object);
-                } else if (o.node instanceof ASTBlock) {
-                  dest.classBodyDecls.add(new ClassBodyObject(o.node, o.fileName, o.line,
-                      o.getAspectName()));
                 }
+              } else if (o.node instanceof ASTAspectFieldDeclaration) {
+                if (!dest.hasClassBodyDecl(o.signature())) {
+                  dest.classBodyDecls.add(new ClassBodyObject(o.node, o.fileName, o.line,
+                                                              o.getAspectName()));
+                }
+              } else if (o.node instanceof ASTAspectRefineMethodDeclaration) {
+                ClassBodyObject object = new ClassBodyObject(o.node, o.fileName, o.line,
+                                                             o.getAspectName());
+                object.refinesAspect = o.refinesAspect;
+                dest.classBodyDecls.add(object);
+              } else if (o.node instanceof ASTBlock) {
+                dest.classBodyDecls.add(new ClassBodyObject(o.node, o.fileName, o.line,
+                                                            o.getAspectName()));
               }
-              for (ClassBodyObject o : d.refinedClassBodyDecls) {
-                  if (o.node instanceof ASTAspectMethodDeclaration
-                      || o.node instanceof ASTAspectFieldDeclaration) {
-                    if (!dest.hasClassBodyDecl(o.signature())) {
-                      dest.refinedClassBodyDecls.add(new ClassBodyObject(o.node, o.fileName,
-                          o.line, o.getAspectName()));
-                    }
-                  } else if (o.node instanceof ASTAspectRefineMethodDeclaration) {
-                    ClassBodyObject object = new ClassBodyObject(o.node, o.fileName,
-                        o.line, o.getAspectName());
-                    object.refinesAspect = o.refinesAspect;
-                    dest.refinedClassBodyDecls.add(object);
-                  } else if (o.node instanceof ASTBlock) {
-                    dest.classBodyDecls.add(new ClassBodyObject(o.node, o.fileName,
-                        o.line, o.getAspectName()));
-                  }
+            }
+            for (ClassBodyObject o : idecl.refinedClassBodyDecls) {
+              if (o.node instanceof ASTAspectMethodDeclaration
+                  || o.node instanceof ASTAspectFieldDeclaration) {
+                if (!dest.hasClassBodyDecl(o.signature())) {
+                  dest.refinedClassBodyDecls.add(new ClassBodyObject(o.node, o.fileName,
+                                                                     o.line, o.getAspectName()));
+                }
+              } else if (o.node instanceof ASTAspectRefineMethodDeclaration) {
+                ClassBodyObject object = new ClassBodyObject(o.node, o.fileName,
+                                                             o.line, o.getAspectName());
+                object.refinesAspect = o.refinesAspect;
+                dest.refinedClassBodyDecls.add(object);
+              } else if (o.node instanceof ASTBlock) {
+                dest.classBodyDecls.add(new ClassBodyObject(o.node, o.fileName,
+                                                            o.line, o.getAspectName()));
               }
+            }
 
-              for (int k = 0; k < d.getNumSynEq(); k++) {
-                dest.addSynEq((SynEq)d.getSynEq(k).fullCopy());
-              }
+            for (InhDecl inhDecl : idecl.getInhDeclList()) {
+              dest.addInhDecl((InhDecl) inhDecl.fullCopy());
+            }
 
-              for (int k = 0; k < d.getNumInhDecl(); k++) {
-                dest.addInhDecl((InhDecl)d.getInhDecl(k).fullCopy());
-              }
-
-              for (int k = 0; k < d.getNumInhEq(); k++) {
-                dest.addInhEq((InhEq)d.getInhEq(k).fullCopy());
-              }
+            for (InhEq inhEq : idecl.getInhEqList()) {
+              dest.addInhEq((InhEq) inhEq.fullCopy());
             }
           }
         }

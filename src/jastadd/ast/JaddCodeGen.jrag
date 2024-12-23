@@ -106,7 +106,7 @@ aspect JaddCodeGen {
   }
 
   syn boolean ASTDecl.hasSynEq(String name) {
-    for (SynEq eq : getSynEqList()) {
+    for (SynEq eq : synEqs()) {
       if (eq.name().equals(name)) {
         return true;
       }
@@ -261,7 +261,7 @@ aspect JaddCodeGen {
    */
   private void ASTDecl.emitConstructorAnnotation(PrintWriter out){
     out.println(config().indent + "@ASTNodeAnnotation.Constructor(");
-    
+
     out.print(config().ind(2) + "name = {");
     int paramIndex = 0;
     for (Component c : components()) {

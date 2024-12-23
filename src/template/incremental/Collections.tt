@@ -31,7 +31,7 @@
 # This makes sure that all collection attribute instances are properly flushed
 # when some change flushes the survey result.
 #
-# NOTE(joqvist): this implementation currently only suuports incremental=param!
+# NOTE(joqvist): this implementation currently only supports incremental=param!
 
 # Cache field for the survey attribute dependency handler.
 CollDecl.incSurveyHandlerDecl = [[

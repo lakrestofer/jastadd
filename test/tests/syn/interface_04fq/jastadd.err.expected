@@ -1,1 +1,0 @@
-Error at tests/syn/interface_04fq/Test.jrag:6: multiple equations for synthesized attribute B.attr, previously defined in tests/syn/interface_04fq/Test.jrag:8

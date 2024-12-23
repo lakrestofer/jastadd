@@ -88,15 +88,15 @@ aspect InstanceOf {
 aspect Subclasses {
   syn lazy Map<ASTDecl,Collection<ASTDecl>> Grammar.subclassMap() {
     Map<ASTDecl,Collection<ASTDecl>> map = new HashMap<ASTDecl,Collection<ASTDecl>>();
-    for (int j = 0; j < getNumTypeDecl(); j++) {
-      if (getTypeDecl(j) instanceof ASTDecl) {
-        ASTDecl decl = (ASTDecl) getTypeDecl(j);
+    for (TypeDecl td : getTypeDecls()) {
+      if (td instanceof ASTDecl) {
+        ASTDecl decl = (ASTDecl) td;
         map.put(decl, new ArrayList<ASTDecl>());
       }
     }
-    for (int j = 0; j < getNumTypeDecl(); j++) {
-      if (getTypeDecl(j) instanceof ASTDecl) {
-        ASTDecl decl = (ASTDecl) getTypeDecl(j);
+    for (TypeDecl td : getTypeDecls()) {
+      if (td instanceof ASTDecl) {
+        ASTDecl decl = (ASTDecl) td;
         if (decl.superClass() != null) {
           map.get(decl.superClass()).add(decl);
         }
@@ -127,14 +127,14 @@ aspect Parents {
   /** Maps type declarations to their supertypes. */
   syn lazy HashMap<TypeDecl, Collection<ASTDecl>> Grammar.parentMap() {
     HashMap<TypeDecl, Collection<ASTDecl>> map = new LinkedHashMap<TypeDecl, Collection<ASTDecl>>();
-    for (int j = 0; j < getNumTypeDecl(); j++) {
-      if (getTypeDecl(j) instanceof ASTDecl) {
-        map.put(getTypeDecl(j), new LinkedHashSet<ASTDecl>());
+    for (TypeDecl td : getTypeDecls()) {
+      if (td instanceof ASTDecl) {
+        map.put(td, new LinkedHashSet<ASTDecl>());
       }
     }
-    for (int j = 0; j < getNumTypeDecl(); j++) {
-      if (getTypeDecl(j) instanceof ASTDecl) {
-        ASTDecl decl = (ASTDecl) getTypeDecl(j);
+    for (TypeDecl td : getTypeDecls()) {
+      if (td instanceof ASTDecl) {
+        ASTDecl decl = (ASTDecl) td;
         for (Component component : decl.components()) {
           if (!(component instanceof TokenComponent)) {
             TypeDecl t = lookup(component.type());

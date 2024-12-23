@@ -54,8 +54,6 @@ public interface Tests {
     "incremental/region/Test179", // Varying debug output.
     "coll/multi-target_03p", // https://bitbucket.org/jastadd/jastadd2/issues/326/multiple-contribution-to-different-targets
     "trace/coll04", // https://bitbucket.org/jastadd/jastadd2/issues/334/generated-tracing-code-for-collection
-    "coll/interface_03p", // https://bitbucket.org/jastadd/jastadd-test/pull-requests/20
-    "coll/interface_04p", // https://bitbucket.org/jastadd/jastadd-test/pull-requests/20
   };
 
   /**

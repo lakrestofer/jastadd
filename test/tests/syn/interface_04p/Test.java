@@ -5,7 +5,7 @@
 // program around this behavior by instead refining the equation in another
 // aspect.
 // .grammar: { A; B; }
-// .result: JASTADD_ERR_OUTPUT
+// .result: JASTADD_PASS
 import static runtime.Test.*;
 
 public class Test {
