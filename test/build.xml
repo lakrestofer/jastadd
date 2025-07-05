@@ -62,6 +62,7 @@ To enable logging of passed tests:
 				<pathelement path="lib/ant.jar"/>
 				<pathelement path="lib/ant-junit.jar"/>
 				<pathelement path="lib/tinytemplate-${tinytemplate.version}.jar"/>
+				<pathelement path="${jastadd.jar}"/>
 			</classpath>
 			<src path="src"/>
 		</javac>
@@ -72,7 +73,8 @@ To enable logging of passed tests:
 		<delete dir="${basedir}/tmp"/>
 	</target>
 
-	<property name="test-src.dir" location="src/tests"/>
+	<property name="src.dir" location="src"/>
+	<property name="test-src.dir" location="${src.dir}/tests"/>
 	<property name="test-reports.dir" location="reports"/>
 
 	<target name="test" depends="build" description="run JastAdd2 tests">
@@ -95,11 +97,17 @@ To enable logging of passed tests:
 			<sysproperty key="org.jastadd.testThreads" value="${threads}"/>
 			<classpath>
 				<pathelement path="${bin.dir}"/>
+				<pathelement path="${jastadd.jar}"/>
 				<pathelement path="lib/junit-${junit.version}.jar"/>
 				<pathelement path="lib/hamcrest-core-${hamcrest.version}.jar"/>
 			</classpath>
 			<test name="${testSuite}"
 				todir="${test-reports.dir}"/>
+			<batchtest todir="${test-reports.dir}">
+				<fileset dir="${src.dir}">
+					<include name="tests/jastadd2/analysis/**/Test*.java" />
+				</fileset>
+			</batchtest>
 			<formatter type="xml"/>
 			<formatter classname="ant.SimpleTestFormatter" usefile="false"/>
 		</junit>

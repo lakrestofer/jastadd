@@ -268,7 +268,7 @@ public aspect Attributes {
       equ.addAnnotation(new Annotation(annotation));
     }
     equ.hostName = className;
-    this.recordAttributeForUnknownType(className, equ.signature());
+    this.recordAttributeForUnknownType(className, equ);
     synEqs.add(equ);
   }
 
@@ -330,27 +330,150 @@ public aspect Attributes {
       equ.setIndex(p);
     }
     equ.hostName = className;
-    this.recordAttributeForUnknownType(className, equ.signature());
+    this.recordAttributeForUnknownType(className, equ);
     inhEqs.add(equ);
   }
 
-  private HashMap<String, ArrayList<String>> Grammar.lateBindingAttributes = new HashMap<String, ArrayList<String>>();
-  private void Grammar.recordAttributeForUnknownType(String type, String sig) {
-    ArrayList<String> signatures = null;
-    if (!this.lateBindingAttributes.containsKey(type)) {
-      signatures = new ArrayList<String>();
-      this.lateBindingAttributes.put(type, signatures);
-    } else {
-      signatures = this.lateBindingAttributes.get(type);
+
+  // --------------------------------------------------------------------------------
+  // Attribute Signatures
+
+  /**
+   * Attribute signatures, for attribute declarations and attribute equations.
+   *
+   * For attribute declarations, this type is just a thin wrapper around the
+   * attribute name as a string.
+   * For inherited attribute equations (only), attribute signatures can be more
+   * precise: they distinguishe between the child attributes over which the equation
+   * broadcasts.
+   *
+   * Rationale: when an ASTDecl implements multiple interfaces, it is possible
+   * that different interfaces broadcast the same attribute to different NTAs,
+   * so we must be able to keep track of which interface provides which part of the
+   * functionality.
+   */
+  class AttrSignature implements Comparable<AttrSignature> {
+    protected String baseSignature;
+
+    protected AttrSignature(String signature) {
+      this.baseSignature = signature;
     }
-    signatures.add(sig);
+
+    /**
+     * Construct an attribute signature
+     *
+     * @param signature The signature, i.e., attribute name (for syn and coll attributes).
+     */
+    public static AttrSignature
+    from(String signature) {
+      return new AttrSignature(signature);
+    }
+
+    public String signature() {
+      return this.baseSignature;
+    }
+
+    @Override
+    public String toString() {
+      return this.baseSignature;
+    }
+
+    @Override
+    public int compareTo(AttrSignature other) {
+      // Let subclasses handle comparison against this class
+      if (other.getClass() != AttrSignature.class) {
+        return -other.compareTo(this);
+      }
+      return this.baseSignature.compareTo(other.baseSignature);
+    }
+
+    @Override
+    public int hashCode() {
+      return this.baseSignature.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (obj instanceof AttrSignature) {
+        AttrSignature other = (AttrSignature) obj;
+        return this.compareTo(other) == 0;
+      }
+      return false;
+    }
   }
 
-  public ArrayList<String> Grammar.removeLateBoundAttributeSignaturesForType(String type) {
-    ArrayList<String> result = this.lateBindingAttributes.get(type);
-    if (result != null) {
-      this.lateBindingAttributes.put(type, null);
+  /**
+   * Signature for inherited attribute equations.
+   *
+   */
+  class InhAttrSignature extends AttrSignature {
+    protected String childName;
+
+    protected InhAttrSignature(String signature, String childName) {
+      super(signature);
+      this.childName = childName;
     }
+
+    /**
+     * @param signature String signature of the attribute itself
+     * @param childName Either "Child" for attribute equations that broadcast to all children, or the
+     *   name of the AST child to broadcast to
+     */
+    public static InhAttrSignature
+    from(String signature, String childName) {
+      return new InhAttrSignature(signature, childName);
+    }
+
+    public String childName() {
+      return this.childName;
+    }
+
+    @Override
+    public String toString() {
+      return this.childName + "." + this.baseSignature;
+    }
+
+    @Override
+    public int compareTo(AttrSignature other) {
+      if (other.getClass() != InhAttrSignature.class) {
+        // Not equal, to ensure consistent ordering we compare the mismatching class names
+        return other.getClass().toString().compareTo(this.getClass().toString());
+      }
+      InhAttrSignature otherInh = (InhAttrSignature) other;
+      int result = this.childName.compareTo(otherInh.childName);
+      if (result != 0) {
+        return result;
+      }
+      return this.baseSignature.compareTo(other.baseSignature);
+    }
+  }
+
+  syn AttrSignature AttrEq.attrSignature();
+  eq AttrEq.attrSignature() = AttrSignature.from(signature());
+  eq InhEq.attrSignature() = InhAttrSignature.from(signature(), childName());
+
+  syn AttrSignature AttrDecl.attrSignature();
+  eq AttrDecl.attrSignature() = AttrSignature.from(signature());
+
+  // --------------------------------------------------------------------------------
+  // Late attribute resolution
+
+  // Tracks syn and inh equations whose host types haven't been resolved yet
+  HashMap<String, TreeSet<AttrSignature>> Grammar.lateBindingSignatures = new HashMap<String, TreeSet<AttrSignature>>();
+
+  private void Grammar.recordAttributeForUnknownType(String type, AttrEq equ) {
+    if (!lateBindingSignatures.containsKey(type)) {
+      lateBindingSignatures.put(type, new TreeSet<AttrSignature>());
+    }
+    lateBindingSignatures.get(type).add(equ.attrSignature());
+  }
+
+  public Collection<AttrSignature> Grammar.removeLateBoundAttributeSignaturesForType(String type) {
+    TreeSet<AttrSignature> result = this.lateBindingSignatures.get(type);
+    if (result == null) {
+      return null;
+    }
+    this.lateBindingSignatures.put(type, null);
     return result;
   }
 
@@ -457,8 +580,8 @@ public aspect Attributes {
    * Locally defined or redefined signatures
    */
   public Set<String> TypeDecl.implementedAttributeSignatures() {
-    ArrayList<String> late_signatures = grammar().removeLateBoundAttributeSignaturesForType(this.name());
-    if (late_signatures != null) {
+    Collection<AttrSignature> lateSignatures = grammar().removeLateBoundAttributeSignaturesForType(this.name());
+    if (lateSignatures != null) {
       if (this.finalizedAttributeSignatures) {
         throw new RuntimeException("Internal error in JastAdd: TypeDecl.implementedAttributeSignatures()"
                                    + " was called before we had seen all late-bound signatures.  The earlier"
@@ -467,11 +590,19 @@ public aspect Attributes {
       } else {
         this.finalizedAttributeSignatures = true;
       }
-      for (String s : late_signatures) {
-        this.storeDefinedSignature(s);
+      for (AttrSignature s : lateSignatures) {
+        this.storeDefinedSignature(s.signature());
       }
     }
     return this.implementedAttributeSignatures;
+  }
+
+  public Set<AttrSignature> TypeDecl.implementedAttributeEquations() {
+    Set<AttrSignature> result = grammar().lateBindingSignatures.get(this.name());
+    if (result == null) {
+      return Collections.<AttrSignature>emptySet();
+    }
+    return result;
   }
 
   public void TypeDecl.storeDefinedSignature(String sig) {
