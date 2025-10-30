@@ -1,0 +1,26 @@
+// Do not generate annotations for (static) initializers since it's illegal Java code
+// .grammar: {Node;}
+// .options: generateAnnotations=yes
+// .result: EXEC_PASS
+
+import static runtime.Test.*;
+
+aspect Test {
+    public class MyTestClass {
+        int x1 = 1;
+        {
+            x1 = 2;
+        }
+        static int x2 = 3;
+        static {
+            x2 = 4;
+        }
+    }
+
+    public class Test {
+        public static void main(String args[]) {
+            MyTestClass my = new MyTestClass();
+            testSame(6, my.x1 + my.x2);
+        }
+    }
+}
