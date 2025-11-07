@@ -52,6 +52,18 @@ aspect Interfaces {
   }
 
   /**
+   * Set of interfaces already known to the superclass
+   */
+  syn Set<InterfaceDecl> TypeDecl.interfacesSetFromSuperclass() = Collections.<InterfaceDecl>emptySet();
+
+  eq ASTDecl.interfacesSetFromSuperclass() {
+    if (this.superClass() == null) {
+      return Collections.<InterfaceDecl>emptySet();
+    }
+    return this.superClass().implementedInterfacesSet();
+  }
+
+  /**
    * Transitive set of all super-interfaces.  Since this computes a
    * fixed point, it will gracefully handle recursive self-inheritance.
    */
@@ -98,6 +110,21 @@ aspect Interfaces {
     final HashSet<TypeDecl> recursiveExclusions = new HashSet<TypeDecl>(exclusions);
     recursiveExclusions.add(this);
 
+    // Don't track interfaces that the superclass inherits.
+    // Not only would that be wasteful, it would also lead to unintended overrides.
+    // Consider:
+    // - ASTNode B <:  ASTNode A  <: interface I
+    // - inh I.getChild().foo() = "I"
+    // - inh A.getX().foo() = "A"
+    // To ensure B.getX().foo() = "A", class B can simply delegate the handling of
+    // foo() to class A.
+    // This requites that we exclude I from the implemented interfaces-- which is fine,
+    // since class A will already include any functionality from I that is still
+    // visible in B.
+    // For resolving Diamond Inheritance, this behaviour is consistent
+    // with the assumption that superclass inheritance has higher
+    // precedence than interface inheritance.
+    recursiveExclusions.addAll(this.interfacesSetFromSuperclass());
 
     // Collect all super-interfaces
     Map<AttrSignature, Collection<TypeDecl>> results = new TreeMap<AttrSignature, Collection<TypeDecl>>();
@@ -141,30 +168,49 @@ aspect Interfaces {
     Collection<TypeDecl> self = new ArrayList<TypeDecl>(1);
     self.add(this);
 
-    this.addImplementationMapOverrides(results, self);
+    this.addImplementationMapOverrides(results, self, true);
 
     return results;
   }
 
   /**
-   * Updates <tt>decls</tt> with <tt>self</tt> for all <tt>AttrSignature</tt>s defined for this type
+   * Should an equation inherited from a superclass have precedence
+   * over an equation inherited from an interface?
    */
-  void TypeDecl.addImplementationMapOverrides(Map<AttrSignature, Collection<TypeDecl>> decls, Collection<TypeDecl> self) {
+  protected static final boolean ASTDecl.superclassEquationsOverrideInterfaceEquations = true;
+
+  /**
+   * Updates <tt>decls</tt> with <tt>self</tt> for all <tt>AttrSignature</tt>s defined for this type
+   *
+   * @param override: Allow overriding existing definitions
+   */
+  void TypeDecl.addImplementationMapOverrides(Map<AttrSignature, Collection<TypeDecl>> decls,
+                                              Collection<TypeDecl> self,
+                                              boolean override) {
     for (AttrSignature signature: this.implementedAttributeEquations()) {
-      // Keep "self" as "this"
-      decls.put(signature, self);
+      // Only override interface definitions if `override' is set
+      if (override || !decls.containsKey(signature)) {
+        // Keep "self" as "this"
+        decls.put(signature, self);
+      }
     }
   }
 
   /**
    * Updates <tt>decls</tt> with <tt>self</tt> for all <tt>AttrSignature</tt>s defined for this type or for any parent type
+   *
+   * @param override: Allow overriding existing definitions
    */
   @Override
-  void ASTDecl.addImplementationMapOverrides(Map<AttrSignature, Collection<TypeDecl>> decls, Collection<TypeDecl> self) {
+  void ASTDecl.addImplementationMapOverrides(Map<AttrSignature, Collection<TypeDecl>> decls,
+                                             Collection<TypeDecl> self,
+                                             boolean override) {
     if (this.hasSuperClass() && this.superClass() != null) {
-      this.superClass().addImplementationMapOverrides(decls, self);
+
+      this.superClass().addImplementationMapOverrides(decls, self,
+                                                      ASTDecl.superclassEquationsOverrideInterfaceEquations);
     }
-    super.addImplementationMapOverrides(decls, self);
+    super.addImplementationMapOverrides(decls, self, override);
   }
 
   /**

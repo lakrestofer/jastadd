@@ -100,12 +100,20 @@ aspect AttributeProblems {
   syn Collection<Problem> ClassDecl.attributeProblems() =
       Collections.emptyList(); // Don't collect problems for attributes in ClassDecls.
 
+  inh boolean ASTNode.insideInterface();
+  eq Grammar.getChild().insideInterface() = false;
+  eq InterfaceDecl.getChild().insideInterface() = true;
+
   /**
-   * Hack to make collection only on ASTdecls that are not
-   * ClassDecl or InterfaceDecl.
+   * Hack to collect attribute problems on InterfaceDecl only for
+   * interface-specific problems.
    */
   syn Collection<Problem> InterfaceDecl.attributeProblems() =
-      Collections.emptyList(); // Don't collect problems for attributes in InterfaceDecls.
+      interfaceAttributeProblems();
+
+  coll Collection<Problem> InterfaceDecl.interfaceAttributeProblems() [new LinkedList<Problem>()]
+      root Grammar;
+
 
   SynEq contributes errorf("synthesized attribute %s assigned in class %s is not declared",
           name(), hostClass().name())
@@ -512,4 +520,25 @@ aspect AttributeProblems {
       when root != null && root() == null
       to TypeDecl.attributeProblems()
       for hostClass();
+
+  CollDecl contributes errorf("incompatible declarations for collection attribute %s.%s(): %s", hostClass().name(), getName(), hostClass().collDeclIsAmbiguous(this))
+      when hostClass().collDeclIsAmbiguous(this) != null
+        && grammar.lookup(hostName) != null
+      to TypeDecl.attributeProblems()
+      for hostClass();
+
+  // Return error message if decl is ambiguous, otherwise null
+  syn String TypeDecl.collDeclIsAmbiguous(CollDecl decl) = null;
+
+  eq ASTDecl.collDeclIsAmbiguous(CollDecl decl) {
+    final String name = decl.getName();
+    for (CollDecl otherDecl : collDecls()) {
+      if (otherDecl != decl
+          && otherDecl.getName().equals(name)) {
+        return String.format(" other declaration in %s L%d: %s %s()",
+                             otherDecl.getFileName(), otherDecl.getStartLine(), otherDecl.getType(), name);
+      }
+    }
+    return null;
+  }
 }

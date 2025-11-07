@@ -220,13 +220,13 @@ aspect AttributeWeaving {
     for (InterfaceDecl iface : implementedInterfaces()) {
       for (CollEq declInt : iface.collEqs()) {
         Boolean equFlag = false;
-        for (CollEq decl : equations){
-          if (decl.signature().equals(declInt.signature())) {
+        for (CollEq decl : equations) {
+          if (decl.origin() == declInt.origin()) {
             equFlag = true;
           }
         }
         if (!equFlag) {
-          equations.add(declInt);
+          equations.add(declInt.cloneForHost(name()));
         }
       }
     }
