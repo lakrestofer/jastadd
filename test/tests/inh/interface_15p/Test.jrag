@@ -1,0 +1,28 @@
+// No conflict in multiple interface inheritance if manually overridden
+// .grammar: { S ::= E; E; }
+// .result: EXEC_PASS
+import static runtime.Test.*;
+aspect Test15 {
+    interface A { }
+    interface B { }
+    interface C { }
+
+    C extends A;
+    C extends B;
+
+    inh int E.foo();
+    eq A.getChild().foo() = 0;
+    eq B.getChild().foo() = 1;
+    eq C.getChild().foo() = 2;
+
+    S implements A;
+    S implements C;
+
+    public class Test{
+	public static void main(String[] args) {
+	    E e = new E();
+	    S s = new S(e);
+	    testEquals(2, e.foo());
+	}
+    }
+}

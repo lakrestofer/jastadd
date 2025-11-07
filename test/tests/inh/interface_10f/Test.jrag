@@ -1,0 +1,15 @@
+// Conflict when inheriting inh definition from two sources
+// .grammar: { S ::= E; E; }
+// .result: JASTADD_FAIL
+aspect Test10 {
+    interface A { }
+    interface B { }
+
+    inh boolean A.foo();
+    inh boolean B.foo();
+    eq A.getChild().foo() = true;
+    eq B.getChild().foo() = false;
+
+    S implements A;
+    S implements B;
+}

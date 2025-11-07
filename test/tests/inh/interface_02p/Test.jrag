@@ -1,3 +1,8 @@
+// An interface can have an inherited attribute that is defined in another interface.
+// .grammar = { Father ::= Son; Son; }
+// .result: EXEC_PASS
+import static runtime.Test.*;
+
 aspect Test {
 	interface SonI { }
 	interface FatherI { }
@@ -7,4 +12,12 @@ aspect Test {
 	inh boolean SonI.attr();
 
 	eq FatherI.getChild().attr() = true;
+
+
+	public class Test {
+		public static void main(String[] args) {
+			Father father = new Father(new Son());
+			testTrue(father.getSon().attr());
+		}
+	}
 }

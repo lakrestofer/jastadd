@@ -1,0 +1,32 @@
+// Test targeted contribution to interface-hosted collection
+// .grammar { A ::= B*; B ::= <ID>; }
+
+import static runtime.Test.*;
+import java.util.HashSet;
+
+aspect Test {
+    interface I {
+	public HashSet<I> targets();
+    }
+    A implements I;
+
+    public HashSet<I> A.targets() {
+	return new HashSet<>();
+    }
+
+    coll HashSet<I> I.set() [new HashSet<>()] with add;
+    ASTNode contributes (I)this
+	when (this instanceof I)
+	to I.set()
+	for each ((I)this).targets();
+
+    public class Test {
+	public static void main(String[] args) {
+	    B b = new B("0");
+	    A a = new A();
+	    a.addB(b);
+
+	    testFalse(a.set().contains(a));
+	}
+    }
+}

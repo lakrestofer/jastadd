@@ -1,0 +1,19 @@
+// Conflict when indirectly inheriting syn definition from two sources
+// .grammar: { S; }
+// .result: JASTADD_FAIL
+import static runtime.Test.*;
+aspect Test10 {
+    interface A { }
+    interface B { }
+
+    syn boolean A.foo();
+    syn boolean B.foo();
+    eq A.foo() = true;
+    eq B.foo() = false;
+
+    interface AA extends A { }
+    interface BB extends B { }
+
+    S implements AA;
+    S implements BB;
+}

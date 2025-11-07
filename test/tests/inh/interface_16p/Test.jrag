@@ -1,0 +1,58 @@
+// Unambiguous chain of overriding in interfaces
+// .grammar: { S ::= E*; abstract E; EA:E ::= E; EB:E ::= E; EC:E ::= E; EAC:E ::= E; EBC:E ::= E; EABC:E ::= E; H:E;}
+// .result: EXEC_PASS
+import static runtime.Test.*;
+aspect Test16 {
+    interface A { }
+    interface B { }
+    interface C { }
+
+    B extends A;
+    C extends B;
+
+    inh int E.foo();
+    eq A.getChild().foo() = 0;
+    eq B.getChild().foo() = 1;
+    eq C.getChild().foo() = 2;
+
+    EA implements A;
+    EB implements B;
+    EC implements C;
+
+    EAC implements C;
+    EAC implements A;
+
+    EBC implements B;
+    EBC implements C;
+
+    EABC implements A;
+    EABC implements C;
+    EABC implements B;
+
+    public class Test{
+	public static void main(String[] args) {
+	    H hea = new H();
+	    H heb = new H();
+	    H hec = new H();
+	    H heac = new H();
+	    H hebc = new H();
+	    H heabc = new H();
+            List<E> list = new List<E>();
+
+            list.add(new EA(hea));
+            list.add(new EB(heb));
+            list.add(new EC(hec));
+            list.add(new EAC(heac));
+            list.add(new EBC(hebc));
+            list.add(new EABC(heabc));
+            S s = new S(list);
+
+	    testEquals(0, hea.foo());
+	    testEquals(1, heb.foo());
+	    testEquals(2, hec.foo());
+	    testEquals(2, heac.foo());
+	    testEquals(2, hebc.foo());
+	    testEquals(2, heabc.foo());
+	}
+    }
+}

@@ -1,0 +1,18 @@
+// Conflict when subinterface defines attribute with identical signature
+// .grammar: { S ::= E; E; }
+// .result: JASTADD_FAIL
+import static runtime.Test.*;
+aspect Test17 {
+    interface A { }
+    interface B { }
+
+    inh int A.foo();
+    inh int B.foo(); // Should fail due to multiple declarations
+    eq A.getChild().foo() = 0;
+    eq B.getChild().foo() = 1;
+
+    S implements A;
+    S implements B;
+
+    eq S.getChild().foo() = 2;
+}

@@ -1,0 +1,32 @@
+// No conflict when indirectly inheriting coll contributions from two sources
+// .grammar { A ::= B; B ::= <ID>; }
+// .result: EXEC_PASS
+import static runtime.Test.*;
+import java.util.ArrayList;
+import java.util.Collection;
+
+aspect Test {
+    interface I { }
+    interface K { }
+
+    I contributes 0 to A.set();
+    K contributes 1 to A.set();
+
+    interface II extends I { }
+    interface II extends K { }
+
+    B implements II;
+
+    coll Collection<Integer> A.set() [new ArrayList<Integer>()] with add;
+
+    public class Test {
+	public static void main(String[] args) {
+	    B b = new B("0");
+	    A a = new A(b);
+
+	    testEquals(2, a.set().size());
+	    testTrue(a.set().contains(0));
+	    testTrue(a.set().contains(1));
+	}
+    }
+}

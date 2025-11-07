@@ -1,0 +1,21 @@
+// Define inherited equation in interface for normal children
+// .grammar: { A ::= B; B; }
+// .result: EXEC_PASS
+
+import static runtime.Test.*;
+
+aspect Test18 {
+    interface I {
+        B getB();
+    }
+    inh int B.attr();
+    eq I.getB().attr() = 42;
+    A implements I;
+
+    public class Test {
+        public static void main(String[] args) {
+	    A a = new A(new B());
+	    testSame(42, a.getB().attr());
+        }
+    }
+}

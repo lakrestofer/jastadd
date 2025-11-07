@@ -1,13 +1,29 @@
+// Tests contribution to interface-hosted collection
+// .grammar: { A ::= B*; B ::= <ID>; }
+
 import java.util.Collection;
 import java.util.HashSet;
+import static runtime.Test.*;
 
 aspect Test {
-	inh A B.a();
-	eq A.getB().a() = this;
+    inh A B.a();
+    eq A.getB().a() = this;
 
-	interface I { }
-	A implements I;
+    interface I { }
+    A implements I;
 
-	coll Collection<String> I.set() [new HashSet<String>()] with add;
-	B contributes getID() to I.set() for a();
+    coll Collection<String> I.set() [new HashSet<String>()] with add;
+    B contributes getID() to I.set() for a();
+
+    public class Test {
+	public static void main(String[] args) {
+	    A a = new A();
+	    a.addB(new B("1"));
+	    a.addB(new B("2"));
+
+	    testTrue(a.set().contains("1"));
+	    testTrue(a.set().contains("2"));
+	    testEqual(2, a.set().size());
+	}
+    }
 }
