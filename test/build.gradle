@@ -10,6 +10,8 @@ repositories {
 sourceSets {
 	test {
 		java {
+			compileClasspath += files('jastadd2.jar')
+			runtimeClasspath += files('jastadd2.jar')
 			srcDirs 'src/core', 'src/tests'
 		}
 	}
@@ -22,6 +24,7 @@ dependencies {
 test {
 	dependsOn 'cleanTest'
 	include 'tests/jastadd2/TestShouldPass.class'
+	include 'tests/jastadd2/analysis/*.class'
 
 	systemProperty 'debug_jastadd', System.getProperty('jastadd_debug', 'false')
 	systemProperty 'org.jastadd.testTimeout', 5000

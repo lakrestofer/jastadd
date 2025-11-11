@@ -1,3 +1,8 @@
+// Consider an interface with an equation defining an inherited attribute via getChild(). A node directly implementing the interface can override this equation by using the specific getters of its children.
+// .grammar: { Father ::= First:Son Second:Son; Son; }
+// .result: EXEC_PASS
+import static runtime.Test.*;
+
 aspect Test {
 	interface FatherI { }
 	Father implements FatherI;
@@ -6,4 +11,13 @@ aspect Test {
 
 	eq FatherI.getChild().attr() = true;
 	eq Father.getSecond().attr() = false;
+
+
+        public class Test {
+		public static void main(String[] args) {
+			Father father = new Father(new Son(), new Son());
+			testTrue(father.getFirst().attr());
+			testFalse(father.getSecond().attr());
+		}
+        }
 }

@@ -1,0 +1,410 @@
+/* Copyright (c) 2025, The JastAdd Team
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ *     * Redistributions of source code must retain the above copyright notice,
+ *       this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *     * Neither the name of the Lund University nor the names of its
+ *       contributors may be used to endorse or promote products derived from
+ *       this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.HashMap;
+import java.util.TreeSet;
+import java.util.Collection;
+import java.util.Collections;
+
+/**
+ * Attributes attached to Interfaces: core analysis (error checking, conflict resolution)
+ */
+aspect Interfaces {
+
+  /**
+   * Set of all directly implemented interfaces
+   */
+  syn Set<InterfaceDecl> TypeDecl.implementedInterfacesSet() {
+    Set<InterfaceDecl> interfaceSet = new HashSet<InterfaceDecl>();
+    for (TypeDecl td : this.grammar().getTypeDecls()) {
+      if (td instanceof InterfaceDecl && implementsInterface(td.name())) {
+        interfaceSet.add((InterfaceDecl) td);
+      }
+    }
+    return interfaceSet;
+  }
+
+  /**
+   * Set of interfaces already known to the superclass
+   */
+  syn Set<InterfaceDecl> TypeDecl.interfacesSetFromSuperclass() = Collections.<InterfaceDecl>emptySet();
+
+  eq ASTDecl.interfacesSetFromSuperclass() {
+    if (this.superClass() == null) {
+      return Collections.<InterfaceDecl>emptySet();
+    }
+    return this.superClass().implementedInterfacesSet();
+  }
+
+  /**
+   * Transitive set of all super-interfaces.  Since this computes a
+   * fixed point, it will gracefully handle recursive self-inheritance.
+   */
+  syn Set<InterfaceDecl> TypeDecl.transitiveSuperInterfacesSet() {
+    HashSet<InterfaceDecl> superInterfaceSet = new HashSet<InterfaceDecl>();
+    LinkedList<InterfaceDecl> workQueue = new LinkedList<InterfaceDecl>();
+    workQueue.addAll(this.implementedInterfacesSet());
+
+    while (!workQueue.isEmpty()) {
+      InterfaceDecl workItem = workQueue.remove();
+      if (!superInterfaceSet.add(workItem)) {
+        continue; // already processed
+      }
+      for (InterfaceDecl idecl : workItem.implementedInterfacesSet()) {
+        if (!superInterfaceSet.contains(idecl)) {
+          // may have dupes in the work queue
+          workQueue.add(idecl);
+        }
+      }
+    }
+
+    return superInterfaceSet;
+  }
+
+  /**
+   * A map from attribute signatures defined by this interface to their declaring (ancestor) interfaces.
+   *
+   * Any key mapped to multiple values has an ambiguous definition (i.e., an error).
+   *
+   * @param exclusions InterfaceDecls to exclude from the map, to avoid self-inclusion.
+   *   (Other TypeDecls are allowed and harmless.)
+   * @return A map from attribute signatures to their declarations.  The value for each key is a collection
+   *   containing either only <tt>this</tt>, or otherwise a collection containing one or more <tt>InterfaceDecl</tt>s.
+   */
+  syn lazy Map<AttrSignature, Collection<TypeDecl>> TypeDecl.transitiveAttributeImplementationsExcluding(Set<TypeDecl> exclusions) {
+    // Reached ourselves recursively?
+    if (exclusions.contains(this)) {
+      return new TreeMap<AttrSignature, Collection<TypeDecl>>();
+    }
+
+    // It shouldn't be possible with non-interface TypeDecls to reach ourselves, so we
+    // expect all recursiveExclusions to be InterfaceDecls, but it is simpler to
+    // just track all TypeDecls anyway:
+    final HashSet<TypeDecl> recursiveExclusions = new HashSet<TypeDecl>(exclusions);
+    recursiveExclusions.add(this);
+
+    // Don't track interfaces that the superclass inherits.
+    // Not only would that be wasteful, it would also lead to unintended overrides.
+    // Consider:
+    // - ASTNode B <:  ASTNode A  <: interface I
+    // - inh I.getChild().foo() = "I"
+    // - inh A.getX().foo() = "A"
+    // To ensure B.getX().foo() = "A", class B can simply delegate the handling of
+    // foo() to class A.
+    // This requites that we exclude I from the implemented interfaces-- which is fine,
+    // since class A will already include any functionality from I that is still
+    // visible in B.
+    // For resolving Diamond Inheritance, this behaviour is consistent
+    // with the assumption that superclass inheritance has higher
+    // precedence than interface inheritance.
+    recursiveExclusions.addAll(this.interfacesSetFromSuperclass());
+
+    // Collect all super-interfaces
+    Map<AttrSignature, Collection<TypeDecl>> results = new TreeMap<AttrSignature, Collection<TypeDecl>>();
+    for (InterfaceDecl superInterface: this.implementedInterfacesSet()) {
+      Map<AttrSignature, Collection<TypeDecl>> superContributions
+        = superInterface.transitiveAttributeImplementationsExcluding(recursiveExclusions);
+      for (Map.Entry<AttrSignature, Collection<TypeDecl>> entry: superContributions.entrySet()) {
+        if (!results.containsKey(entry.getKey())) {
+          results.put(entry.getKey(), new HashSet<TypeDecl>(entry.getValue()));
+        }
+        Collection<TypeDecl> decls = results.get(entry.getKey());
+          for (TypeDecl newDecl: entry.getValue()) {
+            boolean viable = true;
+
+            if (decls.contains(newDecl)) {
+              continue;
+            }
+            for (TypeDecl existingDecl: decls) {
+              if (existingDecl.isSubInterfaceOf(newDecl)) {
+                // We already have something more precise
+                viable = false;
+                break;
+              }
+            }
+            if (viable) {
+              ArrayList<TypeDecl> obsoleteDecls = new ArrayList<TypeDecl>();
+              for (TypeDecl existingDecl: decls) {
+                if (newDecl.isSubInterfaceOf(existingDecl)) {
+                  // More precise?  Time to replace
+                  obsoleteDecls.add(existingDecl);
+                }
+              }
+              decls.removeAll(obsoleteDecls);
+              decls.add(newDecl);
+            }
+        }
+      }
+    }
+
+    // Override with local definitions (also resolving any conflicts)
+    Collection<TypeDecl> self = new ArrayList<TypeDecl>(1);
+    self.add(this);
+
+    this.addImplementationMapOverrides(results, self, true);
+
+    return results;
+  }
+
+  /**
+   * Should an equation inherited from a superclass have precedence
+   * over an equation inherited from an interface?
+   */
+  protected static final boolean ASTDecl.superclassEquationsOverrideInterfaceEquations = true;
+
+  /**
+   * Updates <tt>decls</tt> with <tt>self</tt> for all <tt>AttrSignature</tt>s defined for this type
+   *
+   * @param override: Allow overriding existing definitions
+   */
+  void TypeDecl.addImplementationMapOverrides(Map<AttrSignature, Collection<TypeDecl>> decls,
+                                              Collection<TypeDecl> self,
+                                              boolean override) {
+    for (AttrSignature signature: this.implementedAttributeEquations()) {
+      // Only override interface definitions if `override' is set
+      if (override || !decls.containsKey(signature)) {
+        // Keep "self" as "this"
+        decls.put(signature, self);
+      }
+    }
+  }
+
+  /**
+   * Updates <tt>decls</tt> with <tt>self</tt> for all <tt>AttrSignature</tt>s defined for this type or for any parent type
+   *
+   * @param override: Allow overriding existing definitions
+   */
+  @Override
+  void ASTDecl.addImplementationMapOverrides(Map<AttrSignature, Collection<TypeDecl>> decls,
+                                             Collection<TypeDecl> self,
+                                             boolean override) {
+    if (this.hasSuperClass() && this.superClass() != null) {
+
+      this.superClass().addImplementationMapOverrides(decls, self,
+                                                      ASTDecl.superclassEquationsOverrideInterfaceEquations);
+    }
+    super.addImplementationMapOverrides(decls, self, override);
+  }
+
+  /**
+   * All attribute implementations defined locally for this TypeDecl in a (transitively) inherited interface
+   *
+   * Does not include attributes whose definitions are ambiguous and thus erroneous
+   * (see <tt>ambiguousAttributeImplementationsFromInterfaces</tt>).
+   *
+   * Does not include attributes inherited from superclasses.
+   */
+  syn lazy Map<AttrSignature, TypeDecl> TypeDecl.attributeImplementationsWithInterfaces() {
+    final Map<AttrSignature, TypeDecl> result = new TreeMap<AttrSignature, TypeDecl>();
+
+    for (Map.Entry<AttrSignature, Collection<TypeDecl>> entry:
+           transitiveAttributeImplementationsExcluding(Collections.<TypeDecl>emptySet()).entrySet()) {
+      if (entry.getValue().size() == 1) {
+        for (TypeDecl d: entry.getValue()) {
+          result.put(entry.getKey(), d);
+        }
+      }
+    }
+    return result;
+  }
+
+  /**
+   * Ambiguous declarations that are due to interface inheritance.
+   */
+  syn Map<AttrSignature, Collection<InterfaceDecl>> TypeDecl.ambiguousAttributeImplementationsFromInterfaces() {
+    final Map<AttrSignature, Collection<InterfaceDecl>> result = new TreeMap<AttrSignature, Collection<InterfaceDecl>>();
+
+    for (Map.Entry<AttrSignature, Collection<TypeDecl>> entry:
+           transitiveAttributeImplementationsExcluding(Collections.<TypeDecl>emptySet()).entrySet()) {
+      if (entry.getValue().size() > 1) {
+        ArrayList<InterfaceDecl> clashingInterfaces = new ArrayList<InterfaceDecl>();
+        for (TypeDecl td : entry.getValue()) {
+          clashingInterfaces.add((InterfaceDecl) td);
+        }
+        result.put(entry.getKey(), clashingInterfaces);
+      }
+    }
+    return result;
+  }
+
+  /**
+   * Checks if the TypeDecl is an InterfaceDecl, otherwise returns <tt>null</tt>
+   */
+  syn InterfaceDecl TypeDecl.asInterfaceDecl() = null;
+  eq InterfaceDecl.asInterfaceDecl() = this;
+
+  public boolean TypeDecl.isSubInterfaceOf(TypeDecl other) {
+    final InterfaceDecl selfI = this.asInterfaceDecl();
+    final InterfaceDecl otherI = other.asInterfaceDecl();
+    if (selfI != null && otherI != null) {
+      return selfI.isSubInterfaceOf(otherI);
+    }
+    return false;
+  }
+
+  /**
+   * Tests if the specified interface declaration transitively extends this interface
+   *
+   * This relation tests for a proper sub-interface relation, meaning that
+   * <tt>x.isSubInterfaceOf(x)</tt> does not normally hold (i.e., only in the erroneous
+   * case in which <tt>x</tt> circularly extends itself).
+   *
+   * @param other The potential sub-interface
+   * @return <tt>true</tt> iff <tt>other</tt> is transitively declared to be a
+   *   sub-interface of <tt>this</tt>.
+   */
+  public boolean InterfaceDecl.isSubInterfaceOf(InterfaceDecl other) {
+    return this.transitiveSuperInterfacesSet().contains(other);
+  }
+
+  // --------------------------------------------------------------------------------
+  // Interface ordering and clash detection
+
+  /**
+   * Information about InterfaceDecls relevant to InheritanceConstraintOrdering
+   *
+   * Separated out to simplify testing
+   */
+  public interface InheritanceOrder<ID extends InheritanceOrder> {
+    public boolean isSubInterfaceOf(ID other);
+    public String name();
+  }
+
+  InterfaceDecl implements InheritanceOrder<InterfaceDecl>;
+
+  /**
+   * Resolves constraints on the order in which a class should inherit its interfaces.
+   *
+   * IOE: Inheritance Order Element
+   */
+  public class InheritanceConstraintOrdering<IOE extends InheritanceOrder<IOE>> {
+    // Set of all interfaces to inherit
+    private Set<IOE> allInterfaces;
+
+    public
+    InheritanceConstraintOrdering(Collection<IOE> elements) {
+      this.allInterfaces = new HashSet<IOE>(elements);
+    }
+
+    public
+    InheritanceConstraintOrdering() {
+      this(new ArrayList<IOE>());
+    }
+
+    /**
+     * Orders the directly implemented interfaces
+     */
+    public ArrayList<IOE>
+    getOrdered() {
+      // Clusters contain IOEs that are transitively connected via interfaceRelationExists
+      ArrayList<IOE> ioesBase = new ArrayList<IOE>(allInterfaces);
+      // Sort by names to ensure determinism
+      Collections.sort(ioesBase,
+                       new Comparator<IOE>() {
+                         public int compare(IOE if0, IOE if1) {
+                           return if0.name().compareTo(if1.name());
+                         }});
+
+      ArrayList<IOE> result = new ArrayList<IOE>();
+      // Convert to LinkedList so we can remove elements
+      LinkedList<IOE> ioes = new LinkedList(ioesBase);
+
+      // Iteratatively remove all elements from ioes that are leaves
+      // This is only safe to use if we don't have circular self-dependency
+      while (!ioes.isEmpty()) {
+        int lastSize = ioes.size();
+        Iterator<IOE> it = ioes.iterator();
+        while (it.hasNext()) {
+          IOE candidate = it.next();
+
+          // Is "candiate" a leaf?
+          for (IOE remaining : ioes) {
+            if (remaining.isSubInterfaceOf(candidate)) {
+              // No, it is not
+              candidate = null;
+              break;
+            }
+          }
+
+          if (candidate != null) {
+            // Yes, it is a leaf!
+            result.add(candidate);
+            it.remove();
+          }
+        }
+        if (ioes.size() >= lastSize) {
+          // Going for robustness here-- for debugging, it is better to bail:
+          // throw new RuntimeException();
+          return result;
+        }
+      }
+
+      return result;
+    }
+  }
+
+  /**
+   * Computes a suitable interface inheritance order, and any inheritance conflicts
+   */
+  syn ArrayList<String> TypeDecl.interfaceInheritanceConflicts() {
+    final Map<AttrSignature, Collection<InterfaceDecl>> conflicts = this.ambiguousAttributeImplementationsFromInterfaces();
+    ArrayList<String> errors = new ArrayList<String>();
+
+    for (Map.Entry<AttrSignature, Collection<InterfaceDecl>> conflict: conflicts.entrySet()) {
+      ArrayList<String> interfaces = new ArrayList<String>();
+      for (InterfaceDecl iface: conflict.getValue()) {
+        interfaces.add(iface.toString());
+      }
+      Collections.sort(interfaces);
+      errors.add("- " + conflict.getKey() + ": defined in " + interfaces);
+    }
+    return errors;
+  }
+
+  /**
+   * Computes a suitable interface inheritance order, and any inheritance conflicts
+   */
+  syn Collection<InterfaceDecl> TypeDecl.interfaceInheritanceOrder() {
+    return (new InheritanceConstraintOrdering(this.implementedInterfacesSet())).getOrdered();
+  }
+
+  /**
+   * Is there an interface inheritance conflict?
+   *
+   * @return <tt>null</tt> if there is no conflict, otherwise an error message explaining the conflict
+   */
+  syn String TypeDecl.inheritanceClash() {
+    ArrayList<String> clashes = interfaceInheritanceConflicts();
+    if (clashes.isEmpty()) {
+      return null;
+    }
+    return String.join(System.lineSeparator(), clashes) + System.lineSeparator();
+  }
+}

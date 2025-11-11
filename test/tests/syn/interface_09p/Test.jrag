@@ -1,0 +1,24 @@
+// No conflict when inheriting syn definition from two sources and disambiguating
+// .grammar: { S; }
+// .result: EXEC_PASS
+import static runtime.Test.*;
+aspect Test10 {
+    interface A { }
+    interface B { }
+
+    syn int A.foo();
+    syn int B.foo();
+    eq A.foo() = 0;
+    eq B.foo() = 1;
+
+    S implements A;
+    S implements B;
+
+    eq S.foo() = 2;
+
+    public class Test{
+	public static void main(String[] args) {
+	    testEqual(2, (new S()).foo());
+	}
+    }
+}

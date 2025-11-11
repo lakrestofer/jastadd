@@ -412,6 +412,28 @@ aspect CollectionAttributes {
 
   syn String CollEq.signature() = decl().signature();
 
+  /**
+   * The original declaration of the collection equation, in case the equation is duplicated.
+   */
+  public CollEq CollEq.origin() {
+    if (this.origin != null) {
+      return this.origin;
+    }
+    return this;
+  }
+
+  private CollEq CollEq.origin = null;
+
+  /**
+   * Clone a CollEq from an interface to some other host type, preserving the origin type.
+   */
+  public CollEq CollEq.cloneForHost(String hostName) {
+    CollEq result = this.treeCopyNoTransform();
+    result.origin = this.origin();
+    result.hostName = hostName;
+    return result;
+  }
+
   syn lazy String CollDecl.signature() {
     StringBuffer s = new StringBuffer();
     s.append(getTarget());

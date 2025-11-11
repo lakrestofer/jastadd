@@ -1,0 +1,46 @@
+// Diamond interface inheritance of contribution will only contribute once
+// .grammar { A ::= B; abstract B; B0:B; B1:B; B2:B; B3:B; }
+// .result: EXEC_PASS
+import static runtime.Test.*;
+import java.util.ArrayList;
+import java.util.Collection;
+
+aspect Test {
+    interface I { }
+    interface J extends I { }
+    interface K extends I { }
+
+    I contributes 0 to A.list();
+
+    B0 implements J;
+    B0 implements K;
+
+    B1 implements I;
+    B1 implements J;
+
+    B2 implements I;
+    B2 implements K;
+
+    B3 implements I;
+    B3 implements J;
+    B3 implements K;
+
+    coll Collection<Integer> A.list() [new ArrayList<Integer>()] with add;
+
+    public class Test {
+	public static void main(String[] args) {
+	    A a = new A(new B0());
+	    testEquals(1, a.list().size());
+
+	    a = new A(new B1());
+	    testEquals(1, a.list().size());
+
+	    a = new A(new B2());
+	    testEquals(1, a.list().size());
+
+	    a = new A(new B3());
+	    testEquals(1, a.list().size());
+
+	}
+    }
+}

@@ -1,0 +1,63 @@
+// Partial override of getChild() in shared ancestor via superclass
+// .grammar: { S ::= A; A ::= E0:E E1:E E2:E E3:E E4:E; B:A; E; }
+// .result: EXEC_PASS
+import static runtime.Test.*;
+aspect Test24 {
+    interface Foo { }
+    interface I { }
+    interface J extends I { }
+
+    inh String Foo.foo();
+    E implements Foo;
+
+    A implements I;
+    B implements J;
+    // Subtyping:
+    //  A -> I
+    //  ^    ^
+    //  |    |
+    //  B -> J
+
+    eq I.getChild().foo() = "I.*";
+    eq A.getChild().foo() = "A.*";
+
+    eq A.getE1().foo() = "A.1";
+    eq J.getE2().foo() = "J.2";
+    eq I.getE3().foo() = "I.3";
+    eq B.getE4().foo() = "B.4";
+
+    public class Test{
+        public static void main(String[] args) {
+            {
+                E e0 = new E();
+                E e1 = new E();
+                E e2 = new E();
+                E e3 = new E();
+                E e4 = new E();
+                A a = new A(e0, e1, e2, e3, e4);
+                S s = new S(a);
+                testEquals("A.getE0().foo()", "A.*", e0.foo());
+                testEquals("A.getE1().foo()", "A.1", e1.foo());
+                testEquals("A.getE2().foo()", "A.*", e2.foo());
+                testEquals("A.getE3().foo()", "A.*", e3.foo());
+                testEquals("A.getE4().foo()", "A.*", e4.foo());
+            }
+
+            {
+                E e0 = new E();
+                E e1 = new E();
+                E e2 = new E();
+                E e3 = new E();
+                E e4 = new E();
+                B b = new B(e0, e1, e2, e3, e4);
+                S s = new S(b);
+                testEquals("B.getE0().foo()", "A.*", e0.foo());
+                testEquals("B.getE1().foo()", "A.1", e1.foo());
+                // Semantics TBD
+                // testEquals("B.getE2().foo()", "A.*", e2.foo());
+                testEquals("B.getE3().foo()", "A.*", e3.foo());
+                testEquals("B.getE4().foo()", "B.4", e4.foo());
+            }
+        }
+    }
+}

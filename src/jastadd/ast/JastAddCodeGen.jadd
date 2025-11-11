@@ -90,12 +90,27 @@ aspect JastAddCodeGen {
               }
             }
 
+            Map<AttrSignature, TypeDecl> inhAttrImplsFromInterfaces = tydecl.attributeImplementationsWithInterfaces();
+
             for (InhDecl inhDecl : idecl.getInhDeclList()) {
               dest.addInhDecl((InhDecl) inhDecl.fullCopy());
             }
 
             for (InhEq inhEq : idecl.getInhEqList()) {
-              dest.addInhEq((InhEq) inhEq.fullCopy());
+              AttrSignature sig = inhEq.attrSignature();
+              TypeDecl td = inhAttrImplsFromInterfaces.get(sig);
+
+              // If dest broadcasts to getChild().foo(), then this should
+              // override any interface-intherited getX().foo():
+              if (dest.implementedAttributeEquations()
+                  .contains(InhAttrSignature.from(sig.signature(), "Child"))) {
+                // Don't inherit from interface in this case
+                continue;
+              }
+
+              if (td != null && td == inhEq.hostClass()) {
+                dest.addInhEq((InhEq) inhEq.fullCopy());
+              }
             }
           }
         }

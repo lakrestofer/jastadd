@@ -1,0 +1,44 @@
+// No conflict in multiple interface inheritance if manually overridden
+// .grammar: { abstract S; SA:S; SB:S; SC:S; SAC:S; SBC:S; SABC:S; }
+// .result: EXEC_PASS
+import static runtime.Test.*;
+aspect Test11 {
+    interface A { }
+    interface B { }
+    interface C { }
+
+    C extends A;
+    C extends B;
+
+    syn int A.foo();
+    syn int B.foo();
+
+    eq A.foo() = 0;
+    eq C.foo() = 2;
+    eq B.foo() = 1;
+
+    SA implements A;
+    SB implements B;
+    SC implements C;
+
+    SAC implements C;
+    SAC implements A;
+
+    SBC implements B;
+    SBC implements C;
+
+    SABC implements A;
+    SABC implements C;
+    SABC implements B;
+
+    public class Test{
+	public static void main(String[] args) {
+	    testEqual(0, (new SA()).foo());
+	    testEqual(1, (new SB()).foo());
+	    testEqual(2, (new SC()).foo());
+	    testEqual(2, (new SAC()).foo());
+	    testEqual(2, (new SBC()).foo());
+	    testEqual(2, (new SABC()).foo());
+	}
+    }
+}

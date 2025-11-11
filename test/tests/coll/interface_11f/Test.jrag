@@ -1,0 +1,15 @@
+// Conflict when attempting to override coll definition from parent
+// .grammar { A ::= B; B ::= <ID>; }
+// .result: JASTADD_FAIL
+import static runtime.Test.*;
+import java.util.HashSet;
+import java.util.Collection;
+
+aspect Test {
+    interface I { }
+    interface K extends I { }
+    coll Collection<String> I.set() [new HashSet<String>()] with add;
+    coll Collection<Integer> K.set() [new HashSet<Integer>()] with add;
+
+    B implements K;
+}

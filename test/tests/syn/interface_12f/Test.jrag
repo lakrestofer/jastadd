@@ -1,0 +1,20 @@
+// Conflicting interface inheritance
+// .grammar: { S; }
+// .result: JASTADD_FAIL
+import static runtime.Test.*;
+aspect Test11 {
+    interface A { }
+    interface B { }
+    interface C { }
+
+    interface C extends A;
+    interface C extends B;
+
+    syn int A.foo();
+    syn int B.foo();
+
+    eq A.foo() = 0;
+    eq B.foo() = 1;
+
+    // Should raise error even if interface C is never used
+}

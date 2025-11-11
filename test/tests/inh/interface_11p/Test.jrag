@@ -1,0 +1,30 @@
+// No conflict when inheriting inherited definition from two sources and then specialising
+// .grammar: { S ::= E; E; }
+// .result: EXEC_PASS
+import static runtime.Test.*;
+aspect Test11 {
+    interface Base { }
+    interface A { }
+    interface B { }
+
+    A extends Base;
+    B extends Base;
+
+    inh int E.foo();
+
+    eq A.getChild().foo() = 0;
+    eq B.getChild().foo() = 1;
+
+    S implements A;
+    S implements B;
+
+    eq S.getChild().foo() = 2;
+
+    public class Test{
+	public static void main(String[] args) {
+	    E e = new E();
+	    S s = new S(e);
+	    testEquals(2, e.foo());
+	}
+    }
+}

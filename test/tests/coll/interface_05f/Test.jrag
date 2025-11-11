@@ -1,0 +1,15 @@
+// Conflict when inheriting coll definition from two sources
+// .grammar { A ::= B; B ::= <ID>; }
+// .result: JASTADD_FAIL
+import static runtime.Test.*;
+import java.util.HashSet;
+
+aspect Test {
+    interface I { }
+    interface K { }
+    coll Collection<String> I.set() [new HashSet<String>()] with add;
+    coll Collection<Integer> K.set() [new HashSet<Integer>()] with add;
+
+    B implements I;
+    B implements K;
+}

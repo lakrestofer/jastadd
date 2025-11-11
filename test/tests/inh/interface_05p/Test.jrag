@@ -1,24 +1,21 @@
-// A node implementing an interface can refine an inherited-attribute equation in the interface.
+// Consider an interface with an equation defining an inherited attribute via getChild(). A node directly implementing the interface can override this equation by using getChild().
 // .grammar: { Father ::= Son; Son; }
 // .result: EXEC_PASS
 import static runtime.Test.*;
 
-aspect Test4 {
+aspect Test5 {
 	interface FatherI { }
 	Father implements FatherI;
 
 	inh boolean Son.attr();
 
 	eq FatherI.getChild().attr() = true;
-}
-
-aspect Test4b {
-	refine Test4 eq FatherI.getChild().attr() = false;
+	eq Father.getChild().attr() = false;
 
         public class Test {
 		public static void main(String[] args) {
 			Father father = new Father(new Son());
 			testFalse(father.getSon().attr());
 		}
-        }
+	}
 }
