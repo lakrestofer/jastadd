@@ -61,8 +61,7 @@ public class Test {
 
   private static void testUnparameterized() {
     StateMachine sm = new StateMachine();
-    List<String> events = setup(node -> node.a());
-    for (String s : events) {
+    for (String s : setup(node -> node.a())) {
       switch (s) {
         case "CIRCULAR_CASE1_START Node.a()": sm.enterA(); break;
         case "CIRCULAR_CASE1_RETURN Node.a()": sm.exitA(); break;
@@ -71,7 +70,7 @@ public class Test {
       }
     }
     testEqual(false, sm.isInsideComputeA);
-    testEqual("ev: " + events , false, sm.isInsideComputeB);
+    testEqual(false, sm.isInsideComputeB);
     testEqual(true, sm.didComputeB);
   }
 
