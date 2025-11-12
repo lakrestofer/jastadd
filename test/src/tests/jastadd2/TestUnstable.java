@@ -53,7 +53,6 @@ public class TestUnstable {
   private static final TestProperties properties = new TestProperties();
   static {
     properties.put("jastadd3", "false");
-    properties.put("jastadd.jar", "jastadd2.jar");
     properties.put("options", "indent=tab");
 
     properties.include(Tests.UNSTABLE);

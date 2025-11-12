@@ -58,7 +58,6 @@ public class DocumentationContext extends TemplateContext {
   private static final String version;
   static {
     jastAddProperties.put("jastadd3", "false");
-    jastAddProperties.put("jastadd.jar", "jastadd2.jar");
     jastAddProperties.put("options", "indent=tab");
     JastAddConfiguration jastadd = JastAddConfiguration.get(jastAddProperties);
     version = jastadd.getVersion();
