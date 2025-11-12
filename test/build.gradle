@@ -26,12 +26,10 @@ test {
 	def testSuite = System.getProperty('testSuite', 'tests.jastadd2.TestShouldPass')
 	def testSuitePath = testSuite.replace('.', '/') + '.class'
 	include testSuitePath
-
 	include 'tests/jastadd2/analysis/*.class'
 
 	systemProperty 'debug_jastadd', System.getProperty('jastadd_debug', 'false')
 	systemProperty 'jastadd.jar', System.getProperty('jastadd.jar', '../jastadd2.jar')
-
 	systemProperty 'test', System.getProperty('test', '')
 	systemProperty 'org.jastadd.testTimeout', 5000
 	systemProperty 'org.jastadd.testThreads', 8

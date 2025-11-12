@@ -8,7 +8,7 @@ Quick Start
 -----------
 
 1. Rebuild `jastadd2.jar` in the root of this repository.
-2. Run tests from the command line, using either `ant` or `gradle`:
+2. Run tests from the command line using either `ant` or `gradle`:
     * run all default tests (the TestShouldPass suite):
         - `$ ant`
         - `$ ./gradlew`
