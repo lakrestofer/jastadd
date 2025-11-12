@@ -277,7 +277,9 @@ $endif
 AttrDecl.cacheCycleInit [[
 $if(CacheCycle)
 state.startLastCycle();
+$include(AttrDecl.traceComputeBegin)
 #getType $$tmp = $CircularComputeRhs;
+$include(AttrDecl.traceComputeEnd)
 $endif
 ]]
 
@@ -291,6 +293,7 @@ if (state.lastCycle()) {
   $include(AttrDecl.incHookAttrCompStartCircular)
   #getType new_#(signature)_value = $CircularComputeRhs;
   $include(AttrDecl.incHookAttrCompEndCircular)
+  $include(AttrDecl.traceCircularExitCase2)
   return new_#(signature)_value;
  $endif
 }
