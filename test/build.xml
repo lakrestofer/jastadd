@@ -24,7 +24,7 @@ To enable logging of passed tests:
 </description>
 
 	<property name="jastadd3" value=""/>
-	<property name="jastadd.jar" value="jastadd2.jar"/>
+	<property name="jastadd.jar" value="../jastadd2.jar"/>
 	<property name="options" value=""/>
 	<property name="extraoptions" value=""/>
 	<property name="includes" value=""/>

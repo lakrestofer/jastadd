@@ -7,16 +7,25 @@ it should be able to test JastAdd3 as well.
 Quick Start
 -----------
 
-1. Copy `jastadd2.jar` into the JastAddTest root directory.
-2. Run tests from the command line:
+1. Rebuild `jastadd2.jar` in the root of this repository.
+2. Run tests from the command line using either `ant` or `gradle`:
     * run all default tests (the TestShouldPass suite):
-        `$ ant`
+        - `$ ant`
+        - `$ ./gradlew`
     * or, run some specific test(s):
-        `$ ant -Dtest=ast/flush01`
+        - `$ ant -Dtest=ast/flush01`
+        - `$ ./gradlew -Dtest=ast/flush01`
     * or, run some tests matching a pattern:
-        `$ ant -Dtest=ast/flush*`
+        - `$ ant "-Dtest=ast/flush*"`
+        - `$ ./gradlew "-Dtest=ast/flush*"`
     * or, run a specific test suite:
-        `$ ant -DtestSuite=tests.jastadd2.TestErrors`
+        - `$ ant -DtestSuite=tests.jastadd2.TestErrors`
+        - `$ ./gradlew -DtestSuite=tests.jastadd2.TestErrors`
+    * or, run with a specific jastadd jar file
+        - `$ ant -Djastadd.jar=custom_build.jar`
+        - `$ ./gradlew -Djastadd.jar=custom_build.jar`
+
+    `-Dtest`, `-DtestSuite` and `-Djastadd.jar` can be combined with each other.
 3. Run tests from Eclipse:
     * Select a test suite, e.g., `src/tests/jastadd2/TestShouldPass.java`
     * Select `Popup-menu->Run As->JUnit Test`
@@ -27,13 +36,13 @@ Quick Start
 5. Add your own test suite:
     * Copy an existing test suite.
     * Change it to include and exclude parts of the full test suite.
-6. Before pushing a new version of `JastAdd2` or `JastAddTest`, run the `TestShouldPass` suite. 
+6. Before pushing a new version of `JastAdd2` or `JastAddTest`, run the `TestShouldPass` suite.
 
 
 Tests will timeout after 5 seconds. You can change the default timeout by specifying the
 timeout in milliseconds using the `org.jastadd.testTimeout` system property.
 When using Ant you can use the `-Dtimeout=X` option to change the timeout.
-     
+
 Test Organization
 -----------------
 
