@@ -1,0 +1,7 @@
+aspect Test {
+  syn int Node.a() circular [0] = b();
+  syn int Node.b() = 0;
+
+  syn int Node.pa(int param) circular [0] = pb(param);
+  syn int Node.pb(int param) = param;
+}
