@@ -21,6 +21,7 @@ JastAdd 2.1.13 manual.
       [lazy/caching](#Lazy), [refine](#RefineAttr)
     * [Parameterized](#Parameterized), [broadcasting](#Broadcasting),
       [circular](#Circular), [NTAs](#Nonterminal), [collections](#Collection)
+    * [Attributes on Interfaces](#InterfaceAttr)
 * [Rewrites](#Rewrites)
 * [Building with JastAddGradle](#jastaddgradle)
 * [Command line syntax](#commandline)
@@ -915,7 +916,9 @@ implementation:
 
 Attributes are specified in [JastAdd aspect files](#Aspects).
 
-Different kinds of attributes are documented in the following sections.
+The sections below describe different kinds of attributes and how to
+attach them to AST classes.   and a later section discusses subtleties when
+attaching attributes [to Interfaces](#InterfaceAttr).
 
 ### <a id="Basic"></a><a id="Synthesized"></a>Synthesized attributes
 
@@ -1517,6 +1520,161 @@ Multiple custom collection survey blocks like this can be used, but only one of
 them needs to call `super.collectContributions()`. It is possible to use
 attributes inside the code blocks to decide when a particular subtree should be
 searched for contributions.
+
+### <a id="InterfaceAttr"></a>Attributes on Interfaces
+
+Attribute equations can satisfy the requirements of interfaces
+equivalently to Java methods:
+
+    interface I {
+      public int foo();
+    }
+
+    A implements I;
+
+    syn int A.foo() = 0;
+
+In the above, the `syn` declaration is obversationally equivalent to
+defining a method
+
+    public int A.foo() { return 0; }
+
+JastAdd allows attribute declarations on interfaces, as of JastAdd
+2.4.  For example:
+
+    interface I { }
+    A implements I;
+
+    syn int I.foo();
+    eq A.foo() = 0;
+
+The first line requires all implementers of interface `I` to supply an
+equation for synthesized attribute `foo`, and the second line provides
+such an equation for `A`.  Subclasses of `A` inherit this equation and
+can override it as ususal.
+
+JastAdd also allows attribute equation definitions and collectoin
+contributions on interfaces.  For example:
+
+    interface I { }
+    syn int I.foo() = 0;
+
+will provide a synthesized attribute `foo()` to any class that
+implements `I`, and analogously for all other attributes and for
+collection contributions.
+
+### Multiple Inheritance Resolution
+
+An AST class may inherit an attribute _declaration_ from any number of
+interfaces, as well as from its superclass.  An AST class may also
+inherit any number of collection contributions from any number of
+interfaces, as well as from its superclass.
+
+However, inheriting multiple attribute equations can lead to
+ambiguity.  Consider:
+
+*In an .ast file:*
+
+    B : A;
+
+*In a .jrag file:*
+
+    interface I { }
+    interface J { }
+
+    J extends I;
+    B implements J; // and transitively I
+    B implements I; // redundant but legal
+
+    syn int B.foo() = 1;
+    syn int A.foo() = 2;
+    syn int J.foo() = 3;
+    syn int I.foo() = 4;
+
+Here, `B` inherits four different definitions of the `syn` attribute
+`foo`.  The precedence rulres correspond to those of Java and are in
+order of highest to lowest precedence:
+
+1. Local attribute definition (`B.foo()`, in the example)
+2. Inherited superclass attribute definition (`A.foo()`, in the example)
+3. Inherited unique most specific interface attribute definition (see below)
+
+In the example above, `B.foo()` is explicitly defined and would thus
+take precedence.  If it were not defined, `A.foo()` would take
+precedence.  Otherwise JastAdd would consider the interfaces that `B`
+inherits from.
+
+In our example, `B` implements two interfaces, `I` and `J`, and thus
+inherits two definitions for attribute `foo`: `I.foo()` and `J.foo()`.
+However, `J` is a subtype of `I`, so `J.foo()` is _more specific_ than
+`I.foo()`, and `J.foo()` will take precedence over `I.foo()` following
+the usual Java rules for inheritance and method overriding.  Since
+there is no definition of `foo` that is more speific than `J.foo()`,
+`J.foo()` is the _most specific_ definition of attribute `foo`.
+
+This notion of specificity only depends on the subtype relationship
+between `I` and `J`, so it is irrelevant whether `B` explicitly
+inherits `I`, as in the example, or only implicitly, via `J`.
+
+It is an error for `B` to inherit multiple "most specific"
+definitions, as in:
+
+    interface J { }
+    interface K { }
+
+    B implements J;
+    B implements K;
+
+    syn int J.quux() = 3;
+    syn int K.quux() = 5;
+    // Error: B.quux() is ambiguous
+
+To resolve this ambiguity, `B` must either explicitly define attribute
+`quux` itself or inherit a definition of `quux` from a superclass.
+
+### Inherited Attributes and Broadcasting
+
+Interfaces may define inherited attribute equations:
+
+*In an .ast file:*
+
+    A ::= Left:B Right:B
+
+*In a .jrag file:*
+
+    inh int B.v();
+
+    interface II { }
+    eq II.getLeft().v() = 1
+    eq II.getRight().v() = 2
+
+though any AST class that implements such an interface must provide
+any child components that the interface-based implementation
+implicitly requires.
+
+Inherited attribute overriding in sub-interfaces works analogously to
+subclasses, i.e., per child node:
+
+    interface JI { }
+    JI extends II;
+
+    eq JI.getLeft().v() = -1 // overrides definition from II
+    // inherits JI.getRight().v() from I
+
+This means that broadcasting via inherited attributes introduces
+another layer of ambiguity:
+
+    interface KI { }
+    inh int KI.getChild().v() = 256
+
+    A implements JI
+    A implements KI
+    // Error: undefined precedence
+
+It is illegal for a class to inherit a (most specific)
+`getChild().v()` broadcast definition from one supertype and a (most
+specific) definition `getX().v()` from a different supertype.
+
 
 ## <a id="Rewrites"></a>Rewrites
 
