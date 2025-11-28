@@ -30,15 +30,14 @@
 
 import sys
 import markdown
-import codecs
 
 if __name__ == '__main__':
-    if len(sys.argv) is not 2:
+    if len(sys.argv) != 2:
         sys.stderr.write("Usage: markdown.py <FILE>\n")
         sys.stderr.flush()
     else:
-        with codecs.open(sys.argv[1], mode='r', encoding='utf-8') as f:
+        with open(sys.argv[1], mode='r', encoding='utf-8') as f:
             text = f.read()
-        sys.stdout.write(markdown.markdown(text, ['extra']))
+        sys.stdout.write(markdown.markdown(text, extensions=['extra']))
         sys.stdout.flush()
 
