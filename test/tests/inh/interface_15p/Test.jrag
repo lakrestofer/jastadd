@@ -1,22 +1,35 @@
 // No conflict in multiple interface inheritance if manually overridden
 // .grammar: { S ::= E; E; }
 // .result: EXEC_PASS
+//                           ┌───┬───┐
+//   eq getChild.foo = 0   ┌─► I │ J │ eq getChild.foo = 1
+//                         │ ├───┴───┤
+//                         │ │   K   │ eq getChild.foo = 2
+//                         │ ├───────┤
+//                         └─┼   S   │
+//                           └───┬───┘
+//                               │    
+//                           ┌───┴───┐
+//                           │   E   │ inh foo
+//                           └───────┘
+//                         [ E.foo = 2 ]
+
 import static runtime.Test.*;
 aspect Test15 {
-    interface A { }
-    interface B { }
-    interface C { }
+    interface I { }
+    interface J { }
+    interface K { }
 
-    C extends A;
-    C extends B;
+    K extends I;
+    K extends J;
 
     inh int E.foo();
-    eq A.getChild().foo() = 0;
-    eq B.getChild().foo() = 1;
-    eq C.getChild().foo() = 2;
+    eq I.getChild().foo() = 0;
+    eq J.getChild().foo() = 1;
+    eq K.getChild().foo() = 2;
 
-    S implements A;
-    S implements C;
+    S implements I;
+    S implements K;
 
     public class Test{
 	public static void main(String[] args) {

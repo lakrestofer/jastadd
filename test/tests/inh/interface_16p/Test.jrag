@@ -1,6 +1,25 @@
 // Unambiguous chain of overriding in interfaces
-// .grammar: { S ::= E*; abstract E; EA:E ::= E; EB:E ::= E; EC:E ::= E; EAC:E ::= E; EBC:E ::= E; EABC:E ::= E; H:E;}
+// .grammar: { S ::= E*; abstract E; EA:E ::= H; EB:E ::= H; EC:E ::= H; EAC:E ::= H; EBC:E ::= H; EABC:E ::= H; H;}
 // .result: EXEC_PASS
+//
+// One of the more complex examples:
+//               ┌───┐    
+//               │ A ◄───┐   eq getChild.foo = 0
+//               ├───┤   │
+//               │ B ◄─┐ │   eq getChild.foo = 1
+//           ┌───┼───┤ │ │
+//           │ E │ C │ │ │   eq getChild.foo = 2
+//           ├───┴───┤ │ │
+//           │       ├─┘ │
+//           │ EABC  ├───┘
+//           │       │    
+//           └───┬───┘    
+//               │        
+//             ┌─┴─┐      
+//             │ H │    inh foo  
+//             └───┘   
+//         [ H.foo = 2 ]
+//   
 import static runtime.Test.*;
 aspect Test16 {
     interface A { }
@@ -10,7 +29,7 @@ aspect Test16 {
     B extends A;
     C extends B;
 
-    inh int E.foo();
+    inh int H.foo();
     eq A.getChild().foo() = 0;
     eq B.getChild().foo() = 1;
     eq C.getChild().foo() = 2;
