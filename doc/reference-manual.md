@@ -917,8 +917,8 @@ implementation:
 Attributes are specified in [JastAdd aspect files](#Aspects).
 
 The sections below describe different kinds of attributes and how to
-attach them to AST classes.   and a later section discusses subtleties when
-attaching attributes [to Interfaces](#InterfaceAttr).
+attach them to AST classes. A later section discusses how to
+attach attributes [to Interfaces](#InterfaceAttr).
 
 ### <a id="Basic"></a><a id="Synthesized"></a>Synthesized attributes
 
@@ -1523,55 +1523,68 @@ searched for contributions.
 
 ### <a id="InterfaceAttr"></a>Attributes on Interfaces
 
-Attribute equations can satisfy the requirements of interfaces
-equivalently to Java methods:
+JastAdd 2.4 and onwards supports attributes on Java Interfaces. (Previous support was undocumented and incomplete.)
 
-    interface I {
-      public int foo();
-    }
+JastAdd supports
+- [adding attributes and equations to interfaces](#InterfaceAttrAdd)
+- [Java-like precedence rules for multiple inheritance of equations](#MultInhEquations)
+- [resolution of multiple inheritance and broadcasting](#BroadcastingResolution)
 
-    A implements I;
+There is also preliminary support for
+- [using attributes to implement methods on interfaces](#InterfaceMethAttr)
 
-    syn int A.foo() = 0;
 
-In the above, the `syn` declaration is obversationally equivalent to
-defining a method
+#### <a id="InterfaceAttrAdd"></a>Adding attributes and equations to interfaces
 
-    public int A.foo() { return 0; }
+JastAdd allows synthesized, inherited, and collection attribute declarations to be added to interfaces. In the following example, a synthesized attribute `foo` is declared on the interface `I`.
 
-JastAdd allows attribute declarations on interfaces, as of JastAdd
-2.4.  For example:
+    interface I { }  // ┌───┐
+    syn int I.foo(); // │ I │  syn foo
+                     // ├───┤
+    A implements I;  // │ A │  eq foo = 0
+    eq A.foo() = 0;  // └───┘
 
-    interface I { }
-    A implements I;
+Since the AST class `A` implements `I` it needs to supply an equation for `foo`. Subclasses of `A` inherit this equation and can override it as usual.
 
-    syn int I.foo();
-    eq A.foo() = 0;
 
-The first line requires all implementers of interface `I` to supply an
-equation for synthesized attribute `foo`, and the second line provides
-such an equation for `A`.  Subclasses of `A` inherit this equation and
-can override it as ususal.
+JastAdd also allows attribute equations on interfaces.  In the following example, the interface `I` provides both a declaration and a default equation for `foo`. The equation can be overridden by AST classes implementing the interface.
+```
+                          // ┌───┐
+    interface I { }       // │ I │  syn foo
+    syn int I.foo() = 0;  // └───┘  eq foo = 0
+```
+Contributions to collections can be added to interfaces in an analogous way.
 
-JastAdd also allows attribute equation definitions and collectoin
-contributions on interfaces.  For example:
+**Multiple Inheritance of Attribute Declarations**: An AST class may inherit the same attribute _declaration_ from any number of
+interfaces, as well as from its superclass. For example, consider:
 
-    interface I { }
-    syn int I.foo() = 0;
+*In an .ast file:*
 
-will provide a synthesized attribute `foo()` to any class that
-implements `I`, and analogously for all other attributes and for
-collection contributions.
+    B : A;
 
-### Multiple Inheritance Resolution
+*In a .jrag file:*
+```
+   interface I { }   //         ┌───┬───┐
+   syn int I.foo();  // syn foo │ A │ I │  syn foo
+                     //         ├───┴───┤
+   syn int A.foo();  //         │   B   │  eq foo = 1
+   B implements I;   //         └───────┘
+   eq B.foo() = 1;   //        [B.foo = 1]
+```
+Here, the `B` node inherits the same declaration of `foo` from both `A` and `I`, resulting in `B` having a single attribute `foo` with the value `1` (provided by the equation in `B`).
 
-An AST class may inherit an attribute _declaration_ from any number of
-interfaces, as well as from its superclass.  An AST class may also
-inherit any number of collection contributions from any number of
-interfaces, as well as from its superclass.
+#### <a id="MultInhEquations"></a>Java-like Precedence Rules for Multiply Inherited Equations
 
-However, inheriting multiple attribute equations can lead to
-ambiguity.  Consider:
+Inheriting multiple equations can lead to
+ambiguity. The precedence rules are then the same as for default method implementations as in Java, in the order of highest to lowest precedence:
+
+1. An equation local to the class.
+2. An equation inherited from a superclass.
+3. An equation inherited from an interface, if there is a unique most specific such equation.
+
+As an example, consider:
+
+ Consider:
 
 *In an .ast file:*
 
@@ -1584,57 +1597,66 @@ ambiguity.  Consider:
 
     J extends I;
     B implements J; // and transitively I
-    B implements I; // redundant but legal
 
     syn int B.foo() = 1;
     syn int A.foo() = 2;
     syn int J.foo() = 3;
     syn int I.foo() = 4;
 
-Here, `B` inherits four different definitions of the `syn` attribute
-`foo`.  The precedence rulres correspond to those of Java and are in
-order of highest to lowest precedence:
+This can be depicted as follows:
+```
+                  ┌───┐   
+                  │ I │  syn foo = 4
+              ┌───┼───┤   
+ syn foo = 2  │ A │ J │  syn foo = 3
+              ├───┴───┤   
+              │   B   │  syn foo = 1
+              └───────┘   
+             [B.foo = 1]
+```
+Here, `B` has four different definitions of the `syn` attribute
+`foo`.  Since `B`'s definition has the highest precedence, the value of the attribute will be `1`. If there had been no equation in `B`, the equation in `A` would have taken precedence. If there was no equation in `A` either, then the one in `J` would have taken precedence.
 
-1. Local attribute definition (`B.foo()`, in the example)
-2. Inherited superclass attribute definition (`A.foo()`, in the example)
-3. Inherited unique most specific interface attribute definition (see below)
+**Redundant inheritance edges**: Sometimes, an interface can be inherited in several different ways. Additional redundant inheritance edges are then irrelevant to the resolution.
 
-In the example above, `B.foo()` is explicitly defined and would thus
-take precedence.  If it were not defined, `A.foo()` would take
-precedence.  Otherwise JastAdd would consider the interfaces that `B`
-inherits from.
+As an example, consider the following situation with a class `C` that implements `J`, and redundantly also `I`.
 
-In our example, `B` implements two interfaces, `I` and `J`, and thus
-inherits two definitions for attribute `foo`: `I.foo()` and `J.foo()`.
-However, `J` is a subtype of `I`, so `J.foo()` is _more specific_ than
-`I.foo()`, and `J.foo()` will take precedence over `I.foo()` following
-the usual Java rules for inheritance and method overriding.  Since
-there is no definition of `foo` that is more speific than `J.foo()`,
-`J.foo()` is the _most specific_ definition of attribute `foo`.
+    C implements J; // and transitively also I
+    C implements I; // redundant but legal
 
-This notion of specificity only depends on the subtype relationship
-between `I` and `J`, so it is irrelevant whether `B` explicitly
-inherits `I`, as in the example, or only implicitly, via `J`.
+In this case, the `C` object inherits from `J` and transitively from `I`. The direct implementation of `I` is redundant, and depicted below by an arrow. The equation with the highest precedence will be the one in `J`, since it is more specific than the one in `I`, and the redundant direct implementation of `I` is irrelevant to the resolution.
+```
+                   ┌───┐
+                ┌─►│ I │  syn foo = 4
+                │  ├───┤
+                │  │ J │  syn foo = 3
+                │  ├───┤
+                └─ ┤ C │
+                   └───┘
+               [C.foo = 3]
+```
 
-It is an error for `B` to inherit multiple "most specific"
-definitions, as in:
+**Explicit resolution**: If a class `B` inherits multiple "most specific" equations from interfaces, the ambiguity must be resolved by adding an equation either to `B` or to one of its superclasses.
 
+Consider the following example, which constitutes an error, as there is no most specific equation that defines `B.quux`:
+```
     interface J { }
-    interface K { }
-
-    B implements J;
-    B implements K;
-
-    syn int J.quux() = 3;
+    interface K { }       //                ┌───┬───┐
+                          //  syn quux = 3  │ J │ K │  syn quux = 5
+    B implements J;       //                ├───┴───┤
+    B implements K;       //                │   B   │
+                          //                └───────┘
+    syn int J.quux() = 3; // [Error: ambiguity: no unique equation for B.quux]
     syn int K.quux() = 5;
-    // Error: B.quux() is ambiguous
+```
+To resolve this ambiguity, `B` must either supply an equation for
+`quux` itself or inherit an equation for `quux` from a superclass.
 
-To resolve this ambiguity, `B` must either explicitly define attribute
-`quux` itself or inherit a definition of `quux` from a superclass.
+**Multiple inheritance of contributions**: Contributions to the same collection do not give rise to any ambiguities: all contributions inherited from superclasses and implemented interfaces will contribute to the collection. 
 
-### Inherited Attributes and Broadcasting
+#### <a id="BroadcastingResolution"></a>Resolution of Multiple Inheritance and Broadcasting
 
-Interfaces may define inherited attribute equations:
+Multiple inheritance from interfaces can be combined with broadcasting. Consider the following example:
 
 *In an .ast file:*
 
@@ -1644,37 +1666,77 @@ Interfaces may define inherited attribute equations:
 
     inh int B.v();
 
-    interface II { }
-    eq II.getLeft().v() = 1
-    eq II.getRight().v() = 2
+    interface I { }
+    eq I.getChild().v() = 1
 
-though any AST class that implements such an interface must provide
-any child components that the interface-based implementation
-implicitly requires.
+    interface J { }
+    eq J.getRight().v() = 2
 
-Inherited attribute overriding in sub-interfaces works analogously to
-subclasses, i.e., per child node:
+    J implements I;
+    A implements J;
 
-    interface JI { }
-    JI extends II;
+This can be depicted as follows:
+```
+               ┌───┐                  
+               │ I │ eq getChild.v = 1
+               ├───┤                  
+               │ J │ eq getLeft.v = 2 
+               ├───┤                  
+          ┌────┤ A ├────┐            
+          │    └───┘    │            
+          │Left         │Right       
+          │             │            
+        ┌─┴─┐         ┌─┴─┐          
+        │ B │inh v    │ B │inh v     
+        └───┘         └───┘          
+      [B.v = 2]     [B.v = 1]
+```
+Note that `J`'s equation for `v` overrides `I`'s equation, but only for the `Left` child.
 
-    eq JI.getLeft().v() = -1 // overrides definition from II
-    // inherits JI.getRight().v() from I
+Note also that `J` uses the child accessor `getLeft`. For `A` to be allowed to implement `J`, it must provide an child accessor with that name (which it does according to the grammar above).
 
-This means that broadcasting via inherited attributes introduces
-another layer of ambiguity:
+The combination of multiple inheritance, however, provides another level of possible ambiguity. Consider the following example, where there is an additional interface `K` with an equation for `v` of all children, and that `A` implements this interface:
 
-    interface KI { }
-    inh int KI.getChild().v() = 256
+    interface K { }
+    eq K.getChild().v() = 256;
+    A implements K;
 
-    A implements JI
-    A implements KI
-    // Error: undefined precedence
+This can be depicted as follows:
+```
+                       ┌───┐                
+    eq getChild.v = 1  │ I │                
+                       ├───┼───┐            
+     eq getLeft.v = 2  │ J │ K │ eq getChild.v = 256          
+                       ├───┴───┤            
+                  ┌────┤   A   ├────┐       
+                  │    └───────┘    │       
+                  │Left             │Right  
+                  │                 │       
+                ┌─┴─┐             ┌─┴─┐     
+                │ B │inh v        │ B │inh v
+                └───┘             └───┘     
+[Error: ambiguity: no unique equation for A.getLeft.v]
+```
+There is now an unresolved ambiguity: for the `A` node, there is no unique most specific equation for `getLeft.v`.
 
-It is illegal for a class to inherit a (most specific)
-`getChild().v()` broadcast definition from one supertype and a (most
-specific) definition `getX().v()` from a different supertype.
+In general, it is illegal for a class to inherit a (most specific)
+`getChild().v()` broadcast equation from one supertype and a (most
+specific) equation `getX().v()` from a different supertype.
 
+#### <a id="InterfaceMethAttr"></a>Implementing methods using attributes
+
+A method defined on an interface can be implemented using an attribute.
+This allows an API to be defined on the interface, without revealing what kind of attribute is used for implementing it.
+
+In the following example, the method `foo` on the interface `I` is implemented by a synthesized attribute `foo` in the AST class `A`.
+
+    interface I {
+      public int foo();
+    }
+
+    A implements I;
+
+    syn int A.foo() = 0;
 
 ## <a id="Rewrites"></a>Rewrites
 
