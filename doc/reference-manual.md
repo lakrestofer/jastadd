@@ -1537,21 +1537,21 @@ There is also preliminary support for
 #### <a id="InterfaceAttrAdd"></a>Adding attributes and equations to interfaces
 
 JastAdd allows synthesized, inherited, and collection attribute declarations to be added to interfaces. In the following example, a synthesized attribute `foo` is declared on the interface `I`.
-
-    interface I { }  // ┌───┐
-    syn int I.foo(); // │ I │  syn foo
-                     // ├───┤
-    A implements I;  // │ A │  eq foo = 0
-    eq A.foo() = 0;  // └───┘
-
+```
+interface I { }  // ┌───┐
+syn int I.foo(); // │ I │  syn foo
+                 // ├───┤
+A implements I;  // │ A │  eq foo = 0
+eq A.foo() = 0;  // └───┘
+```
 Since the AST class `A` implements `I` it needs to supply an equation for `foo`. Subclasses of `A` inherit this equation and can override it as usual.
 
 
 JastAdd also allows attribute equations on interfaces.  In the following example, the interface `I` provides both a declaration and a default equation for `foo`. The equation can be overridden by AST classes implementing the interface.
 ```
-                          // ┌───┐
-    interface I { }       // │ I │  syn foo
-    syn int I.foo() = 0;  // └───┘  eq foo = 0
+                      // ┌───┐
+interface I { }       // │ I │  syn foo
+syn int I.foo() = 0;  // └───┘  eq foo = 0
 ```
 Contributions to collections can be added to interfaces in an analogous way.
 
@@ -1559,17 +1559,17 @@ Contributions to collections can be added to interfaces in an analogous way.
 interfaces, as well as from its superclass. For example, consider:
 
 *In an .ast file:*
-
-    B : A;
-
+```
+B : A;
+```
 *In a .jrag file:*
 ```
-   interface I { }   //         ┌───┬───┐
-   syn int I.foo();  // syn foo │ A │ I │  syn foo
-                     //         ├───┴───┤
-   syn int A.foo();  //         │   B   │  eq foo = 1
-   B implements I;   //         └───────┘
-   eq B.foo() = 1;   //        [B.foo = 1]
+interface I { }   //         ┌───┬───┐
+syn int I.foo();  // syn foo │ A │ I │  syn foo
+                  //         ├───┴───┤
+syn int A.foo();  //         │   B   │  eq foo = 1
+B implements I;   //         └───────┘
+eq B.foo() = 1;   //        [B.foo = 1]
 ```
 Here, the `B` node inherits the same declaration of `foo` from both `A` and `I`, resulting in `B` having a single attribute `foo` with the value `1` (provided by the equation in `B`).
 
@@ -1640,14 +1640,14 @@ In this case, the `C` object inherits from `J` and transitively from `I`. The di
 
 Consider the following example, which constitutes an error, as there is no most specific equation that defines `B.quux`:
 ```
-    interface J { }
-    interface K { }       //                ┌───┬───┐
-                          //  syn quux = 3  │ J │ K │  syn quux = 5
-    B implements J;       //                ├───┴───┤
-    B implements K;       //                │   B   │
-                          //                └───────┘
-    syn int J.quux() = 3; // [Error: ambiguity: no unique equation for B.quux]
-    syn int K.quux() = 5;
+interface J { }
+interface K { }       //                ┌───┬───┐
+                      //  syn quux = 3  │ J │ K │  syn quux = 5
+B implements J;       //                ├───┴───┤
+B implements K;       //                │   B   │
+                      //                └───────┘
+syn int J.quux() = 3; // [Error: ambiguity: no unique equation for B.quux]
+syn int K.quux() = 5;
 ```
 To resolve this ambiguity, `B` must either supply an equation for
 `quux` itself or inherit an equation for `quux` from a superclass.
