@@ -1,5 +1,22 @@
 # JastAdd2 Release Notes
 
+## 2.4.0 - 2025-12-09
+
+This release adds support for attributes on Java interfaces (previous support was undocumented and incomplete), see section *Attributes on Interfaces* in the Reference Manual. As in Java, equations from superclasses take precedence over equations from interfaces.
+
+### Interface Support
+* [Pull Request 28:](https://bitbucket.org/jastadd/jastadd2/pull-requests/28) Adds support for attributes on interfaces.
+
+### Bug Fixes
+* Reset circular evaluation state after attribute evaluation error.
+* [Pull Request 30:](https://bitbucket.org/jastadd/jastadd2/pull-requests/30) Fixed two missing tracing events in circular evaluation.
+* Fixed bug when contributors to a collection attribute are cached too early during a circular evaluation. Fixed in [Pull Request 28](https://bitbucket.org/jastadd/jastadd2/pull-requests/28). 
+
+### Other Changes
+* [Pull Request 24:](https://bitbucket.org/jastadd/jastadd2/pull-requests/24) Merge regression test suite (jastadd-test) into main JastAdd repo.
+* Generate `@Source` annotations for interface, enum, class, constructor, field.
+* Agnostic attributes are cached during the last cycle optimization (`--cacheCycle=true`).
+
 ## 2.3.6 - 2023-09-04
 
 This release improves attribute tracing with new tracing events and bug fixes.
