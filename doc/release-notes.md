@@ -15,7 +15,7 @@ This release adds support for attributes on Java interfaces (previous support wa
 ### Other Changes
 * [Pull Request 24:](https://bitbucket.org/jastadd/jastadd2/pull-requests/24) Merge regression test suite (jastadd-test) into main JastAdd repo.
 * Generate `@Source` annotations for interface, enum, class, constructor, field.
-* Agnostic attributes are cached during the last cycle optimization (`--cacheCycle=true`).
+* Agnostic attributes are cached during the last cycle optimization (i.e., `--cacheCycle`, which is enabled by default).
 
 ## 2.3.6 - 2023-09-04
 
