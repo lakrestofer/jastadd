@@ -1,16 +1,20 @@
 // Conflict with interface inheriting inh definition from two sources, even if interface is not used
 // .grammar: { S ::= E; E; }
 // .result: JASTADD_FAIL
+//                       ┌───┬───┐
+//   eq getChild.foo = 0 │ I │ J │ eq getChild.foo = 1
+//                       ├───┴───┤
+//                       │   K   │
+//                       └───────┘
+//       [ Error: C inherits clashing interfaces ]
 aspect Test14 {
-    interface A { }
-    interface B { }
-    interface C { }
+    interface I { }
+    interface J { }
+    interface K { }
 
-    interface C extends A;
-    interface C extends B;
+    K extends I;
+    K extends J;
 
-    inh int A.foo();
-    inh int B.foo();
-    eq A.getChild().foo() = 0;
-    eq B.getChild().foo() = 1;
+    eq I.getChild().foo() = 0;
+    eq J.getChild().foo() = 1;
 }

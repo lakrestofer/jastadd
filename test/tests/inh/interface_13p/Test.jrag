@@ -1,6 +1,19 @@
 // No conflict with linear inheritance order for inh definition
 // .grammar: { S ::= E; E; }
 // .result: EXEC_PASS
+//    ┌───┐
+//    │ A │ getChild.foo = 0
+//    ├───┤
+// ┌─►│ B │ getChild.foo = 1
+// │  ├───┤
+// │  │ C │
+// │  ├───┤
+// └──┤ S │
+//    └─┬─┘
+//      │  
+//    ┌─┴─┐
+//    │ E │ inh foo  [E.foo = 1]
+//    └───┘
 import static runtime.Test.*;
 aspect Test13 {
     interface A { }
