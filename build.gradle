@@ -327,6 +327,7 @@ artifacts {
 signing {
 	// Require keyId to sign:
 	required { project.hasProperty('signing.keyId') }
+	useGpgCmd() // Use gpg command as it supports crypto ed25519
 	sign configurations.archives
 }
 
@@ -350,11 +351,11 @@ if (project.hasProperty('ossrhUsername')) {
 		repositories.mavenDeployer {
 			beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
-			repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2') {
+			repository(url: 'https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2') {
 				authentication(userName: ossrhUsername, password: ossrhPassword)
 			}
 
-			snapshotRepository(url: 'https://oss.sonatype.org/content/repositories/snapshots') {
+			snapshotRepository(url: 'https://ossrh-staging-api.central.sonatype.com/content/repositories/snapshots') {
 				authentication(userName: ossrhUsername, password: ossrhPassword)
 			}
 
