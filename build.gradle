@@ -121,7 +121,7 @@ task sourceZip(type: Zip, dependsOn: 'documentation') {
 
 task binaryDistReadme(type: Exec) {
 	description 'Generate the README for binary distributions'
-	commandLine 'python', file('tools/pymarkdown.py').path, 'README-binary-dist.md'
+	commandLine 'python3', file('tools/pymarkdown.py').path, 'README-binary-dist.md'
 
 	inputs.file 'README-binary-dist.md'
 	outputs.file 'README.html'
@@ -163,7 +163,7 @@ task documentation {
 			flattenmapper()
 			globmapper(from: '*.md', to: "doc${File.separator}*.html")
 		}
-		ant.apply(executable: 'python', dest: 'doc') {
+		ant.apply(executable: 'python3', dest: 'doc') {
 			arg(value: 'tools/pymarkdown.py')
 			srcfile()
 			fileset(dir: 'doc', includes: '*.md')
