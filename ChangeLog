@@ -1,3 +1,22 @@
+2025-12-09  Christoph Reichenbach  <christoph.reichenbach@cs.lth.se>
+
+    * Add support for attributes on Java interfaces (see "Attributes
+    Interfaces" in the Reference Manual)
+
+    * Bug fix: circular evaluation state after attribute evaluation error
+    * Bug fix: added two missing tracing events in circular evaluation
+
+    * Bug fix: don't cache contributors to collection attributes too
+    early during circular evaluation
+
+    * test/: Merge regression test suite
+
+    * Generate @Source annotations for interfaces, enums, classes,
+    constructors, fields
+
+    * Cache agonistic attributes during last cycle optimization (i.e.,
+    unless cycle caching is disabled via `--cacheCycle=false`)
+
 2024-09-06  Jesper Öqvist <jesper.oqvist@cs.lth.se>
 
     * Merge regression tests into JastAdd git main repository.
