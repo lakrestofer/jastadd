@@ -388,7 +388,7 @@ if (project.hasProperty('ossrhUsername')) {
 					}
 					developer {
 						name 'Emma Söderberg'
-						email 'emso@google.com'
+						email 'emma.soderberg@cs.lth.se'
 					}
 					developer {
 						name 'Jesper Öqvist'
@@ -397,6 +397,10 @@ if (project.hasProperty('ossrhUsername')) {
 					developer {
 						name 'Niklas Fors'
 						email 'niklas.fors@cs.lth.se'
+					}
+					developer {
+						name 'Christoph Reichenbach'
+						email 'christoph.reichenbach@cs.lth.se'
 					}
 				}
 				scm {
