@@ -300,9 +300,10 @@ aspect JragCodeGen {
       out.print(obj.modifiers()); // 'public', @UserAnnotation etc.
       TemplateContext tt = templateContext(obj);
       tt.bind("RawComment", docComment(obj));
-      // Do not generate AST annotations for (static) initializers (illegal Java code)
-      tt.bind("IsInitializerBlock",
-        obj.node.jjtGetNumChildren() == 1 && obj.node.jjtGetChild(0) instanceof ASTInitializer);
+      // Do not generate @Source annotations for empty declarations or (static) initializers (illegal Java code)
+      tt.bind("IsEmptyOrInitializerBlock",
+        (obj.node.jjtGetNumChildren() == 0) ||
+        (obj.node.jjtGetNumChildren() == 1 && obj.node.jjtGetChild(0) instanceof ASTInitializer));
       tt.expand("InterTypeDeclaration.member", out);
       out.print(config().indent);
       StringBuffer buf = new StringBuffer();

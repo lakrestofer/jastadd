@@ -1,4 +1,4 @@
-// Do not generate annotations for (static) initializers since it's illegal Java code
+// Do not generate annotations for empty declarations or (static) initializers since it's illegal Java code
 // .grammar: {Node;}
 // .options: generateAnnotations=yes
 // .result: EXEC_PASS
@@ -14,6 +14,17 @@ aspect Test {
         static int x2 = 3;
         static {
             x2 = 4;
+        }
+
+        ;   // Empty declaration. Allowed in Java. Do not generate @Source for it
+
+        public MyTestClass() {
+
+        };  // Empty declaration.
+
+        // OK
+        public @interface MyTestAnnotation {
+            String name();
         }
     }
 

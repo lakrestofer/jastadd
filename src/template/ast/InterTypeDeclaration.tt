@@ -30,7 +30,7 @@ InterTypeDeclaration.member [[
 $RawComment
 $if(HasDeclaredAt)
 $if(HasAspectName)
-$if(!IsInitializerBlock)
+$if(!IsEmptyOrInitializerBlock)
   $include(MemberDecl.generatedAnnotations)
 $endif
 $endif
