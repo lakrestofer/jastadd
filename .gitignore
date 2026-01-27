@@ -13,6 +13,8 @@
 *.swp
 /.idea/
 /*.iml
+.project
+.settings/
 
 # Mac OS files.
 .DS_Store

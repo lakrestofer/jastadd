@@ -35,7 +35,6 @@
               {
                 languages.java = {
                   enable = true;
-                  gradle.enable = true;
                   jdk.package = pkgs.jdk11;
                 };
                 # # https://devenv.sh/reference/options/
