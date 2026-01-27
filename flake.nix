@@ -33,7 +33,11 @@
             inherit inputs pkgs;
             modules = [
               {
-                languages.java.enable = true;
+                languages.java = {
+                  enable = true;
+                  gradle.enable = true;
+                  jdk.package = pkgs.jdk11;
+                };
                 # # https://devenv.sh/reference/options/
                 # packages = [ pkgs.hello ];
 
