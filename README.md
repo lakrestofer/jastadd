@@ -103,7 +103,6 @@ Overall behavior when running JastAdd:
 * Then, possible errors are printed.
 * Then, target AST classes are generated.
 
-
 ## Parsing
 
 JavaCC and its tree-building extension, JJTree, are used for parsing. They

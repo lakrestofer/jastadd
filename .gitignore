@@ -43,3 +43,5 @@
 /test/tmp/
 /test/ant-bin/
 /test/*.jar
+.devenv
+.direnv
